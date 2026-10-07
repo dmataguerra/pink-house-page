@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 64" fill="none">
-  <title>The Pink House night wing emblem</title>
-  <path d="M 64,25 L 59,16 L 57,27 C 41,24 22,12 4,8 C 11,19 16,29 18,42 C 29,31 40,32 46,44 C 55,37 60,42 64,56 C 68,42 73,37 82,44 C 88,32 99,31 110,42 C 112,29 117,19 124,8 C 106,12 87,24 71,27 L 69,16 Z" fill="#FF4F91"/>
-  <path d="M 15,15 L 53,34 M 113,15 L 75,34" stroke="#FFB0CB" stroke-width="1" stroke-linecap="round"/>
-  <path d="M 61,31 L 64,34 L 67,31" stroke="#F1EDE8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>

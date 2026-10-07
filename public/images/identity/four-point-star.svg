@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>Pink House four-point star</title>
+  <path d="M 32,2 C 35,25 39,29 62,32 C 39,35 35,39 32,62 C 29,39 25,35 2,32 C 25,29 29,25 32,2 Z" fill="#FFB0CB"/>
+  <path d="M 32,14 L 32,50 M 14,32 L 50,32" stroke="#F1EDE8" stroke-width=".6"/>
+</svg>

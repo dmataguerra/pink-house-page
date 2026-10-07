@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <title>The Pink House Halloween — October 22, 2026</title>
+  <defs>
+    <path id="seal-top" d="M 37,120 A 83,83 0 0,1 203,120"/>
+    <path id="seal-bottom" d="M 37,120 A 83,83 0 0,0 203,120"/>
+  </defs>
+  <circle cx="120" cy="120" r="114" stroke="#FF4F91" stroke-width="1"/>
+  <circle cx="120" cy="120" r="105" stroke="#FF4F91" stroke-width=".7" stroke-dasharray="1 8"/>
+  <circle cx="120" cy="120" r="69" stroke="#FFB0CB" stroke-width=".6"/>
+  <text fill="#F1EDE8" font-family="Arial, Helvetica, sans-serif" font-size="14" letter-spacing="6">
+    <textPath href="#seal-top" startOffset="50%" text-anchor="middle">HALLOWEEN</textPath>
+  </text>
+  <text fill="#FFB0CB" font-family="Arial, Helvetica, sans-serif" font-size="12" letter-spacing="5">
+    <textPath href="#seal-bottom" startOffset="50%" text-anchor="middle">22.10.26</textPath>
+  </text>
+  <path d="M 139,81 A 40,40 0 1,0 139,159 A 46,46 0 0,1 139,81 Z" fill="#FF4F91"/>
+  <path d="M 130,90 L 130,150 M 144,106 L 144,134 M 158,114 L 158,126" stroke="#FFB0CB" stroke-width="1"/>
+  <path d="M 157,73 L 159,81 L 167,83 L 159,85 L 157,93 L 155,85 L 147,83 L 155,81 Z" fill="#F1EDE8"/>
+  <path d="M 23,116 L 27,120 L 23,124 L 19,120 Z M 217,116 L 221,120 L 217,124 L 213,120 Z" fill="#FF4F91"/>
+</svg>

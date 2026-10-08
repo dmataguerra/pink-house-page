@@ -241,6 +241,12 @@ function textureSvg(pose: ScenePose, texture: SceneTexture): string {
 
 function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneStyle: SceneStyle = {}): string {
   const parts: string[] = [];
+  const gradientX = W * ROAD_GRADIENT.center.x, gradientY = H * ROAD_GRADIENT.center.y;
+  // Match CSS's default farthest-corner ellipse and share it across all roads.
+  // User-space coordinates keep intersections continuous across separate paths.
+  const gradientRadiusX = Math.max(gradientX, W - gradientX) * Math.SQRT2;
+  const gradientRadiusY = Math.max(gradientY, H - gradientY) * Math.SQRT2;
+  parts.push(`<defs><radialGradient id="road-gradient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="translate(${gradientX} ${gradientY}) scale(${gradientRadiusX} ${gradientRadiusY})">${ROAD_GRADIENT.stops.map(stop => `<stop offset="${stop.offset}" stop-color="${stop.color}"/>`).join('')}</radialGradient></defs>`);
   parts.push('<rect width="1920" height="1080" fill="#09070e"/>');
   if(sceneStyle.texture)parts.push(textureSvg(pose,sceneStyle.texture));
   parts.push(`<g opacity="${sceneStyle.geometryOpacity??1}">`);
@@ -287,11 +293,11 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
   // perspective as the homes rather than remaining screen-wide bars.
   for (const road of projectedRoads) {
     const major = !['footway','path','steps','cycleway'].includes(road.kind);
-    ribbon(road.points,road.width+(major?1.2:.4), '#e28b82',.9);
+    ribbon(road.points,road.width+(major?1.2:.4), 'url(#road-gradient)',.9);
   }
   for (const road of projectedRoads) {
     const major = !['footway','path','steps','cycleway'].includes(road.kind);
-    ribbon(road.points,road.width, '#e28b82',.98);
+    ribbon(road.points,road.width, 'url(#road-gradient)',.98);
   }
   const basis=cameraBasis(pose);
   const buildings = data.structures

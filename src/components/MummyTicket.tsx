@@ -34,10 +34,25 @@ function Mummy() {
   </svg>;
 }
 
+// A shared contour keeps both sides of the torn perforation aligned.
+const tearContour = Array.from({ length: 41 }, (_, index) => ({
+  x: index % 2 === 0 ? 4 : index % 4 === 1 ? 7 : 2,
+  y: index * 2.5,
+}));
+
+function PaperCutEdge({ side }: { side: 'main' | 'stub' }) {
+  const path = tearContour.map(({ x, y }, index) => `${index === 0 ? 'M' : 'L'}${side === 'main' ? x : 8 - x} ${y}`).join(' ');
+  return <svg className={`ticket-paper-edge ticket-paper-edge-${side}`} viewBox="0 0 8 100" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d={path} stroke="currentColor" vectorEffect="non-scaling-stroke"/></svg>;
+}
+
+const mainCutShape = `polygon(0 0, ${tearContour.map(({ x, y }) => `calc(100% - ${8 - x}px) ${y}%`).join(', ')}, 0 100%)`;
+const stubCutShape = `polygon(${tearContour.map(({ x, y }) => `${8 - x}px ${y}%`).join(', ')}, 100% 100%, 100% 0)`;
+
 export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
   const [year, month, day] = event.eventDate.split('-');
   const ticketDate = `${day}.${month}.${year.slice(-2)}`;
   const [progress, setProgress] = useState(0);
+  const [cutDirection, setCutDirection] = useState<1 | -1>(1);
   const [phase, setPhase] = useState<'intact' | 'cutting' | 'cut'>('intact');
   const gesture = useRef<{ direction: 1 | -1; start: number; last: number; progress: number; pointerId: number } | null>(null);
   const complete = useRef(false);
@@ -57,7 +72,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
     revealTimer.current = window.setTimeout(() => {
       setPhase('cut');
       onWin();
-    }, reduceMotion ? 0 : 650);
+    }, reduceMotion ? 0 : 900);
   }
 
   function position(e: PointerEvent<HTMLButtonElement>) {
@@ -71,6 +86,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
     // Begin at either end so crossing the dotted line cannot accidentally win.
     if (start > .14 && start < .86) return;
     gesture.current = { direction: start < .5 ? 1 : -1, start, last: start, progress: 0, pointerId: e.pointerId };
+    setCutDirection(gesture.current.direction);
     setProgress(0);
   }
 
@@ -99,19 +115,20 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
 
   function resetGesture() {
     gesture.current = null;
-    if (!complete.current) setProgress(0);
+    if (!complete.current) {
+      setProgress(0);
+      setCutDirection(1);
+    }
   }
 
   const style = {
     '--cut-progress': `${progress * 100}%`,
-    '--scissors-position': `${gesture.current?.direction === -1 ? 100 - progress * 100 : progress * 100}%`,
+    '--scissors-position': `${cutDirection === -1 ? 100 - progress * 100 : progress * 100}%`,
+    '--main-cut-shape': mainCutShape,
+    '--stub-cut-shape': stubCutShape,
   } as CSSProperties;
 
   return <div className={`mummy-ticket-stage mummy-ticket-${phase}`} data-reveal style={style}>
-    <p className="ticket-cut-hint" id="ticket-cut-instructions">
-      <span>{phase === 'cut' ? 'Ver sorpresa' : 'Desliza para cortar'}</span>
-      <svg viewBox="0 0 18 24" fill="none" aria-hidden="true"><path d="M9 1v20m-6-6 6 6 6-6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    </p>
     <div className="mummy-ticket">
       <div className="mummy-ticket-main">
         <div className="mummy-ticket-character"><Mummy/></div>
@@ -120,17 +137,19 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
           <h3 className="mummy-ticket-title" aria-label="Halloween">HALLO<br/>WEEN</h3>
           <p className="mummy-ticket-date">{ticketDate}</p>
         </div>
+        <PaperCutEdge side="main"/>
       </div>
       <div className="mummy-ticket-stub">
-        <p className="mummy-ticket-stub-title"><span>Trick</span><br/>or <em>treat</em></p>
-        <button className="mummy-ticket-confirm" type="button" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">CONFIRMAR <span aria-hidden="true">↗</span></button>
+        <button className="mummy-ticket-stub-title" type="button" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal" aria-label="Confirmar asistencia">
+          <span>Trick</span><br/>or <em>treat</em>
+        </button>
+        <PaperCutEdge side="stub"/>
       </div>
       <button
         ref={cutButton}
         type="button"
         className="ticket-cut-control"
-        aria-label={phase === 'cut' ? 'Ver sorpresa' : 'Cortar ticket y descubrir una sorpresa'}
-        aria-describedby="ticket-cut-instructions"
+        aria-label={phase === 'cut' ? 'Ticket cortado' : 'Cortar ticket'}
         aria-controls="prize-modal"
         aria-haspopup="dialog"
         aria-disabled={phase === 'cutting'}
@@ -153,10 +172,10 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         onClick={() => { if (phase === 'cut') onWin(); }}
       >
         <span className="ticket-perforation" aria-hidden="true"/>
-        <span className="ticket-cut-trail" style={gesture.current?.direction === -1 ? {top: 'auto', bottom: 0} : undefined} aria-hidden="true"/>
-        <span className={`ticket-scissors ${progress > 0 ? 'is-cutting' : ''}`}><Scissors/></span>
+        <span className="ticket-cut-trail" style={cutDirection === -1 ? {top: 'auto', bottom: 0} : undefined} aria-hidden="true"/>
+        <span className={`ticket-scissors ${progress > 0 ? 'is-cutting' : ''}`} aria-hidden="true"><Scissors/></span>
       </button>
     </div>
-    <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado. Sorpresa desbloqueada.' : ''}</span>
+    <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado.' : ''}</span>
   </div>;
 }

@@ -21,6 +21,14 @@ test('illustrated QA accepts correctly labeled complete metadata without a surve
   assert.equal(manifest.surveyedGeometryVerified, false);
 });
 
+test('illustrated QA accepts the licensed Open Buildings vectors but rejects Maps imagery', () => {
+  const manifest=fixture();
+  manifest.source.overture={datasets:['Google Open Buildings','Microsoft ML Buildings'],license:'ODbL-1.0'};
+  validateIllustratedMetadata(manifest);
+  manifest.source.imagery='Google Maps 3D Tiles';
+  assert.throws(()=>validateIllustratedMetadata(manifest));
+});
+
 test('illustrated QA rejects photographic survey claims, hidden labels, and external requests', () => {
   for (const mutate of [
     (manifest: IllustratedRunManifest) => { (manifest as unknown as { photorealistic: boolean }).photorealistic = true; },

@@ -91,6 +91,14 @@ export function generateIllustrativeBuildings(
       .filter(point => Number.isFinite(point.lon) && Number.isFinite(point.lat))
       .map(point => local(point.lon, point.lat)) }))
     .filter(road => road.points.length >= 2);
+  const restrictedLand = osmWays.filter(way => {
+    const tags = way.tags ?? {};
+    return ['park','garden','nature_reserve','pitch','track','sports_centre','playground','swimming_pool'].includes(tags.leisure ?? '') ||
+      ['wood','water','grassland'].includes(tags.natural ?? '') || ['education','commercial','industrial','grass','forest'].includes(tags.landuse ?? '');
+  }).map(way => (way.geometry ?? []).map(point=>local(point.lon,point.lat))).filter(ring=>ring.length>=3);
+  const allRoads = osmWays.filter(way=>way.tags?.highway && (way.geometry?.length ?? 0)>=2)
+    .map(way=>({ points:way.geometry!.map(point=>local(point.lon,point.lat)),
+      clearance: ['motorway','trunk','primary','secondary'].includes(way.tags!.highway) ? 13 : ['footway','path','cycleway'].includes(way.tags!.highway) ? 6 : 9 }));
 
   // Shared vertices identify junctions. Road endpoints are also left clear to
   // avoid putting decorative houses in cul-de-sacs or at interrupted geometry.
@@ -153,6 +161,9 @@ export function generateIllustrativeBuildings(
   for (const candidate of candidates) {
     if (result.length >= MAX_BUILDINGS) break;
     const center = candidate.center;
+    const outline = rectangle(center,candidate.direction,8,12);
+    if (restrictedLand.some(ring=>outline.some(point=>inside(point,ring)) || inside(center,ring))) continue;
+    if (allRoads.some(road=>road.points.some((point,index)=>index>0 && segmentDistance(center,road.points[index-1],point)<road.clearance))) continue;
     if (junctions.some(point => distanceSquared(center, point) < JUNCTION_CLEARANCE ** 2)) continue;
     if (generatedCenters.some(point => distanceSquared(center, point) < 10 ** 2)) continue;
     // An 8×12 m rectangle fits inside a circle of radius 7.22 m. Keeping its
@@ -164,8 +175,7 @@ export function generateIllustrativeBuildings(
       return footprint.ring.some((point, index) => segmentDistance(center, point, footprint.ring[(index + 1) % footprint.ring.length]) < 8);
     });
     if (conflicts) continue;
-    result.push({ ring: geographic(rectangle(center, candidate.direction, 8, 12)),
-      height: hash(candidate.key) % 3 === 0 ? 9.6 : 6.4, target: false });
+    result.push({ ring: geographic(outline), height: hash(candidate.key) % 8 === 0 ? 9.6 : 6.4, target: false });
     generatedCenters.push(center);
   }
   return result;

@@ -1,0 +1,59 @@
+.countdown strong { display: flex; justify-content: center; }
+.countdown-value-accessible { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.countdown .countdown-digit {
+  position: relative;
+  display: inline-block;
+  width: .62em;
+  height: 1.12em;
+  overflow: hidden;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: 1.12;
+  letter-spacing: 0;
+  mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+}
+.countdown .countdown-digit > span {
+  position: absolute;
+  inset: 0;
+  display: block;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  will-change: transform, opacity;
+}
+.countdown-digit-in { animation: countdown-roll-in 560ms cubic-bezier(.22, 1, .36, 1) both; }
+.countdown-digit-out { animation: countdown-roll-out 560ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes countdown-roll-in {
+  from { transform: translateY(88%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes countdown-roll-out {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-88%); opacity: 0; }
+}
+.floating-countdown {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, -14px, 0) scale(.97);
+  transform-origin: top right;
+  transition: opacity 420ms ease, transform 650ms cubic-bezier(.22, 1, .36, 1), visibility 650ms;
+}
+.floating-countdown.is-visible { opacity: 1; visibility: visible; transform: translate3d(0, 0, 0) scale(1); }
+.floating-countdown .countdown {
+  padding: 6px;
+  border: 1px solid #ffffff16;
+  border-radius: 12px;
+  background: #080809cc;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px #0003;
+}
+@media (max-width: 700px) {
+  .floating-countdown { transform: translate3d(0, 18px, 0) scale(.97); transform-origin: bottom center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .countdown-digit-in, .countdown-digit-out { animation: none; }
+  .countdown-digit-out { display: none !important; }
+  .floating-countdown { transition: none; transform: none; }
+}

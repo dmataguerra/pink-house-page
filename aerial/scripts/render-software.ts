@@ -29,6 +29,17 @@ const creditsText = '© OpenStreetMap contributors · openstreetmap.org/copyrigh
 const W = VIDEO.width;
 const H = VIDEO.height;
 const TAU = Math.PI * 2;
+const ROAD_GRADIENT = {
+  type: 'radial', shape: 'ellipse', size: 'farthest-corner',
+  center: { x: .38, y: .5 },
+  stops: [
+    { offset: 0, color: '#ed5290' },
+    { offset: .25, color: '#c72e6c' },
+    { offset: .55, color: '#661034' },
+    { offset: .85, color: '#080607' },
+    { offset: 1, color: '#000000' },
+  ],
+} as const;
 const RENDER_TARGET = {
   latitude: Number(process.env.RENDER_TARGET_LAT ?? TARGET.latitude),
   longitude: Number(process.env.RENDER_TARGET_LON ?? TARGET.longitude),

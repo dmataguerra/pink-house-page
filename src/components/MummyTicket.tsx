@@ -73,7 +73,11 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
       if (!bounds) return;
       const x = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
       const y = ((e.clientY - bounds.top) / bounds.height) * 2 - 1;
-      setPupil({ x: Math.max(-1, Math.min(1, x)) * 10, y: Math.max(-1, Math.min(1, y)) * 7 });
+      const clampedY = Math.max(-1, Math.min(1, y));
+      setPupil({
+        x: Math.max(-1, Math.min(1, x)) * 10,
+        y: clampedY * (clampedY < 0 ? 11 : 7),
+      });
     }
 
     document.addEventListener('pointermove', trackPupils);

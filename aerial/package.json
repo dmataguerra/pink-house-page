@@ -15,6 +15,11 @@
     "preflight": "tsx scripts/preflight.ts",
     "resolve:location": "tsx scripts/resolve-location.ts",
     "render": "tsx scripts/render.ts",
+    "render:illustrated": "tsx scripts/render-illustrated.ts",
+    "render:software": "tsx scripts/render-software.ts",
+    "render:pink-house": "tsx scripts/render-pink-house.ts",
+    "fetch:open": "tsx scripts/fetch-open-data.ts",
+    "fetch:buildings": "tsx scripts/fetch-microsoft-buildings.ts",
     "qa": "tsx scripts/qa.ts",
     "install:browser": "playwright install chromium"
   },

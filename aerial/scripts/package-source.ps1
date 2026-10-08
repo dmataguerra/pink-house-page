@@ -10,7 +10,7 @@ if ([System.IO.Path]::GetDirectoryName($packageFinal) -ne $packageOutput -or [Sy
 }
 
 $packageFiles = @{}
-foreach ($packageFile in @('.env.example', '.gitignore', 'dataset.example.json', 'index.html', 'package.json', 'package-lock.json', 'README.md', 'START_HERE.md', 'TECHNICAL_REPORT.md', 'tsconfig.json', 'vite.config.ts', 'setup.ps1')) {
+foreach ($packageFile in @('.env.example', '.gitignore', 'dataset.example.json', 'index.html', 'package.json', 'package-lock.json', 'README.md', 'START_HERE.md', 'TECHNICAL_REPORT.md', 'SURVEYED_MODE_RESEARCH.md', 'tsconfig.json', 'vite.config.ts', 'setup.ps1')) {
     $packagePath = Join-Path $aerialRoot $packageFile
     if (-not (Test-Path -LiteralPath $packagePath -PathType Leaf)) { throw "Missing source file: $packageFile" }
     $packageFiles[('aerial/' + $packageFile)] = $packagePath
@@ -25,6 +25,11 @@ foreach ($packageFolder in @('src', 'server', 'scripts', 'tests', 'types')) {
     }
 }
 $packageFiles['START_HERE.md'] = Join-Path $aerialRoot 'START_HERE.md'
+foreach ($packageItem in (Get-ChildItem -LiteralPath (Join-Path $aerialRoot 'public/open-data') -File)) {
+    if ($packageItem.Extension -notin @('.json', '.geojson', '.txt', '.md')) { continue }
+    if ($packageItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) { throw 'Linked data files cannot be packaged.' }
+    $packageFiles[('aerial/public/open-data/' + $packageItem.Name)] = $packageItem.FullName
+}
 $packageFiles['output/.gitignore'] = Join-Path $packageOutput '.gitignore'
 if (-not (Test-Path -LiteralPath $packageFiles['output/.gitignore'] -PathType Leaf)) {
     Set-Content -LiteralPath $packageFiles['output/.gitignore'] -Value "*`n!.gitignore" -Encoding ascii

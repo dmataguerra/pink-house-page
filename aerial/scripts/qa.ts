@@ -84,6 +84,52 @@ export interface QualityReport {
   targetVisibleFrames: number;
 }
 
+export interface IllustratedFrameReport {
+  frame: number;
+  time: number;
+  targetVisible: boolean;
+  attributionVisible: boolean;
+  approximationLabelVisible: boolean;
+  projectedTarget: { x: number; y: number };
+  geometryCount: number;
+  estimatedHeightCount: number;
+}
+
+export interface IllustratedRunManifest extends VideoSpec {
+  version: 1;
+  kind: 'cartographic-preview';
+  status: 'capturing' | 'captured' | 'validated' | 'failed' | 'preview';
+  createdAt: string;
+  approximationCaption: string;
+  photorealistic: false;
+  surveyedGeometryVerified: false;
+  targetHouseReconstructionVerified: false;
+  source: Record<string, unknown>;
+  credits: string[];
+  reports: IllustratedFrameReport[];
+  images: ImageMetric[];
+  blockedRequests: string[];
+}
+
+export interface IllustratedQualityReport {
+  kind: 'cartographic-preview';
+  passed: true;
+  checkedAt: string;
+  video: QualityReport['video'];
+  images: QualityReport['images'];
+  approximationCaption: string;
+  photorealistic: false;
+  surveyedGeometryVerified: false;
+  targetHouseReconstructionVerified: false;
+  source: Record<string, unknown>;
+  attributionVerifiedFrames: number;
+  approximationLabelVerifiedFrames: number;
+  targetCoordinateVisibleFrames: number;
+  blockedRequests: string[];
+}
+
+const ILLUSTRATED_CAPTION = 'VISUALIZACIÓN APROXIMADA · ALTURAS ESTIMADAS';
+
 export function redact(message: unknown): string {
   let result = message instanceof Error ? message.message : String(message);
   for (const [name, value] of Object.entries(process.env)) {
@@ -317,6 +363,52 @@ export async function validateRun(video: string, manifest: RunManifest): Promise
   };
 }
 
+/** Validate an explicitly approximate illustration without claiming a survey. */
+export function validateIllustratedMetadata(manifest: IllustratedRunManifest): void {
+  assert(manifest && manifest.version === 1 && manifest.kind === 'cartographic-preview', 'A cartographic-preview manifest is required.');
+  assert(manifest.width === REQUIRED_SPEC.width && manifest.height === REQUIRED_SPEC.height && manifest.fps === REQUIRED_SPEC.fps, 'Illustrated output dimensions or frame rate differ from the required specification.');
+  assert(Number.isInteger(manifest.frames) && manifest.frames > 0 && manifest.frames <= REQUIRED_SPEC.frames, 'Illustrated output frame count is outside the supported 30-second maximum.');
+  assert(Number.isFinite(manifest.duration) && Math.abs(manifest.duration - manifest.frames / manifest.fps) <= 1 / manifest.fps + 0.001, 'Illustrated output duration does not match its frame count.');
+  assert(manifest.status === 'captured' || manifest.status === 'validated', 'The complete illustrated frame sequence was not captured.');
+  assert(manifest.photorealistic === false && manifest.surveyedGeometryVerified === false && manifest.targetHouseReconstructionVerified === false, 'An illustrated video must not claim a photographic survey or verified house reconstruction.');
+  assert(manifest.approximationCaption === ILLUSTRATED_CAPTION, 'The permanent estimated-height approximation caption is missing.');
+  assert(Array.isArray(manifest.blockedRequests) && manifest.blockedRequests.length === 0, 'Illustrated capture requested external content; only local open geographic data is permitted.');
+  const source = manifest.source;
+  assert(source && typeof source === 'object' && source.kind === 'cartographic-preview', 'Illustrated geographic source provenance is missing or has the wrong kind.');
+  assert(!/google|earth\s+studio/i.test(JSON.stringify(source)), 'Google geographic imagery is prohibited in this cartographic export.');
+  assert(Number.isInteger(source.geometryCount) && Number(source.geometryCount) > 0, 'Illustrated geographic source contains no geometry.');
+  assert(Number.isInteger(source.estimatedHeightCount) && Number(source.estimatedHeightCount) >= 0 && Number(source.estimatedHeightCount) <= Number(source.geometryCount), 'Illustrated source estimated-height count is invalid.');
+  assert(Array.isArray(manifest.credits) && manifest.credits.every((credit) => typeof credit === 'string'), 'Illustrated credit evidence is missing.');
+  const credits = manifest.credits.join(' ').replace(/\s+/g, ' ');
+  assert(credits.includes(ILLUSTRATED_CAPTION), 'Visible credit evidence omits the approximation caption.');
+  assert(/OpenStreetMap/i.test(credits) && /openstreetmap\.org\/copyright|opendatacommons\.org\/licenses\/odbl/i.test(credits), 'Visible OpenStreetMap attribution and license reference are required.');
+  assert(Array.isArray(manifest.reports) && manifest.reports.length === manifest.frames, 'Illustrated per-frame diagnostics are incomplete.');
+  manifest.reports.forEach((report, index) => {
+    const prefix = `Illustrated frame ${index}: `;
+    assert(report && report.frame === index && finite(report.time) && Math.abs(report.time - index / manifest.fps) < 0.00001, `${prefix}camera sequence is invalid.`);
+    assert(report.targetVisible === true, `${prefix}target coordinate marker is offscreen.`);
+    assert(report.attributionVisible === true && report.approximationLabelVisible === true, `${prefix}attribution or approximation caption is hidden.`);
+    assert(Number.isInteger(report.geometryCount) && report.geometryCount === source.geometryCount, `${prefix}geographic geometry count differs from source provenance.`);
+    assert(Number.isInteger(report.estimatedHeightCount) && report.estimatedHeightCount === source.estimatedHeightCount, `${prefix}estimated-height count differs from source provenance.`);
+    const point = report.projectedTarget;
+    assert(point && finite(point.x) && finite(point.y) && point.x >= 48 && point.x <= manifest.width - 48 && point.y >= 48 && point.y <= manifest.height - 48, `${prefix}target coordinate marker lies outside the safe frame.`);
+  });
+}
+
+export async function validateIllustratedRun(video: string, manifest: IllustratedRunManifest): Promise<IllustratedQualityReport> {
+  validateIllustratedMetadata(manifest);
+  const images = validateImages(manifest.images, manifest.frames, manifest.fps);
+  const technical = await validateVideo(video, manifest);
+  return {
+    kind: 'cartographic-preview', passed: true, checkedAt: new Date().toISOString(),
+    video: technical, images, approximationCaption: manifest.approximationCaption,
+    photorealistic: false, surveyedGeometryVerified: false, targetHouseReconstructionVerified: false,
+    source: manifest.source, attributionVerifiedFrames: manifest.reports.length,
+    approximationLabelVerifiedFrames: manifest.reports.length,
+    targetCoordinateVisibleFrames: manifest.reports.length, blockedRequests: manifest.blockedRequests,
+  };
+}
+
 async function main() {
   const aerialRoot = fileURLToPath(new URL('../', import.meta.url));
   loadDotenv({ path: path.join(aerialRoot, '.env.local'), quiet: true });
@@ -329,8 +421,10 @@ async function main() {
   const video = option('--video');
   const manifestFile = option('--manifest');
   assert(video && manifestFile, 'Usage from aerial/: npm run qa -- --video ../output/house_flyover.mp4 --manifest ../output/house_flyover.manifest.json');
-  const manifest = JSON.parse(await readFile(path.resolve(manifestFile), 'utf8')) as RunManifest;
-  const report = await validateRun(path.resolve(video), manifest);
+  const manifest = JSON.parse(await readFile(path.resolve(manifestFile), 'utf8')) as RunManifest | IllustratedRunManifest;
+  const report = 'kind' in manifest && manifest.kind === 'cartographic-preview'
+    ? await validateIllustratedRun(path.resolve(video), manifest)
+    : await validateRun(path.resolve(video), manifest as RunManifest);
   const reportFile = option('--report') || path.join(path.dirname(path.resolve(video)), `${path.parse(video).name}.qa.json`);
   await writeFile(reportFile, JSON.stringify(report, null, 2));
   console.log(`QA passed: ${report.video.width}×${report.video.height}, ${report.video.fps} fps, ${report.video.duration} seconds, ${manifest.frames} decoded frames.`);

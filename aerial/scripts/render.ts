@@ -85,6 +85,14 @@ async function publish(partialVideo: string, manifestFile: string, qaFile: strin
 export async function render(): Promise<void> {
   loadDotenv({ path: path.join(aerialRoot, '.env.local'), quiet: true });
   loadDotenv({ path: path.join(aerialRoot, '.env'), quiet: true });
+  if (process.env.FLYOVER_MODE !== 'surveyed') {
+    // The default deliverable is an explicitly approximate cartographic
+    // preview. The software renderer is deterministic and works in restricted
+    // runners where Chromium cannot connect to localhost; the Cesium/Playwright
+    // implementation remains available through render-illustrated.ts.
+    const { renderPinkHouse } = await import('./render-pink-house');
+    return renderPinkHouse({ preview: process.argv.includes('--preview') });
+  }
   // Rights and geographic coverage are checked before any browser or output
   // directory is created. The app repeats this check when loading its source.
   await loadDataset(aerialRoot);

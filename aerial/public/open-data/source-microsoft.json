@@ -1,0 +1,109 @@
+{
+  "source": "Microsoft Global ML Building Footprints",
+  "license": "CDLA Permissive 2.0",
+  "licenseUrl": "https://cdla.dev/permissive-2-0/",
+  "licenseText": "Community Data License Agreement - Permissive - Version 2.0\n\nThis is the Community Data License Agreement - Permissive, Version 2.0 (the \"agreement\"). Data Provider(s) and Data Recipient(s) agree as follows:\n\n1. Provision of the Data\n\n1.1. A Data Recipient may use, modify, and share the Data made available by Data Provider(s) under this agreement if that Data Recipient follows the terms of this agreement.\n\n1.2. This agreement does not impose any restriction on a Data Recipient's use, modification, or sharing of any portions of the Data that are in the public domain or that may be used, modified, or shared under any other legal exception or limitation.\n\n2. Conditions for Sharing Data\n\n2.1. A Data Recipient may share Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data.\n\n3. No Restrictions on Results\n\n3.1. This agreement does not impose any restriction or obligations with respect to the use, modification, or sharing of Results.\n\n4. No Warranty; Limitation of Liability\n\n4.1. All Data Recipients receive the Data subject to the following terms:\n\nTHE DATA IS PROVIDED ON AN \"AS IS\" BASIS, WITHOUT REPRESENTATIONS, WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.\n\nNO DATA PROVIDER SHALL HAVE ANY LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING WITHOUT LIMITATION LOST PROFITS), HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE DATA OR RESULTS, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.\n\n5. Definitions\n\n5.1. \"Data\" means the material received by a Data Recipient under this agreement.\n\n5.2. \"Data Provider\" means any person who is the source of Data provided under this agreement and in reliance on a Data Recipient's agreement to its terms.\n\n5.3. \"Data Recipient\" means any person who receives Data directly or indirectly from a Data Provider and agrees to the terms of this agreement.\n\n5.4. \"Results\" means any outcome obtained by computational analysis of Data, including for example machine learning models and models' insights.\n",
+  "licenseTextSource": "https://raw.githubusercontent.com/Community-Data-License-Agreements/Releases/main/CDLA-Permissive-2.0.txt",
+  "attribution": "Microsoft Global ML Building Footprints · CDLA Permissive 2.0",
+  "repository": "https://github.com/microsoft/GlobalMLBuildingFootprints",
+  "catalog": "https://bfppub.blob.core.windows.net/%24web/2026-08-13/dataset-links.csv",
+  "catalogSha256": "de61b569b0c23c364d61173632d8c5487ea30bf20912c55b9fa1ab4a89d01148",
+  "fetchedAt": "2026-10-08T03:44:57.817Z",
+  "downloadComplete": true,
+  "target": {
+    "latitude": 20.707390681241908,
+    "longitude": -100.44438633247219,
+    "address": "Paseo de Libero 172, Juriquilla, Querétaro, Mexico"
+  },
+  "queryRadiusMeters": 1400,
+  "subsetBounds": {
+    "west": -100.45783125185328,
+    "south": 20.694814324792034,
+    "east": -100.4309414130911,
+    "north": 20.71996703769178
+  },
+  "extraction": "Full source footprint geometries whose bounds intersect the 1400 m target bounding envelope; no invented outlines.",
+  "downloads": [
+    {
+      "quadkey": "023310003",
+      "url": "https://bfppub.blob.core.windows.net/%24web/2026-08-13/global-buildings.geojsonl/RegionName=Mexico/quadkey=023310003/part-00134-110f5303-ff85-4c71-a2bf-c6070024fec8.c000.csv.gz",
+      "catalogUrl": "https://bfppub.z5.web.core.windows.net/2026-08-13/global-buildings.geojsonl/RegionName=Mexico/quadkey=023310003/part-00134-110f5303-ff85-4c71-a2bf-c6070024fec8.c000.csv.gz",
+      "catalogSize": "21.6MB",
+      "bytes": 22661123,
+      "records": 272018,
+      "sha256": "fd6a3448a01158a7a48d7711a87310e19667803125ae6bdcd032809c53fe1c2d"
+    }
+  ],
+  "buildings": 1291,
+  "suppliedAiHeightEstimates": 0,
+  "targetContainingFootprints": [],
+  "nearestFootprints": [
+    {
+      "id": "microsoft-023310003-187211",
+      "distanceMeters": 376.6,
+      "containsTarget": false,
+      "properties": {
+        "height": -1,
+        "confidence": -1,
+        "footprintSource": "Microsoft Global ML Building Footprints",
+        "footprintMethod": "AI detected from imagery; not surveyed",
+        "heightMethod": "No supplied height"
+      }
+    },
+    {
+      "id": "microsoft-023310003-166655",
+      "distanceMeters": 485.4,
+      "containsTarget": false,
+      "properties": {
+        "height": -1,
+        "confidence": -1,
+        "footprintSource": "Microsoft Global ML Building Footprints",
+        "footprintMethod": "AI detected from imagery; not surveyed",
+        "heightMethod": "No supplied height"
+      }
+    },
+    {
+      "id": "microsoft-023310003-71206",
+      "distanceMeters": 504.8,
+      "containsTarget": false,
+      "properties": {
+        "height": -1,
+        "confidence": -1,
+        "footprintSource": "Microsoft Global ML Building Footprints",
+        "footprintMethod": "AI detected from imagery; not surveyed",
+        "heightMethod": "No supplied height"
+      }
+    },
+    {
+      "id": "microsoft-023310003-154172",
+      "distanceMeters": 582,
+      "containsTarget": false,
+      "properties": {
+        "height": -1,
+        "confidence": -1,
+        "footprintSource": "Microsoft Global ML Building Footprints",
+        "footprintMethod": "AI detected from imagery; not surveyed",
+        "heightMethod": "No supplied height"
+      }
+    },
+    {
+      "id": "microsoft-023310003-223990",
+      "distanceMeters": 582.1,
+      "containsTarget": false,
+      "properties": {
+        "height": -1,
+        "confidence": -1,
+        "footprintSource": "Microsoft Global ML Building Footprints",
+        "footprintMethod": "AI detected from imagery; not surveyed",
+        "heightMethod": "No supplied height"
+      }
+    }
+  ],
+  "subsetSha256": "3aa251a85fab513a6b70f70b823c5473079a1661934a9a199e4b01dcc5b8e6dc",
+  "limitations": [
+    "Footprints are AI detections, not field surveys; target identity is unverified even if a polygon contains the coordinate.",
+    "No photographs, facade textures, roof slopes, vegetation meshes or terrain heights are supplied.",
+    "Any supplied height is a model estimate. Missing heights must be labeled as visualization assumptions.",
+    "Source imagery dates vary; the catalog publication date is not a target-area capture date."
+  ]
+}

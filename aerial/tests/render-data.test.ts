@@ -32,6 +32,10 @@ test('roads retain geographic widths and mapped parks retain surface outlines',(
   assert.deepEqual(data.surfaces[0].ring,ring.slice(0,-1));
 });
 
-test('the Juriquilla title is centered independently of camera angle',()=>{
-  for(const frame of [300,500,800])assert.match(overlays(illustratedPose(frame)),/x="960" y="142" text-anchor="middle"[^>]*>JURIQUILLA/);
+test('the local overlay omits the regional title and emphasizes Pink House',()=>{
+  for(const frame of [300,500,800]){
+    const overlay=overlays(illustratedPose(frame));
+    assert.doesNotMatch(overlay,/JURIQUILLA/);
+    assert.match(overlay,/font-size="17"[^>]*letter-spacing="2">PINK HOUSE/);
+  }
 });

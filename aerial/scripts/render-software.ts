@@ -36,7 +36,7 @@ const RENDER_TARGET = {
 const POINTS_OF_INTEREST = [
   { east: 0, north: 0, color: '#f1ede8', label: '' },
   { latitude: 20.70438308336931, longitude: -100.44387705896915, color: '#55b9ff', label: 'FIF', zone: 'fif' },
-  { latitude: 20.70827004638903, longitude: -100.4453510329209, color: '#ff4f5e', label: 'UVM', zone: 'uvm' },
+  { latitude: 20.70827004638903, longitude: -100.4453510329209, color: '#ff1f3d', label: 'UVM', zone: 'uvm' },
   { latitude: 20.705875489620908, longitude: -100.44812312985161, color: '#ffd447', label: 'ENES', zone: 'enes' },
 ] as const;
 const ZONE_RADIUS = 105;
@@ -276,11 +276,11 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
   // perspective as the homes rather than remaining screen-wide bars.
   for (const road of projectedRoads) {
     const major = !['footway','path','steps','cycleway'].includes(road.kind);
-    ribbon(road.points,road.width+(major?1.2:.4), '#ff4f91',.9);
+    ribbon(road.points,road.width+(major?1.2:.4), '#e58b78',.9);
   }
   for (const road of projectedRoads) {
     const major = !['footway','path','steps','cycleway'].includes(road.kind);
-    ribbon(road.points,road.width, '#ff4f91',.98);
+    ribbon(road.points,road.width, '#e58b78',.98);
   }
   const basis=cameraBasis(pose);
   const buildings = data.structures
@@ -350,7 +350,7 @@ export function overlays(pose: IllustratedPose, style: OverlayStyle = {}): strin
   const inSpace = pose.range > 40000;
   const ink = '#f1ede8';
   const footer = `<text x="1858" y="1050" font-family="Arial,sans-serif" font-size="10" fill="${ink}" fill-opacity=".5" text-anchor="end">© OSM contributors · openstreetmap.org/copyright · Overture · Microsoft · Google Open Buildings (CC BY 4.0)</text>`;
-  return `<g font-family="Inter,Arial,sans-serif" fill="${ink}"><text x="960" y="142" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="84" font-weight="700" letter-spacing="-2">JURIQUILLA</text><circle cx="960" cy="540" r="${inSpace ? 8 : 12}" fill="#f1ede8" stroke="#f1ede8" stroke-width="3"/><line x1="960" y1="540" x2="960" y2="455" stroke="#f1ede8" stroke-width="2"/><rect x="836" y="419" width="248" height="37" rx="4" fill="#101010" fill-opacity=".95" stroke="#f1ede8"/><text x="960" y="443" fill="#f1ede8" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="1.5">${esc(brand.toUpperCase())}</text>${footer}</g>`;
+  return `<g font-family="Inter,Arial,sans-serif" fill="${ink}"><circle cx="960" cy="540" r="${inSpace ? 8 : 12}" fill="#ffffff" stroke="#ffffff" stroke-width="3"/><line x1="960" y1="540" x2="960" y2="455" stroke="#ffffff" stroke-width="2"/><rect x="792" y="411" width="336" height="53" rx="5" fill="#101010" fill-opacity=".95" stroke="#ffffff" stroke-width="1.5"/><text x="960" y="445" fill="#ffffff" text-anchor="middle" font-size="17" font-weight="700" letter-spacing="2">${esc(brand.toUpperCase())}</text>${footer}</g>`;
 }
 
 export function frameSvg(frame: number, data: ReturnType<typeof gatherData>, style: OverlayStyle = {}): string {
@@ -451,7 +451,7 @@ export async function renderSoftwareIllustrated({preview=false}: {preview?:boole
       if (!(await exists(filename))) await writeFile(filename,png);
       if (preview || (frame+1)%30===0) console.log(preview?`Rendered software preview frame ${frame}.`:`Rendered ${frame+1}/${VIDEO.frames} frames.`);
     }
-    const manifest: IllustratedRunManifest={version:1,kind:'cartographic-preview',status:preview?'preview':'captured',createdAt:new Date().toISOString(),...REQUIRED_SPEC,frames:preview?REQUIRED_SPEC.frames:captureCount,duration:preview?REQUIRED_SPEC.duration:captureCount/VIDEO.fps,approximationCaption:caption,photorealistic:false,surveyedGeometryVerified:false,targetHouseReconstructionVerified:false,source:{...source,effectiveTarget:RENDER_TARGET,zoneStyling:{radiusMeters:ZONE_RADIUS,roads:'#ff4f91',ground:'#000000',fif:'#55b9ff',enes:'#ffd447',uvm:'#ff4f5e',pinkHouse:'#ffffff'}},credits:[caption,creditsText],reports:preview?reports:reports,images,blockedRequests:[]};
+    const manifest: IllustratedRunManifest={version:1,kind:'cartographic-preview',status:preview?'preview':'captured',createdAt:new Date().toISOString(),...REQUIRED_SPEC,frames:preview?REQUIRED_SPEC.frames:captureCount,duration:preview?REQUIRED_SPEC.duration:captureCount/VIDEO.fps,approximationCaption:caption,photorealistic:false,surveyedGeometryVerified:false,targetHouseReconstructionVerified:false,source:{...source,effectiveTarget:RENDER_TARGET,zoneStyling:{radiusMeters:ZONE_RADIUS,roads:'#e58b78',ground:'#000000',fif:'#55b9ff',enes:'#ffd447',uvm:'#ff1f3d',pinkHouse:'#ffffff'}},credits:[caption,creditsText],reports:preview?reports:reports,images,blockedRequests:[]};
     if (preview) {
       await writeFile(path.join(outputRoot,'verification','software-preview.json'),JSON.stringify(manifest,null,2));
       console.log('Software preview frames saved under output/.render-software-*; no MP4 published.');

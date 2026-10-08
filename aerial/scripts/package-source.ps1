@@ -19,7 +19,7 @@ foreach ($packageFolder in @('src', 'server', 'scripts', 'tests', 'types')) {
     $packageFolderPath = Join-Path $aerialRoot $packageFolder
     foreach ($packageItem in (Get-ChildItem -LiteralPath $packageFolderPath -Recurse -File)) {
         if ($packageItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) { throw 'Linked source files cannot be packaged.' }
-        if ($packageItem.Extension -notin @('.ts', '.tsx', '.css', '.mjs', '.ps1')) { continue }
+        if ($packageItem.Extension -notin @('.ts', '.tsx', '.css', '.mjs', '.ps1', '.py')) { continue }
         $packageRelative = $packageItem.FullName.Substring($aerialRoot.Length + 1).Replace('\', '/')
         $packageFiles[('aerial/' + $packageRelative)] = $packageItem.FullName
     }

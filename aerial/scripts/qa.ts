@@ -375,7 +375,10 @@ export function validateIllustratedMetadata(manifest: IllustratedRunManifest): v
   assert(Array.isArray(manifest.blockedRequests) && manifest.blockedRequests.length === 0, 'Illustrated capture requested external content; only local open geographic data is permitted.');
   const source = manifest.source;
   assert(source && typeof source === 'object' && source.kind === 'cartographic-preview', 'Illustrated geographic source provenance is missing or has the wrong kind.');
-  assert(!/google|earth\s+studio/i.test(JSON.stringify(source)), 'Google geographic imagery is prohibited in this cartographic export.');
+  // Google Open Buildings is a separately published CC BY 4.0 vector dataset
+  // distributed by Overture; it is not Google Maps imagery or 3D tile content.
+  const imagerySource = JSON.stringify(source).replace(/Google Open Buildings/g, 'open footprint dataset');
+  assert(!/google|earth\s+studio/i.test(imagerySource), 'Google geographic imagery is prohibited in this cartographic export.');
   assert(Number.isInteger(source.geometryCount) && Number(source.geometryCount) > 0, 'Illustrated geographic source contains no geometry.');
   assert(Number.isInteger(source.estimatedHeightCount) && Number(source.estimatedHeightCount) >= 0 && Number(source.estimatedHeightCount) <= Number(source.geometryCount), 'Illustrated source estimated-height count is invalid.');
   assert(Array.isArray(manifest.credits) && manifest.credits.every((credit) => typeof credit === 'string'), 'Illustrated credit evidence is missing.');

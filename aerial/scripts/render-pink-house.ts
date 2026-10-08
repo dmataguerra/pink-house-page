@@ -13,7 +13,7 @@ import {
 const aerialRoot = fileURLToPath(new URL('../', import.meta.url));
 const outputRoot = path.resolve(aerialRoot, '..', 'output');
 const caption = 'VISUALIZACIÓN APROXIMADA · ALTURAS ESTIMADAS';
-const creditsText = '© OpenStreetMap contributors · openstreetmap.org/copyright · https://openstreetmap.org/copyright | Natural Earth | Microsoft Global ML Building Footprints · CDLA Permissive 2.0';
+const creditsText = '© OpenStreetMap contributors · openstreetmap.org/copyright · https://openstreetmap.org/copyright | Overture Maps Foundation · ODbL 1.0 | Google Open Buildings · CC BY 4.0 | Natural Earth | Microsoft Global ML Building Footprints · CDLA Permissive 2.0';
 const EDITED_FROM_FRAME = 300;
 const FPS = VIDEO.fps;
 const FRAME_COUNT = VIDEO.frames - EDITED_FROM_FRAME;
@@ -58,18 +58,22 @@ export async function renderPinkHouse({ preview = false }: { preview?: boolean }
   const osm = JSON.parse(await readFile(path.join(aerialRoot, 'public/open-data/osm.json'), 'utf8')) as { elements: Array<Record<string, unknown>> };
   const microsoftFile = path.join(aerialRoot, 'public/open-data/microsoft-buildings.geojson');
   const microsoft = await exists(microsoftFile) ? JSON.parse(await readFile(microsoftFile, 'utf8')) : {};
-  const data = gatherData(osm as never, microsoft);
+  const overtureFile = path.join(aerialRoot, 'public/open-data/overture-buildings.geojson');
+  const overture = await exists(overtureFile) ? JSON.parse(await readFile(overtureFile, 'utf8')) : {};
+  const overtureSourceFile = path.join(aerialRoot, 'public/open-data/source-overture.json');
+  const overtureSource = await exists(overtureSourceFile) ? JSON.parse(await readFile(overtureSourceFile, 'utf8')) : null;
+  const data = gatherData(osm as never, microsoft, overture);
   const msSourceFile = path.join(aerialRoot, 'public/open-data/source-microsoft.json');
   const msSource = await exists(msSourceFile) ? JSON.parse(await readFile(msSourceFile, 'utf8')) : null;
   const osmSource = JSON.parse(await readFile(path.join(aerialRoot, 'public/open-data/source.json'), 'utf8'));
   const source = {
     kind: 'cartographic-preview', label: 'Pink House', editedFromFrame: EDITED_FROM_FRAME,
     trimmedFromSeconds: EDITED_FROM_FRAME / FPS, durationSeconds: SPEC.duration, footerTextRemoved: true,
-    openStreetMap: osmSource, microsoft: msSource,
+    openStreetMap: osmSource, microsoft: msSource, overture: overtureSource,
     naturalEarth: { name: 'Natural Earth II', license: 'Public domain', url: 'https://www.naturalearthdata.com/about/terms-of-use/' },
-    mappedBuildingCount: data.mappedBuildingCount, microsoftBuildings: data.microsoftCount, proceduralBuildings: data.proceduralCount,
+    mappedBuildingCount: data.mappedBuildingCount, microsoftBuildings: data.microsoftCount, overtureBuildings: data.overtureCount, proceduralBuildings: data.proceduralCount, duplicateFootprintsRemoved: data.duplicateCount,
     roads: data.roads.length, geometryCount: data.structures.length,
-    estimatedHeightCount: data.structures.filter((item) => item.height !== 0).length,
+    estimatedHeightCount: data.structures.filter((item) => item.heightEstimated).length,
     terrain: 'Ellipsoid with flat illustrative local ground; no measured terrain model.', targetHouseVerified: false,
     photographicTextures: false,
     limitations: ['Building footprints are mapped or AI-derived; heights are mostly estimated.', 'The Pink House marker indicates the supplied coordinate; the specific house is not reconstructed or verified.'],
@@ -88,10 +92,23 @@ export async function renderPinkHouse({ preview = false }: { preview?: boolean }
     await lock.writeFile(JSON.stringify({ pid: process.pid, mode: 'pink-house-trimmed', startedAt: new Date().toISOString() }));
     await mkdir(framesRoot, { recursive: true });
     const indices = preview ? [0, 200, 400, 599] : Array.from({ length: FRAME_COUNT }, (_, i) => i);
-    for (const outputFrame of indices) {
+    // Several independent SVG rasterizations can use separate native workers.
+    // The metrics still consume frames in order for continuity/freeze checks.
+    const concurrency = preview ? 2 : 4;
+    const pending = new Map<number,Promise<Buffer>>();
+    const schedule = (index:number) => {
+      if(index>=indices.length)return;
+      const outputFrame=indices[index];
+      pending.set(index,sharp(Buffer.from(frameSvg(EDITED_FROM_FRAME+outputFrame,data,style))).png({compressionLevel:1}).toBuffer());
+    };
+    for(let index=0;index<Math.min(concurrency,indices.length);index++)schedule(index);
+    for (let index=0;index<indices.length;index++) {
+      const outputFrame=indices[index];
       const sourceFrame = EDITED_FROM_FRAME + outputFrame;
       const file = path.join(framesRoot, `frame-${String(outputFrame).padStart(6, '0')}.png`);
-      const png = await sharp(Buffer.from(frameSvg(sourceFrame, data, style))).png().toBuffer();
+      const png = await pending.get(index)!;
+      pending.delete(index);
+      schedule(index+concurrency);
       const measured = await measureImage(png, outputFrame, previous);
       previous = measured.pixels;
       images.push(measured.metric);

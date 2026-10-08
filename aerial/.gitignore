@@ -6,3 +6,4 @@ dist/
 private/
 public/data/
 *.tsbuildinfo
+.data-tools/

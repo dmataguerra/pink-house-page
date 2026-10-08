@@ -13,7 +13,9 @@ powershell -NoProfile -File .\aerial\setup.ps1
 npm --prefix aerial run render
 ```
 
-The default software renderer publishes `output/house_flyover.mp4` after checks: **1920 × 1080, 30 fps, 20 seconds, H.264/yuv420p**. It uses source frames 300–899 from the original 30-second camera path, so playback begins at the former 10-second point. The header has no coordinates, the label is “Pink House”, and the video footer is empty; the small top-right source credit remains for attribution. It also saves `.manifest.json` and `.qa.json` sidecars. Rendering takes longer than playback. Existing final outputs are preserved as backups. Keep several GB free for the 600 intermediate PNG frames. The delivered MP4 was rendered and validated successfully.
+The default software renderer publishes `output/house_flyover.mp4` after checks: **1920 × 1080, 30 fps, 20 seconds, H.264/yuv420p**. It uses source frames 300–899 from the original 30-second camera path, so playback begins at the former 10-second point. The centered header has no coordinates, the label is “Pink House”, and source attribution remains at the lower edge. It also saves `.manifest.json` and `.qa.json` sidecars. Rendering takes longer than playback. Existing final outputs are preserved as backups. Keep several GB free for the 600 intermediate PNG frames.
+
+The 8 October update retains the monochrome design and uses the included Overture 2026-09-23.1 footprint snapshot to fill the neighborhood with actual detected/mapped outlines. After deduplication, 15,934 outlines remain and no procedural homes are used. The render uses camera depth for occlusion, perspective-correct street widths and subdued wall/roof shading. Heights remain estimates where the sources do not supply them.
 
 Preview four still frames with `npm --prefix aerial run render -- --preview`. For an interactive preview, run `npm --prefix aerial run dev` and open [the illustrated scene](http://127.0.0.1:4175/?mode=illustrated).
 
@@ -27,6 +29,8 @@ To refresh the geographic extracts rather than use the included snapshot:
 npm --prefix aerial run fetch:open
 npm --prefix aerial run fetch:buildings
 ```
+
+The included Overture snapshot renders without Python or network access. To refresh it, install DuckDB for Python and run `aerial/scripts/fetch-overture-buildings.py` with that Python executable. The script reads Overture's STAC spatial extents, downloads only matching remote parquet rows, and stores outlines plus source/checksum records under `aerial/public/open-data/`. See [Overture's data documentation](https://docs.overturemaps.org/getting-data/cloud-sources/) and [building attribution](https://docs.overturemaps.org/attribution/#buildings). Overture includes the separately licensed Google Open Buildings vectors (CC BY 4.0); no Google Maps tiles, screenshots or meshes are used.
 
 The Microsoft download can be substantially larger than the final clipped extract. It is optional but gives much better residential coverage. Fetching requires internet; capture blocks all external requests. Natural Earth is public domain, OSM is ODbL 1.0, and the Microsoft extract includes its CDLA Permissive 2.0 text and source. See `public/open-data/` and [TECHNICAL_REPORT.md](./TECHNICAL_REPORT.md).
 

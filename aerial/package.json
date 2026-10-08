@@ -18,6 +18,7 @@
     "render:illustrated": "tsx scripts/render-illustrated.ts",
     "render:software": "tsx scripts/render-software.ts",
     "render:pink-house": "tsx scripts/render-pink-house.ts",
+    "render:orbital": "tsx scripts/render-orbital-film.ts",
     "fetch:open": "tsx scripts/fetch-open-data.ts",
     "fetch:buildings": "tsx scripts/fetch-microsoft-buildings.ts",
     "qa": "tsx scripts/qa.ts",

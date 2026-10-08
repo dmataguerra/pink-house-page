@@ -230,14 +230,14 @@ function textureSvg(pose: ScenePose, texture: SceneTexture): string {
 
 function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneStyle: SceneStyle = {}): string {
   const parts: string[] = [];
-  parts.push('<rect width="1920" height="1080" fill="#000000"/>');
+  parts.push('<rect width="1920" height="1080" fill="#09070e"/>');
   if(sceneStyle.texture)parts.push(textureSvg(pose,sceneStyle.texture));
   parts.push(`<g opacity="${sceneStyle.geometryOpacity??1}">`);
   const visibleRadius = clamp(pose.range * 6.4, 900, 3600);
   for (const surface of data.surfaces) {
     const points = surface.ring.map(([lon,lat])=>projectLonLat(lon,lat,.12,pose));
     if (points.some(point=>!point)) continue;
-    const fill = '#050505';
+    const fill = '#110d18';
     parts.push(polygon(points.map(point=>[point![0],point![1]]),fill,.72));
   }
   const projectedRoads: Array<{points: Array<[number,number]>; kind: string; width: number}> = [];
@@ -276,11 +276,11 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
   // perspective as the homes rather than remaining screen-wide bars.
   for (const road of projectedRoads) {
     const major = !['footway','path','steps','cycleway'].includes(road.kind);
-    ribbon(road.points,road.width+(major?1.2:.4), '#e58b78',.9);
+    ribbon(road.points,road.width+(major?1.2:.4), '#e28b82',.9);
   }
   for (const road of projectedRoads) {
     const major = !['footway','path','steps','cycleway'].includes(road.kind);
-    ribbon(road.points,road.width, '#e58b78',.98);
+    ribbon(road.points,road.width, '#e28b82',.98);
   }
   const basis=cameraBasis(pose);
   const buildings = data.structures
@@ -293,6 +293,14 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
       return center[0]>-margin&&center[0]<W+margin&&center[1]>-margin&&center[1]<H+margin;
     })
     .sort((a,b) => b.depth-a.depth);
+  const uvmStructures = buildings
+    .filter(({item, radius}) => {
+      const uvm = zoneCenters.find(candidate => candidate.zone === 'uvm');
+      return Boolean(uvm && Math.hypot(item.center[0]-uvm.center[0], item.center[1]-uvm.center[1]) <= ZONE_RADIUS);
+    })
+    .sort((a,b) => b.item.area-a.item.area)
+    .slice(0, 2);
+  const uvmStructureSet = new Set(uvmStructures.map(({item}) => item));
   for (const {item} of buildings) {
     const shadow=item.local.map(([e,n])=>project([e+item.height*.62,n-item.height*.42,.34],pose));
     if (shadow.every(Boolean)) parts.push(polygon(shadow.map(p=>[p![0],p![1]]),'#060606',.24));
@@ -310,9 +318,9 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
     const zone = zoneCenters
       .map(candidate => ({...candidate, distance: Math.hypot(item.center[0]-candidate.center[0], item.center[1]-candidate.center[1])}))
       .sort((a,b) => a.distance-b.distance)[0];
-    const zoneColor = zone && zone.distance <= ZONE_RADIUS ? zone.color : undefined;
-    const tone = 45+item.tone*3;
-    const shade = item.target ? '#ffffff' : zoneColor ?? `rgb(${tone},${tone},${tone})`;
+    const zoneColor = zone && zone.distance <= ZONE_RADIUS && (zone.zone !== 'uvm' || uvmStructureSet.has(item)) ? zone.color : undefined;
+    const tone = 54+item.tone*3;
+    const shade = item.target ? '#ffffff' : zoneColor ?? `rgb(${tone},${tone-2},${tone+5})`;
     const winding=item.local.reduce((sum,[e,n],i)=>{const next=item.local[(i+1)%item.local.length];return sum+e*next[1]-n*next[0];},0)>0?1:-1;
     for (let i=0;i<basePoints.length;i++) {
       const j=(i+1)%basePoints.length;
@@ -320,9 +328,9 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
       if(length<.01)continue;
       const nx=dy/length*winding,ny=-dx/length*winding;
       if(nx*(pose.east-(a[0]+b[0])/2)+ny*(pose.north-(a[1]+b[1])/2)<=0)continue;
-      const light=clamp(nx*(-.6)+ny*.45,.05,1), wallTone=20+light*13+item.tone;
+      const light=clamp(nx*(-.6)+ny*.45,.05,1), wallTone=28+light*13+item.tone;
       const side = item.target ? `rgb(${220+light*25},${220+light*25},${220+light*25})` :
-        zoneColor ? zoneColor : `rgb(${wallTone},${wallTone},${wallTone})`;
+        zoneColor ? zoneColor : `rgb(${wallTone},${wallTone-2},${wallTone+5})`;
       parts.push(polygon([basePoints[i],basePoints[j],roofPoints[j],roofPoints[i]],side,1));
       const pixelHeight=Math.hypot(basePoints[i][0]-roofPoints[i][0],basePoints[i][1]-roofPoints[i][1]);
       if(pixelHeight>13) {
@@ -330,7 +338,7 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
         for(let h=3.2;h<item.height-1;h+=3.2){const p=project([a[0],a[1],h],pose),q=project([b[0],b[1],h],pose);if(p&&q)parts.push(line([[p[0],p[1]],[q[0],q[1]]],item.target?'#ffffff':zoneColor ?? '#373737',.45,.45));}
       }
     }
-    parts.push(polygon(roofPoints,shade,1,item.target?'#ffffff':zoneColor ?? '#626262',.72));
+    parts.push(polygon(roofPoints,shade,1,item.target?'#ffffff':zoneColor ?? '#726b78',.72));
     const center = roofPoints.reduce((acc,p) => [acc[0]+p[0],acc[1]+p[1]] as [number,number], [0,0] as [number,number]);
     center[0] /= roofPoints.length; center[1] /= roofPoints.length;
     if (item.target) parts.push(`<circle cx="${center[0].toFixed(1)}" cy="${center[1].toFixed(1)}" r="10" fill="#f1ede8" stroke="#f1ede8" stroke-width="3"/>`);
@@ -451,7 +459,7 @@ export async function renderSoftwareIllustrated({preview=false}: {preview?:boole
       if (!(await exists(filename))) await writeFile(filename,png);
       if (preview || (frame+1)%30===0) console.log(preview?`Rendered software preview frame ${frame}.`:`Rendered ${frame+1}/${VIDEO.frames} frames.`);
     }
-    const manifest: IllustratedRunManifest={version:1,kind:'cartographic-preview',status:preview?'preview':'captured',createdAt:new Date().toISOString(),...REQUIRED_SPEC,frames:preview?REQUIRED_SPEC.frames:captureCount,duration:preview?REQUIRED_SPEC.duration:captureCount/VIDEO.fps,approximationCaption:caption,photorealistic:false,surveyedGeometryVerified:false,targetHouseReconstructionVerified:false,source:{...source,effectiveTarget:RENDER_TARGET,zoneStyling:{radiusMeters:ZONE_RADIUS,roads:'#e58b78',ground:'#000000',fif:'#55b9ff',enes:'#ffd447',uvm:'#ff1f3d',pinkHouse:'#ffffff'}},credits:[caption,creditsText],reports:preview?reports:reports,images,blockedRequests:[]};
+    const manifest: IllustratedRunManifest={version:1,kind:'cartographic-preview',status:preview?'preview':'captured',createdAt:new Date().toISOString(),...REQUIRED_SPEC,frames:preview?REQUIRED_SPEC.frames:captureCount,duration:preview?REQUIRED_SPEC.duration:captureCount/VIDEO.fps,approximationCaption:caption,photorealistic:false,surveyedGeometryVerified:false,targetHouseReconstructionVerified:false,source:{...source,effectiveTarget:RENDER_TARGET,zoneStyling:{radiusMeters:ZONE_RADIUS,roads:'#e28b82',ground:'#09070e',houses:'#726b78',fif:'#55b9ff',enes:'#ffd447',uvm:'#ff1f3d',uvmStructures:2,pinkHouse:'#ffffff'}},credits:[caption,creditsText],reports:preview?reports:reports,images,blockedRequests:[]};
     if (preview) {
       await writeFile(path.join(outputRoot,'verification','software-preview.json'),JSON.stringify(manifest,null,2));
       console.log('Software preview frames saved under output/.render-software-*; no MP4 published.');

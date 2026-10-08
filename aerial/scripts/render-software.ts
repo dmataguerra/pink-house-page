@@ -344,7 +344,8 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
     const zone = zoneCenters
       .map(candidate => ({...candidate, distance: Math.hypot(item.center[0]-candidate.center[0], item.center[1]-candidate.center[1])}))
       .sort((a,b) => a.distance-b.distance)[0];
-    const zoneColor = zone && zone.distance <= ZONE_RADIUS && (zone.zone !== 'uvm' || uvmStructureSet.has(item)) ? zone.color : undefined;
+    const zoneColor = item.highlightedPoi === 'enes' ? zoneCenters.find(point => point.zone === 'enes')!.color :
+      zone && zone.zone !== 'enes' && zone.distance <= ZONE_RADIUS && (zone.zone !== 'uvm' || uvmStructureSet.has(item)) ? zone.color : undefined;
     const tone = 54+item.tone*3;
     const shade = item.target ? '#ffffff' : `rgb(${tone},${tone-2},${tone+5})`;
     const winding=item.local.reduce((sum,[e,n],i)=>{const next=item.local[(i+1)%item.local.length];return sum+e*next[1]-n*next[0];},0)>0?1:-1;
@@ -372,7 +373,8 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
   }
   for (const point of POINTS_OF_INTEREST) {
     const [east, north] = 'latitude' in point ? localPoint(point.longitude, point.latitude) : [point.east, point.north];
-    const projected = project([east, north, 1.5], pose);
+    const markerHeight = 'zone' in point && point.zone === 'enes' ? ENES_BUILDING.heightMeters + 1.5 : 1.5;
+    const projected = project([east, north, markerHeight], pose);
     if (!projected || Math.hypot(east, north) > visibleRadius) continue;
     parts.push(`<circle cx="${projected[0].toFixed(1)}" cy="${projected[1].toFixed(1)}" r="22" fill="${point.color}" fill-opacity=".24"/><circle cx="${projected[0].toFixed(1)}" cy="${projected[1].toFixed(1)}" r="9" fill="${point.color}" stroke="#ffffff" stroke-width="3"/><text x="${(projected[0] + 20).toFixed(1)}" y="${(projected[1] - 18).toFixed(1)}" fill="${point.color}" stroke="#000000" stroke-width="4" paint-order="stroke" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="2">${point.label}</text>`);
   }

@@ -1,0 +1,25 @@
+{
+  "name": "REPLACE with the actual surveyed dataset name",
+  "provider": "REPLACE with the survey owner or licensed provider",
+  "tilesetUrl": "/data/tileset.json",
+  "captureDate": "2026-01-01",
+  "provenance": "surveyed-photogrammetry",
+  "containsSurveyedBuildings": true,
+  "hasPhotographicTextures": true,
+  "targetEllipsoidHeight": 0,
+  "coverage": {
+    "west": -100.46,
+    "south": 20.69,
+    "east": -100.43,
+    "north": 20.73
+  },
+  "attribution": "REPLACE with the exact credit text required by the license",
+  "license": {
+    "standaloneVideoExport": false,
+    "videoDistribution": false,
+    "evidenceFile": "./license.txt",
+    "reference": "REPLACE with the license clause or written permission reference",
+    "reviewedBy": "",
+    "reviewedOn": ""
+  }
+}

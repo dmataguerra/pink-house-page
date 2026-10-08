@@ -5,6 +5,7 @@ export const event = {
   eventTime: null as string | null,
   utcOffset: '-06:00',
   instagramUsername: 'david_mata_g',
+  attendanceUrl: 'https://calendar.app.google/HCNWJHqhFCBNuWdn9',
   locationLabel: 'Compartida al confirmar',
   // Set to '/assets/house/house-master.webp' when the prepared photo is ready.
   houseAsset: null as string | null,

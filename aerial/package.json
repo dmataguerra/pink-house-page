@@ -1,0 +1,42 @@
+{
+  "name": "licensed-house-flyover",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "test": "tsx --test tests/*.test.ts",
+    "smoke": "tsx scripts/smoke.ts",
+    "setup": "powershell -NoProfile -File ./setup.ps1",
+    "doctor": "tsx scripts/doctor.ts",
+    "browser:check": "tsx scripts/browser-check.ts",
+    "source:package": "powershell -NoProfile -File ./scripts/package-source.ps1",
+    "preflight": "tsx scripts/preflight.ts",
+    "resolve:location": "tsx scripts/resolve-location.ts",
+    "render": "tsx scripts/render.ts",
+    "qa": "tsx scripts/qa.ts",
+    "install:browser": "playwright install chromium"
+  },
+  "dependencies": {
+    "cesium": "1.146.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "dotenv": "^16.6.0",
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
+    "playwright": "^1.56.0",
+    "sharp": "^0.34.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.7.3",
+    "vite": "^6.1.0",
+    "vite-plugin-static-copy": "^2.3.0"
+  }
+}

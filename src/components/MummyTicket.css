@@ -106,7 +106,9 @@
 .ticket-cut-hint svg { width: 18px; height: 24px; }
 .mummy-ticket-intact .ticket-cut-hint svg { animation: ticket-hint-nudge 2s ease-in-out infinite; }
 .ticket-cut-control { position: absolute; z-index: 4; left: calc(100% - var(--stub-width)); top: 14px; bottom: 14px; width: 48px; padding: 0; transform: translateX(-50%); background: transparent; border: 0; border-radius: 12px; color: var(--ink); cursor: ns-resize; touch-action: none; user-select: none; -webkit-tap-highlight-color: transparent; }
-.ticket-cut-control:focus-visible { outline: 2px solid #ff4f91; outline-offset: 3px; background: #ff4f911c; }
+.mummy-ticket-intact .ticket-cut-control:focus-visible { outline: 2px solid #ff4f91; outline-offset: 3px; background: #ff4f911c; }
+.mummy-ticket-cutting .ticket-cut-control:focus-visible { outline: none; background: transparent; }
+.mummy-ticket-cut .ticket-cut-control:focus-visible { outline: 2px solid #ff4f91; outline-offset: 3px; background: transparent; }
 .ticket-perforation { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: repeating-linear-gradient(to bottom, #ff4f91 0 6px, transparent 6px 14px); }
 .ticket-cut-trail { position: absolute; top: 0; left: 50%; width: 5px; height: var(--cut-progress); transform: translateX(-50%); background: #ff4f91; border-radius: 4px; box-shadow: 0 0 12px #ff4f9199; transition: height 80ms linear; }
 .ticket-scissors { position: absolute; display: grid; place-items: center; left: 50%; top: clamp(4px, var(--scissors-position), calc(100% - 24px)); width: 38px; height: 38px; transform: translate(-50%, -10%); background: #ff4f91; border: 3px solid #f1ede8; border-radius: 50%; box-shadow: 0 2px 12px #0002; transition: background 150ms, top 90ms linear, opacity 180ms ease; }

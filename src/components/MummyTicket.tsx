@@ -98,10 +98,10 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
     gesture.current = null;
     setProgress(1);
     setPhase('cutting');
-    cutButton.current?.focus({ preventScroll: true });
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     revealTimer.current = window.setTimeout(() => {
       setPhase('cut');
+      cutButton.current?.focus({ preventScroll: true });
       onWin();
     }, reduceMotion ? 0 : 900);
   }

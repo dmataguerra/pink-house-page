@@ -101,10 +101,10 @@ body{background:#000}
 .archive-image{position:relative}
 .archive-card h3{display:none}
 .footer-top{display:none}
-.footer-brand{display:flex;justify-content:center;align-items:center;line-height:1;margin:60px 0 45px}
+.footer-brand{display:flex;justify-content:center;align-items:center;width:fit-content;max-width:100%;font-size:clamp(46px,6.4vw,103px);line-height:1;margin:60px auto 45px;background:radial-gradient(ellipse farthest-corner at top left,#ed5290 0%,#c72e6c 25%,#661034 55%,#080607 85%,#000000 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
 .footer-brand img{display:block;width:auto;max-width:min(92vw,720px);height:clamp(100px,15vw,190px);object-fit:contain}
 @media(max-width:1000px){.hero{--hero-video-gap:clamp(100px,15svh,190px);min-height:min(100svh,1000px)}}
-@media(max-width:600px){.hero{--hero-video-gap:clamp(80px,16svh,150px)}.footer-brand{margin:48px 0 34px}.footer-brand img{height:clamp(82px,28vw,150px)}}
+@media(max-width:600px){.hero{--hero-video-gap:clamp(80px,16svh,150px)}.footer-brand{font-size:clamp(24px,7.4vw,44px);margin:48px auto 34px}.footer-brand img{height:clamp(82px,28vw,150px)}}
 
 button.button,button.button-arrow{border:0;cursor:pointer;font-family:inherit}
 button.button-arrow{padding:0}

@@ -1,6 +1,6 @@
 export const parties = [
-  { id: 'memory-01', title: 'Recuerdo 01', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-01.png`, status: 'Noche pasada', demo: true },
-  { id: 'memory-02', title: 'Recuerdo 02', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-02.png`, status: 'Noche pasada', demo: true },
-  { id: 'memory-03', title: 'Recuerdo 03', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-03.png`, status: 'Noche pasada', demo: true },
+  { id: 'memory-01', title: 'Cuchillo serrado', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-knife.png`, status: 'Noche pasada', demo: true },
+  { id: 'memory-02', title: 'Máscara en el pasillo', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-mask.png`, status: 'Noche pasada', demo: true },
+  { id: 'memory-03', title: 'The Pink House', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-house.png`, status: 'Noche pasada', demo: true },
 ];
 

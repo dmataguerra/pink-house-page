@@ -1,0 +1,24 @@
+{
+  "source": "OpenStreetMap",
+  "license": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors · openstreetmap.org/copyright",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "fetchedAt": "2026-10-08T01:48:32.154Z",
+  "dataDate": "2026-10-08T01:47:05Z",
+  "target": {
+    "latitude": 20.707390681241908,
+    "longitude": -100.44438633247219,
+    "address": "Paseo de Libero 172, Juriquilla, Querétaro, Mexico"
+  },
+  "queryRadiusMeters": 1400,
+  "elements": 1467,
+  "buildings": 144,
+  "roads": 1229,
+  "measuredBuildingHeights": 1,
+  "limitations": [
+    "Mapped building footprints only; missing outlines are not reconstructed.",
+    "Unmapped heights are explicitly estimated.",
+    "No photographic facade or roof textures are available in this source.",
+    "Correct target building identity is unverified; the supplied coordinate is marked."
+  ]
+}

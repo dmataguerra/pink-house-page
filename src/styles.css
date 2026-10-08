@@ -94,6 +94,20 @@ body{background:#000}
 @media(max-width:1000px){.hero{min-height:min(100svh,1000px)}}
 @media(max-height:550px) and (orientation:landscape){.hero{min-height:0}}
 
+/* Final archive, footer and mummy accents. */
+.hero{min-height:min(115svh,1120px)}
+.brand{position:relative}
+.brand-logo{position:relative;z-index:1}
+.brand-mummy{position:absolute;z-index:0;right:calc(100% + 8px);bottom:-2px;width:clamp(34px,4.2vw,64px)!important;height:clamp(62px,8vw,98px)!important;object-fit:contain;object-position:center;pointer-events:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35))}
+.archive-image{position:relative}
+.archive-hanging-mummy{position:absolute!important;z-index:2;top:-8%;right:-7%;width:48%!important;height:auto!important;max-height:none;object-fit:contain!important;pointer-events:none;filter:drop-shadow(0 10px 10px rgba(0,0,0,.42))}
+.archive-card h3{display:none}
+.footer-top{display:none}
+.footer-brand{display:flex;justify-content:center;align-items:center;line-height:1;margin:60px 0 45px}
+.footer-brand img{display:block;width:auto;height:clamp(42px,6vw,72px);object-fit:contain}
+@media(max-width:1000px){.hero{min-height:min(112svh,1000px)}}
+@media(max-width:600px){.brand-mummy{right:calc(100% + 5px);width:34px!important;height:64px!important}.archive-hanging-mummy{top:-6%;right:-8%;width:53%!important}.footer-brand{margin:48px 0 34px}}
+
 button.button,button.button-arrow{border:0;cursor:pointer;font-family:inherit}
 button.button-arrow{padding:0}
 button.button:focus-visible,button.button-arrow:focus-visible{outline:2px solid #ff4f91;outline-offset:5px}

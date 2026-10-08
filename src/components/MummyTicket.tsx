@@ -180,7 +180,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         ref={cutButton}
         type="button"
         className="ticket-cut-control"
-        aria-label={phase === 'cut' ? 'Ticket cortado' : 'Cortar ticket'}
+        aria-label={phase === 'cut' ? 'Volver a ver premio del ticket' : 'Cortar ticket'}
         aria-controls="prize-modal"
         aria-haspopup="dialog"
         aria-disabled={phase === 'cutting'}

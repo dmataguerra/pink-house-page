@@ -2,7 +2,7 @@ import SiteModal from './SiteModal';
 import './MummyTicket.css';
 
 export default function PrizeModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  return <SiteModal id="prize-modal" title="Te has ganado un premio." open={open} onClose={onClose} className="prize-modal">
+  return <SiteModal id="prize-modal" title="¡Sorpresa desbloqueada!" open={open} onClose={onClose} className="prize-modal">
     <div className="prize-mark" aria-hidden="true">
       <svg viewBox="0 0 160 120" fill="none">
         <path d="M80 8v12M26 30l8 8m92-8-8 8M20 76h12m108 0h-12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>

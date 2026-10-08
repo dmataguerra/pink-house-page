@@ -109,7 +109,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
 
   return <div className={`mummy-ticket-stage mummy-ticket-${phase}`} data-reveal style={style}>
     <p className="ticket-cut-hint" id="ticket-cut-instructions">
-      <span>{phase === 'cut' ? 'Ver mi premio' : 'Desliza para cortar'}</span>
+      <span>{phase === 'cut' ? 'Ver sorpresa' : 'Desliza para cortar'}</span>
       <svg viewBox="0 0 18 24" fill="none" aria-hidden="true"><path d="M9 1v20m-6-6 6 6 6-6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
     </p>
     <div className="mummy-ticket">
@@ -122,14 +122,14 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         </div>
       </div>
       <div className="mummy-ticket-stub">
-        <p className="mummy-ticket-stub-title">Trick<br/>or treat</p>
+        <p className="mummy-ticket-stub-title"><span>Trick</span><br/>or <em>treat</em></p>
         <button className="mummy-ticket-confirm" type="button" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">CONFIRMAR <span aria-hidden="true">↗</span></button>
       </div>
       <button
         ref={cutButton}
         type="button"
         className="ticket-cut-control"
-        aria-label={phase === 'cut' ? 'Ver mi premio' : 'Cortar ticket y descubrir mi premio'}
+        aria-label={phase === 'cut' ? 'Ver sorpresa' : 'Cortar ticket y descubrir una sorpresa'}
         aria-describedby="ticket-cut-instructions"
         aria-controls="prize-modal"
         aria-haspopup="dialog"
@@ -157,6 +157,6 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         <span className={`ticket-scissors ${progress > 0 ? 'is-cutting' : ''}`}><Scissors/></span>
       </button>
     </div>
-    <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado. Te has ganado un premio.' : ''}</span>
+    <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado. Sorpresa desbloqueada.' : ''}</span>
   </div>;
 }

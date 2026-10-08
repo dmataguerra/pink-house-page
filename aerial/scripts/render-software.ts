@@ -29,6 +29,10 @@ const creditsText = '© OpenStreetMap contributors · openstreetmap.org/copyrigh
 const W = VIDEO.width;
 const H = VIDEO.height;
 const TAU = Math.PI * 2;
+const RENDER_TARGET = {
+  latitude: Number(process.env.RENDER_TARGET_LAT ?? TARGET.latitude),
+  longitude: Number(process.env.RENDER_TARGET_LON ?? TARGET.longitude),
+};
 const POINTS_OF_INTEREST = [
   { east: 0, north: 0, color: '#f1ede8', label: '' },
   { latitude: 20.70438308336931, longitude: -100.44387705896915, color: '#8bd8ff', label: 'FIF' },
@@ -41,8 +45,8 @@ async function exists(file: string): Promise<boolean> { try { await stat(file); 
 function esc(value: string): string { return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); }
 function clamp(value: number, low: number, high: number): number { return Math.max(low, Math.min(high, value)); }
 function localPoint(lon: number, lat: number): [number, number] {
-  const e = (lon - TARGET.longitude) * 111320 * Math.cos(TARGET.latitude * Math.PI / 180);
-  const n = (lat - TARGET.latitude) * 110540;
+  const e = (lon - RENDER_TARGET.longitude) * 111320 * Math.cos(RENDER_TARGET.latitude * Math.PI / 180);
+  const n = (lat - RENDER_TARGET.latitude) * 110540;
   return [e, n];
 }
 function ringRadius(ring: Ring): number { return Math.max(...ring.map(([lon, lat]) => { const [e,n] = localPoint(lon,lat); return Math.hypot(e,n); })); }
@@ -76,7 +80,7 @@ export function gatherData(osm: {elements: OSMWay[]}, microsoft: FootprintCollec
     const area = ringArea(local);
     if (area < 7 || area > 250_000) return false;
     const center = local.reduce((sum, p) => [sum[0]+p[0]/local.length, sum[1]+p[1]/local.length] as [number,number], [0,0] as [number,number]);
-    const centerGeo = [TARGET.longitude + center[0]/(111320*Math.cos(TARGET.latitude*Math.PI/180)), TARGET.latitude+center[1]/110540];
+    const centerGeo = [RENDER_TARGET.longitude + center[0]/(111320*Math.cos(RENDER_TARGET.latitude*Math.PI/180)), RENDER_TARGET.latitude+center[1]/110540];
     // Prefer community-mapped outlines and heights. A roof detected again by a
     // second provider must never be extruded twice, or become a row of fragments.
     if (deduplicate && structures.some(existing => {
@@ -88,7 +92,7 @@ export function gatherData(osm: {elements: OSMWay[]}, microsoft: FootprintCollec
     })) { duplicateCount++; return false; }
     let hash = 0; for (const ch of identity) hash = ((hash*31)+ch.charCodeAt(0)) >>> 0;
     structures.push({ ring, local, center, area, height: clamp(height,2.5,80), heightEstimated,
-      target: ringContains(TARGET.longitude,TARGET.latitude,ring), source, tone: hash%5 });
+      target: ringContains(RENDER_TARGET.longitude,RENDER_TARGET.latitude,ring), source, tone: hash%5 });
     return true;
   };
   for (const way of osm.elements) {

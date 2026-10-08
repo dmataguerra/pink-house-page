@@ -25,8 +25,8 @@ function Mummy({ pupilX, pupilY }: { pupilX: number; pupilY: number }) {
     <path d="M-6 197C32 157 101 152 149 173c50-23 116-24 158 13v99H-6Z" fill="#222123"/>
     <path className="mummy-eye" d="M27 181c22-13 59-16 85-6 21 8 28 32 22 55-8 30-29 44-57 43-36-1-62-26-61-52 0-16 3-31 11-40Z" fill="#ff4f91" stroke="#222123" strokeWidth="4.5"/>
     <path className="mummy-eye" d="M178 176c29-13 63-12 87 4 19 13 24 37 16 59-10 30-35 42-64 35-28-6-50-25-52-49-2-21 1-39 13-49Z" fill="#ff4f91" stroke="#222123" strokeWidth="4.5"/>
-    <ellipse className="mummy-pupil" cx="86" cy="248" rx="10" ry="12" fill="#222123" transform={`translate(${pupilX} ${pupilY})`}/>
-    <ellipse className="mummy-pupil" cx="234" cy="248" rx="10" ry="12" fill="#222123" transform={`translate(${pupilX} ${pupilY})`}/>
+    <ellipse className="mummy-pupil" cx="86" cy="248" rx="8" ry="10" fill="#222123" transform={`translate(${pupilX} ${pupilY})`}/>
+    <ellipse className="mummy-pupil" cx="234" cy="248" rx="8" ry="10" fill="#222123" transform={`translate(${pupilX} ${pupilY})`}/>
     <path d="M-21 278c110 29 228 19 342-17v65C183 317 56 359-21 332Z" fill="#f1ede8" stroke="#222123" strokeWidth="3.5"/>
     <path d="M-23 343c97-29 224-11 345-35v98H-23Z" fill="#e4dfd7" stroke="#222123" strokeWidth="3.5"/>
     <path d="M-20 345c115 7 225 50 342 30M-10 410c126-27 232-13 331-31" stroke="#222123" strokeWidth="3.5"/>
@@ -63,14 +63,26 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
 
   useEffect(() => () => window.clearTimeout(revealTimer.current), []);
 
-  function movePupils(e: PointerEvent<HTMLDivElement>) {
-    if (e.pointerType === 'touch') return;
-    const bounds = character.current?.getBoundingClientRect();
-    if (!bounds) return;
-    const x = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
-    const y = ((e.clientY - bounds.top) / bounds.height) * 2 - 1;
-    setPupil({ x: Math.max(-1, Math.min(1, x)) * 8, y: Math.max(-1, Math.min(1, y)) * 6 });
-  }
+  useEffect(() => {
+    function trackPupils(e: globalThis.PointerEvent) {
+      if (e.pointerType === 'touch') {
+        resetPupils();
+        return;
+      }
+      const bounds = character.current?.getBoundingClientRect();
+      if (!bounds) return;
+      const x = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
+      const y = ((e.clientY - bounds.top) / bounds.height) * 2 - 1;
+      setPupil({ x: Math.max(-1, Math.min(1, x)) * 10, y: Math.max(-1, Math.min(1, y)) * 7 });
+    }
+
+    document.addEventListener('pointermove', trackPupils);
+    window.addEventListener('blur', resetPupils);
+    return () => {
+      document.removeEventListener('pointermove', trackPupils);
+      window.removeEventListener('blur', resetPupils);
+    };
+  }, []);
 
   function resetPupils() {
     setPupil({ x: 0, y: 0 });
@@ -143,7 +155,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
     '--stub-cut-shape': stubCutShape,
   } as CSSProperties;
 
-  return <div className={`mummy-ticket-stage mummy-ticket-${phase}`} data-reveal style={style} onPointerMove={movePupils} onPointerLeave={resetPupils}>
+  return <div className={`mummy-ticket-stage mummy-ticket-${phase}`} data-reveal style={style}>
     <div className="mummy-ticket">
       <div className="mummy-ticket-main">
         <div className="mummy-ticket-character" ref={character}><Mummy pupilX={pupil.x} pupilY={pupil.y}/></div>

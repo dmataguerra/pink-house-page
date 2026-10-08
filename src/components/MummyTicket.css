@@ -35,7 +35,7 @@
 
 .mummy-ticket-character { position: relative; min-width: 0; overflow: hidden; }
 .mummy-illustration { display: block; position: absolute; width: 100%; height: 100%; }
-.mummy-pupil { transition: transform 110ms cubic-bezier(.22, .61, .36, 1); }
+.mummy-pupil { transition: transform 90ms cubic-bezier(.22, .61, .36, 1); }
 
 .mummy-ticket-details {
   position: relative;

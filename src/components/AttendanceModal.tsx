@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react';
 import { event } from '../config/event';
-import './AttendanceModal.css';
+import SiteModal from './SiteModal';
 
 type AttendanceModalProps = {
   open: boolean;
@@ -12,51 +11,7 @@ function ExternalArrow() {
 }
 
 export default function AttendanceModal({ open, onClose }: AttendanceModalProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!open || !dialog) return;
-
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const previousOverflow = document.documentElement.style.overflow;
-    const previousPadding = document.documentElement.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-
-    document.documentElement.style.overflow = 'hidden';
-    if (scrollbarWidth > 0) {
-      const padding = parseFloat(getComputedStyle(document.documentElement).paddingRight) || 0;
-      document.documentElement.style.paddingRight = `${padding + scrollbarWidth}px`;
-    }
-    dialog.showModal();
-
-    return () => {
-      dialog.close();
-      document.documentElement.style.overflow = previousOverflow;
-      document.documentElement.style.paddingRight = previousPadding;
-      previousFocus?.focus({ preventScroll: true });
-    };
-  }, [open]);
-
-  return <dialog
-    ref={dialogRef}
-    id="attendance-modal"
-    className="attendance-modal"
-    aria-labelledby="attendance-modal-title"
-    onCancel={e => { e.preventDefault(); onClose(); }}
-    onClick={e => {
-      if (e.target !== e.currentTarget) return;
-      const bounds = e.currentTarget.getBoundingClientRect();
-      if (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom) onClose();
-    }}
-  >
-    <div className="attendance-modal-content">
-      <header className="attendance-modal-header">
-        <h2 id="attendance-modal-title">¿Nos vemos?</h2>
-        <button type="button" className="attendance-modal-close" onClick={onClose} aria-label="Cerrar modal" autoFocus>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
-        </button>
-      </header>
+  return <SiteModal id="attendance-modal" title="¿Nos vemos?" open={open} onClose={onClose}>
       <div className="attendance-options">
         <a className="attendance-option attendance-option-instagram" href={`https://www.instagram.com/${event.instagramUsername}/`} target="_blank" rel="noopener noreferrer" aria-label="Pedir ubicación en Instagram (se abre en una pestaña nueva)">
           <span className="attendance-option-media">
@@ -79,6 +34,5 @@ export default function AttendanceModal({ open, onClose }: AttendanceModalProps)
           <span className="attendance-option-arrow"><ExternalArrow/></span>
         </a>
       </div>
-    </div>
-  </dialog>;
+  </SiteModal>;
 }

@@ -337,7 +337,7 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
       .sort((a,b) => a.distance-b.distance)[0];
     const zoneColor = zone && zone.distance <= ZONE_RADIUS && (zone.zone !== 'uvm' || uvmStructureSet.has(item)) ? zone.color : undefined;
     const tone = 54+item.tone*3;
-    const shade = item.target ? '#ffffff' : zoneColor ?? `rgb(${tone},${tone-2},${tone+5})`;
+    const shade = item.target ? '#ffffff' : `rgb(${tone},${tone-2},${tone+5})`;
     const winding=item.local.reduce((sum,[e,n],i)=>{const next=item.local[(i+1)%item.local.length];return sum+e*next[1]-n*next[0];},0)>0?1:-1;
     for (let i=0;i<basePoints.length;i++) {
       const j=(i+1)%basePoints.length;
@@ -347,15 +347,16 @@ function localSvg(pose: ScenePose, data: ReturnType<typeof gatherData>, sceneSty
       if(nx*(pose.east-(a[0]+b[0])/2)+ny*(pose.north-(a[1]+b[1])/2)<=0)continue;
       const light=clamp(nx*(-.6)+ny*.45,.05,1), wallTone=28+light*13+item.tone;
       const side = item.target ? `rgb(${220+light*25},${220+light*25},${220+light*25})` :
-        zoneColor ? zoneColor : `rgb(${wallTone},${wallTone-2},${wallTone+5})`;
-      parts.push(polygon([basePoints[i],basePoints[j],roofPoints[j],roofPoints[i]],side,1));
+        `rgb(${wallTone},${wallTone-2},${wallTone+5})`;
+      parts.push(polygon([basePoints[i],basePoints[j],roofPoints[j],roofPoints[i]],side,1,
+        !item.target && zoneColor ? zoneColor : 'none', !item.target && zoneColor ? 1.2 : 0));
       const pixelHeight=Math.hypot(basePoints[i][0]-roofPoints[i][0],basePoints[i][1]-roofPoints[i][1]);
       if(pixelHeight>13) {
         // A restrained floor joint clarifies volume without fabricating facades.
-        for(let h=3.2;h<item.height-1;h+=3.2){const p=project([a[0],a[1],h],pose),q=project([b[0],b[1],h],pose);if(p&&q)parts.push(line([[p[0],p[1]],[q[0],q[1]]],item.target?'#ffffff':zoneColor ?? '#373737',.45,.45));}
+        for(let h=3.2;h<item.height-1;h+=3.2){const p=project([a[0],a[1],h],pose),q=project([b[0],b[1],h],pose);if(p&&q)parts.push(line([[p[0],p[1]],[q[0],q[1]]],item.target?'#ffffff':'#373737',.45,.45));}
       }
     }
-    parts.push(polygon(roofPoints,shade,1,item.target?'#ffffff':zoneColor ?? '#726b78',.72));
+    parts.push(polygon(roofPoints,shade,1,item.target?'#ffffff':zoneColor ?? '#726b78',!item.target && zoneColor ? 1.8 : .72));
     const center = roofPoints.reduce((acc,p) => [acc[0]+p[0],acc[1]+p[1]] as [number,number], [0,0] as [number,number]);
     center[0] /= roofPoints.length; center[1] /= roofPoints.length;
     if (item.target) parts.push(`<circle cx="${center[0].toFixed(1)}" cy="${center[1].toFixed(1)}" r="10" fill="#f1ede8" stroke="#f1ede8" stroke-width="3"/>`);

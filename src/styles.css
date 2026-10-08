@@ -113,7 +113,7 @@ button.button:focus-visible,button.button-arrow:focus-visible{outline:2px solid 
 /* Keep the hero content aligned to the site grid while allowing its glow to
    reach the full viewport on wide monitors. */
 .hero{background:transparent;isolation:isolate;overflow:visible}
-.hero::before{content:"";position:absolute;z-index:-1;top:0;bottom:calc(-1 * var(--hero-video-gap));left:50%;width:100vw;transform:translateX(-50%);background:radial-gradient(ellipse 34% 30% at 42% 44%,rgba(255,92,157,.95) 0%,rgba(238,33,117,.72) 28%,rgba(128,15,65,.34) 55%,rgba(0,0,0,0) 78%),radial-gradient(ellipse 48% 42% at 43% 48%,rgba(121,16,58,.22) 0%,rgba(0,0,0,0) 72%),#050505;pointer-events:none}
+.hero::before{content:"";position:absolute;z-index:-1;top:0;bottom:calc(-1 * var(--hero-video-gap));left:50%;width:100vw;transform:translateX(-50%);background:radial-gradient(ellipse 34% 72% at 42% 44%,rgba(255,92,157,.95) 0%,rgba(238,33,117,.72) 28%,rgba(128,15,65,.34) 55%,rgba(0,0,0,0) 78%),radial-gradient(ellipse 48% 86% at 43% 48%,rgba(121,16,58,.22) 0%,rgba(0,0,0,0) 72%),#050505;pointer-events:none}
 .button-with-arrow{gap:16px}
 .button-with-arrow span{font-size:24px;line-height:.7;transition:transform .25s}
 .button-with-arrow:hover span{transform:translateX(3px)}

@@ -95,7 +95,7 @@ body{background:#000}
 @media(max-height:550px) and (orientation:landscape){.hero{min-height:0}}
 
 /* Final archive, footer and mummy accents. */
-.hero{min-height:min(100svh,1000px);margin-bottom:clamp(140px,16svh,260px)}
+.hero{--hero-video-gap:clamp(140px,16svh,260px);min-height:min(100svh,1000px);margin-bottom:var(--hero-video-gap)}
 .brand{position:relative}
 .brand-logo{position:relative;z-index:1}
 .archive-image{position:relative}
@@ -103,8 +103,8 @@ body{background:#000}
 .footer-top{display:none}
 .footer-brand{display:flex;justify-content:center;align-items:center;line-height:1;margin:60px 0 45px}
 .footer-brand img{display:block;width:auto;max-width:min(92vw,720px);height:clamp(100px,15vw,190px);object-fit:contain}
-@media(max-width:1000px){.hero{min-height:min(100svh,1000px);margin-bottom:clamp(100px,15svh,190px)}}
-@media(max-width:600px){.hero{margin-bottom:clamp(80px,16svh,150px)}.footer-brand{margin:48px 0 34px}.footer-brand img{height:clamp(82px,28vw,150px)}}
+@media(max-width:1000px){.hero{--hero-video-gap:clamp(100px,15svh,190px);min-height:min(100svh,1000px)}}
+@media(max-width:600px){.hero{--hero-video-gap:clamp(80px,16svh,150px)}.footer-brand{margin:48px 0 34px}.footer-brand img{height:clamp(82px,28vw,150px)}}
 
 button.button,button.button-arrow{border:0;cursor:pointer;font-family:inherit}
 button.button-arrow{padding:0}
@@ -113,7 +113,7 @@ button.button:focus-visible,button.button-arrow:focus-visible{outline:2px solid 
 /* Keep the hero content aligned to the site grid while allowing its glow to
    reach the full viewport on wide monitors. */
 .hero{background:transparent;isolation:isolate;overflow:visible}
-.hero::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:radial-gradient(ellipse 34% 30% at 42% 44%,rgba(255,92,157,.95) 0%,rgba(238,33,117,.72) 28%,rgba(128,15,65,.34) 55%,rgba(0,0,0,0) 78%),radial-gradient(ellipse 48% 42% at 43% 48%,rgba(121,16,58,.22) 0%,rgba(0,0,0,0) 72%),#050505}
+.hero::before{content:"";position:absolute;z-index:-1;top:0;bottom:calc(-1 * var(--hero-video-gap));left:50%;width:100vw;transform:translateX(-50%);background:radial-gradient(ellipse 34% 30% at 42% 44%,rgba(255,92,157,.95) 0%,rgba(238,33,117,.72) 28%,rgba(128,15,65,.34) 55%,rgba(0,0,0,0) 78%),radial-gradient(ellipse 48% 42% at 43% 48%,rgba(121,16,58,.22) 0%,rgba(0,0,0,0) 72%),#050505;pointer-events:none}
 .button-with-arrow{gap:16px}
 .button-with-arrow span{font-size:24px;line-height:.7;transition:transform .25s}
 .button-with-arrow:hover span{transform:translateX(3px)}

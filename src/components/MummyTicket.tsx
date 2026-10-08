@@ -76,7 +76,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
       const clampedY = Math.max(-1, Math.min(1, y));
       setPupil({
         x: Math.max(-1, Math.min(1, x)) * 10,
-        y: clampedY * (clampedY < 0 ? 11 : 7),
+        y: clampedY * (clampedY < 0 ? 16 : 7),
       });
     }
 

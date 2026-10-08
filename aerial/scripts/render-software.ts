@@ -13,7 +13,7 @@ import {
 
 type OSMWay = { id: number; tags?: Record<string, string>; geometry?: Array<{lat: number; lon: number}> };
 type Ring = number[][];
-type Structure = { ring: Ring; height: number; target: boolean; source: string; heightEstimated: boolean; local: Array<[number, number]>; center: [number, number]; area: number; tone: number };
+type Structure = { ring: Ring; height: number; target: boolean; source: string; heightEstimated: boolean; local: Array<[number, number]>; center: [number, number]; area: number; tone: number; highlightedPoi?: 'enes' };
 type Road = { points: Array<{lat: number; lon: number}>; kind: string; width: number };
 type Surface = { ring: Ring; kind: 'water' | 'green' | 'campus' | 'residential' | 'paved' };
 type FootprintCollection = { features?: Array<{ id?: string | number; geometry?: {type: string; coordinates: Ring[] | Ring[][]}; properties?: Record<string, unknown> }> };
@@ -51,6 +51,7 @@ const POINTS_OF_INTEREST = [
   { latitude: 20.705875489620908, longitude: -100.44812312985161, color: '#ffd447', label: 'ENES', zone: 'enes' },
 ] as const;
 const ZONE_RADIUS = 105;
+const ENES_BUILDING = { widthMeters: 96, depthMeters: 60, heightMeters: 18 } as const;
 const zoneCenters = POINTS_OF_INTEREST.filter((point): point is Extract<typeof POINTS_OF_INTEREST[number], { latitude: number; zone: string }> => 'latitude' in point)
   .map(point => ({ zone: point.zone, color: point.color, center: localPoint(point.longitude, point.latitude) }));
 
@@ -81,13 +82,13 @@ function roadWidth(tags: Record<string, string>): number {
   if (lanes > 0) return lanes * 3.25;
   return ({ motorway: 11, motorway_link: 7, trunk: 11, trunk_link: 7, primary: 10, secondary: 9, tertiary: 8, residential: 6.5, living_street: 5, service: 4.5, pedestrian: 3, footway: 1.6, path: 1.2, cycleway: 2, steps: 1.4 } as Record<string, number>)[tags.highway] ?? 6;
 }
-export function gatherData(osm: {elements: OSMWay[]}, microsoft: FootprintCollection, overture: FootprintCollection = {}) {
+export function gatherData(osm: {elements: OSMWay[]}, microsoft: FootprintCollection, overture: FootprintCollection = {}, options: { includeEnesBuilding?: boolean } = {}) {
   const structures: Structure[] = [];
   const roads: Road[] = [];
   const surfaces: Surface[] = [];
   const mappedRings: Ring[] = [];
   let duplicateCount = 0;
-  const add = (input: Ring, height: number, heightEstimated: boolean, source: string, identity: string, deduplicate = true) => {
+  const add = (input: Ring, height: number, heightEstimated: boolean, source: string, identity: string, deduplicate = true, highlightedPoi?: 'enes') => {
     const ring = cleanRing(input);
     if (ring.length < 3) return false;
     const local = ring.map(([lon, lat]) => localPoint(lon, lat));
@@ -106,7 +107,7 @@ export function gatherData(osm: {elements: OSMWay[]}, microsoft: FootprintCollec
     })) { duplicateCount++; return false; }
     let hash = 0; for (const ch of identity) hash = ((hash*31)+ch.charCodeAt(0)) >>> 0;
     structures.push({ ring, local, center, area, height: clamp(height,2.5,80), heightEstimated,
-      target: ringContains(RENDER_TARGET.longitude,RENDER_TARGET.latitude,ring), source, tone: hash%5 });
+      target: ringContains(RENDER_TARGET.longitude,RENDER_TARGET.latitude,ring), source, tone: hash%5, highlightedPoi });
     return true;
   };
   for (const way of osm.elements) {
@@ -152,6 +153,14 @@ export function gatherData(osm: {elements: OSMWay[]}, microsoft: FootprintCollec
   const illustrative = nearTarget > 30 ? [] : generateIllustrativeBuildings(osm.elements, structures.map(item=>item.ring));
   let proceduralCount = 0;
   for (const item of illustrative) if (add(item.ring,item.height,true,'Procedural illustrative house volume',`schematic-${proceduralCount}`)) proceduralCount++;
+  if (options.includeEnesBuilding) {
+    // Place the requested large illustrative building at the ENES marker itself.
+    const enes = zoneCenters.find(point => point.zone === 'enes')!;
+    const halfWidth = ENES_BUILDING.widthMeters / 2, halfDepth = ENES_BUILDING.depthMeters / 2;
+    const enesRing = [[-halfWidth,-halfDepth],[halfWidth,-halfDepth],[halfWidth,halfDepth],[-halfWidth,halfDepth]]
+      .map(([east,north]) => [RENDER_TARGET.longitude + (enes.center[0]+east)/(111320*Math.cos(RENDER_TARGET.latitude*Math.PI/180)), RENDER_TARGET.latitude + (enes.center[1]+north)/110540]);
+    add(enesRing,ENES_BUILDING.heightMeters,true,'User-requested illustrative ENES building','enes-landmark',false,'enes');
+  }
   return { structures, roads, surfaces, mappedBuildingCount: mappedRings.length, microsoftCount, overtureCount, proceduralCount, duplicateCount };
 }
 
@@ -426,7 +435,7 @@ export async function renderSoftwareIllustrated({preview=false}: {preview?:boole
   const msSourceFile = path.join(aerialRoot,'public/open-data/source-microsoft.json');
   const microsoft = await exists(msFile) ? JSON.parse(await readFile(msFile,'utf8')) as {features?: Array<{geometry?: {type:string;coordinates:Ring[]};properties?:Record<string,unknown>}>} : {};
   const msSource = await exists(msSourceFile) ? JSON.parse(await readFile(msSourceFile,'utf8')) : null;
-  const data = gatherData(osm,microsoft);
+  const data = gatherData(osm,microsoft,{}, { includeEnesBuilding: true });
   const source = {kind:'cartographic-preview', openStreetMap:JSON.parse(await readFile(path.join(aerialRoot,'public/open-data/source.json'),'utf8')), microsoft:msSource,
     naturalEarth:{name:'Natural Earth II',license:'Public domain',url:'https://www.naturalearthdata.com/about/terms-of-use/'},
     mappedBuildingCount:data.mappedBuildingCount,microsoftBuildings:data.microsoftCount,proceduralBuildings:data.proceduralCount,

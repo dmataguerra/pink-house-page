@@ -45,7 +45,7 @@ export default function HeroVideo() {
     </div>
     <SiteModal id="hero-video-modal" title="Locación de Pink House" open={open} onClose={() => setOpen(false)} className="hero-video-modal">
       {open && <video ref={expandedVideo} className="hero-video-full" src={source} poster={poster} autoPlay muted playsInline loop preload="metadata"
-        disablePictureInPicture aria-label="Locación de Pink House" onLoadedMetadata={e => {
+        controls disablePictureInPicture aria-label="Locación de Pink House" onLoadedMetadata={e => {
           e.currentTarget.currentTime = startTime;
           void e.currentTarget.play().catch(() => {});
         }}/>}

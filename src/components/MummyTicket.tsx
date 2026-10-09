@@ -23,8 +23,8 @@ function Mummy({ pupilX, pupilY }: { pupilX: number; pupilY: number }) {
     <path d="M-21 115C86 103 207 91 322 70L321 188C192 146 101 187-20 165Z" fill="#f1ede8" stroke="#222123" strokeWidth="3.5"/>
     <path d="M-20 135C111 160 215 109 323 130" stroke="#222123" strokeWidth="3.5"/>
     <path d="M-6 197C32 157 101 152 149 173c50-23 116-24 158 13v99H-6Z" fill="#222123"/>
-    <path className="mummy-eye" d="M27 181c22-13 59-16 85-6 21 8 28 32 22 55-8 30-29 44-57 43-36-1-62-26-61-52 0-16 3-31 11-40Z" fill="#ff4f91" stroke="#222123" strokeWidth="4.5"/>
-    <path className="mummy-eye" d="M178 176c29-13 63-12 87 4 19 13 24 37 16 59-10 30-35 42-64 35-28-6-50-25-52-49-2-21 1-39 13-49Z" fill="#ff4f91" stroke="#222123" strokeWidth="4.5"/>
+    <path className="mummy-eye" d="M27 181c22-13 59-16 85-6 21 8 28 32 22 55-8 30-29 44-57 43-36-1-62-26-61-52 0-16 3-31 11-40Z" fill="var(--ticket-accent)" stroke="#222123" strokeWidth="4.5"/>
+    <path className="mummy-eye" d="M178 176c29-13 63-12 87 4 19 13 24 37 16 59-10 30-35 42-64 35-28-6-50-25-52-49-2-21 1-39 13-49Z" fill="var(--ticket-accent)" stroke="#222123" strokeWidth="4.5"/>
     <ellipse className="mummy-pupil" cx="86" cy="248" rx="8" ry="10" fill="#222123" transform={`translate(${pupilX} ${pupilY})`}/>
     <ellipse className="mummy-pupil" cx="234" cy="248" rx="8" ry="10" fill="#222123" transform={`translate(${pupilX} ${pupilY})`}/>
     <path d="M-21 278c110 29 228 19 342-17v65C183 317 56 359-21 332Z" fill="#f1ede8" stroke="#222123" strokeWidth="3.5"/>
@@ -183,7 +183,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         <div className="mummy-ticket-character" ref={character}><Mummy pupilX={pupil.x} pupilY={pupil.y}/></div>
         <div className="mummy-ticket-details">
           <p className="mummy-ticket-brand">THE PINK HOUSE</p>
-          <h3 className="mummy-ticket-title"><img src={`${import.meta.env.BASE_URL}images/halloween-wordmark.svg`} alt="Halloween" width="660" height="180" loading="lazy"/></h3>
+          <h3 className="mummy-ticket-title">Halloween</h3>
           <p className="mummy-ticket-date">{ticketDate}<span> · {event.eventTime}</span></p>
         </div>
         <PaperCutEdge side="main"/>

@@ -15,7 +15,7 @@ export default function AttendanceModal({ open, onClose }: AttendanceModalProps)
       <div className="attendance-options">
         <a className="attendance-option attendance-option-instagram" href={`https://www.instagram.com/${event.instagramUsername}/`} target="_blank" rel="noopener noreferrer" aria-label="Pedir ubicación en Instagram (se abre en una pestaña nueva)">
           <span className="attendance-option-media">
-            <img className="attendance-profile-photo" src={`${import.meta.env.BASE_URL}images/instagram-profile.jpeg`} alt="David, anfitrión de The Pink House" width="720" height="1280"/>
+            <img className="attendance-profile-photo" src={`${import.meta.env.BASE_URL}images/instagram-profile-cinematic.webp`} alt="David, anfitrión de The Pink House" width="720" height="1280"/>
           </span>
           <span className="attendance-option-body">
             <span className="attendance-option-title">Pedir ubicación</span>
@@ -25,7 +25,7 @@ export default function AttendanceModal({ open, onClose }: AttendanceModalProps)
         </a>
         <a className="attendance-option attendance-option-confirm" href={event.attendanceUrl} target="_blank" rel="noopener noreferrer" aria-label="Confirmar asistencia (se abre en una pestaña nueva)">
           <span className="attendance-option-media">
-            <img className="attendance-map-image" src={`${import.meta.env.BASE_URL}images/attendance-map.svg`} alt="" width="640" height="320"/>
+            <img className="attendance-map-image" src={`${import.meta.env.BASE_URL}images/archive-location-documentary.webp`} alt="" width="640" height="320"/>
           </span>
           <span className="attendance-option-body">
             <span className="attendance-option-title">Confirmar asistencia</span>

@@ -1,22 +1,19 @@
-.hero-video { position: relative; width: 100%; }
-.hero-video-open { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; color: var(--site-text); border: 1px solid var(--site-border); border-radius: var(--site-radius); background: var(--site-surface); cursor: pointer; overflow: hidden; }
-.hero-video-open video { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-.hero-video-cue { position: absolute; top: 50%; left: 50%; display: flex; align-items: center; gap: 6px; min-height: 44px; padding-inline: 10px; transform: translate(-50%, -50%); white-space: nowrap; background: #0a090be6; border: 1px solid #ffffff35; border-radius: var(--site-radius); pointer-events: none; }
-.hero-video-location { flex-shrink: 0; }
-.hero-video-cue-label { font-size: var(--type-action); line-height: 1.4; }
-.attendance-modal.hero-video-modal { width: min(90vw, 1440px); max-height: 90dvh; }
-.hero-video-modal .attendance-modal-content { padding: 16px; }
-.hero-video-modal .attendance-modal-header { margin-bottom: 12px; gap: 12px; }
-.hero-video-modal .attendance-modal-header h2 { font-size: 18px; letter-spacing: -.02em; }
-.hero-video-full { display: block; width: 100%; max-height: calc(90dvh - 100px); aspect-ratio: 16 / 9; object-fit: contain; background: #000; border-radius: var(--site-radius); pointer-events: none; }
+.hero-video { position:relative; width:100%; height:100%; }
+.hero-video-open { position:relative; display:block; width:100%; height:100%; padding:0; color:#fff; border:1px solid #fff; border-radius:.8333333vw; background:#000; cursor:pointer; overflow:hidden; }
+.hero-video-open video { display:block; width:100%; height:100%; object-fit:cover; filter:grayscale(1) sepia(1) saturate(2.4) hue-rotate(-24deg); pointer-events:none; }
+.hero-video-cue { position:absolute; bottom:.8333333vw; left:1.9444444vw; display:flex; align-items:center; gap:5px; white-space:nowrap; pointer-events:none; font:.9027778vw/1.1 'FoundersGrotesk-Medium',Arial,sans-serif; text-shadow:0 1px 4px #000; }
+.hero-video-cue::before { content:''; position:absolute; background:#ff2443; border-radius:100%; height:.4166667vw; width:.4166667vw; left:-.9027778vw; }
+.hero-video-location { display:none; }
+.attendance-modal.hero-video-modal { width:min(90vw,1440px); max-height:90dvh; background:#111; color:#fff; }
+.hero-video-modal .attendance-modal-content { padding:16px; }
+.hero-video-modal .attendance-modal-header { margin-bottom:12px; gap:12px; }
+.hero-video-modal .attendance-modal-header h2 { font-size:18px; letter-spacing:-.02em; }
+.hero-video-modal .attendance-modal-close { color:#fff; border-color:#fff5; }
+.hero-video-full { display:block; width:100%; max-height:calc(90dvh - 100px); aspect-ratio:16 / 9; object-fit:contain; background:#000; filter:grayscale(1) sepia(1) saturate(2.4) hue-rotate(-24deg); }
+@media (max-width:1024px) {
+ .hero-video-open { border-radius:5px; }
+ .hero-video-cue { bottom:16px; font-size:10px; left:auto; right:7px; transform:rotate(180deg); writing-mode:vertical-rl; }
+ .hero-video-cue::before { width:3px; height:3px; left:3px; top:-8px; }
+ .attendance-modal.hero-video-modal { width:calc(100% - 24px); }
+}
 
-@media (hover: hover) {
-  .hero-video-open:hover { border-color: var(--site-muted); }
-  .hero-video-open:hover .hero-video-cue { border-color: var(--site-accent); }
-}
-@media (max-width: 700px) {
-  .hero-video-cue { gap: 4px; min-height: 32px; padding-inline: 4px; }
-  .hero-video-location { width: 14px; height: 14px; }
-  .hero-video-cue-label { font-size: var(--type-label); }
-  .attendance-modal.hero-video-modal { width: calc(100% - 24px); }
-}

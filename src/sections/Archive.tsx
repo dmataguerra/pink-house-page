@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { parties } from '../data/parties';
 import './Archive.css';
 
-export default function Archive({ onConfirm }: { onConfirm: () => void }) {
+export default function Archive() {
   const track = useRef<HTMLDivElement>(null);
 
   const move = (direction: number) => {
@@ -13,20 +13,22 @@ export default function Archive({ onConfirm }: { onConfirm: () => void }) {
     element.scrollBy({ left: step * direction, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
 
-  return <section className="archive archive-redesign" id="archive" aria-labelledby="archive-title">
-    <div className="archive-intro" data-reveal>
+  return <section className="archive section wrapper" id="archive" aria-labelledby="archive-title">
+    <div className="section-heading" data-reveal>
       <div>
-        <p className="archive-eyebrow"><span aria-hidden="true"/>EL ARCHIVO</p>
-        <h2 id="archive-title" className="archive-title"><span>FIESTA DE</span><span>DISFRACES</span></h2>
+        <p className="section-eyebrow">01 / Pink House</p>
+        <h2 className="section-title" id="archive-title">Noches de<br/>Pink House.</h2>
       </div>
-      <div className="archive-description">
+      <div className="section-description">
         <p>Somos estudiantes que hacemos pedas caseras, pero esta vez quisimos subir el nivel.</p>
         <p>El disfraz es opcional, pero habrá felicitación al mejor disfraz.</p>
-        <button type="button" className="attendance-link" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">Me apunto <span aria-hidden="true">↗</span></button>
       </div>
     </div>
     <div className="archive-carousel" role="region" aria-roledescription="carrusel" aria-label="Recuerdos de Pink House" data-reveal>
-      <div className="archive-carousel-heading"><p className="archive-eyebrow"><span aria-hidden="true"/>RECUERDOS COMPARTIDOS</p></div>
+      <div className="archive-carousel-heading">
+        <p className="section-eyebrow">Recuerdos compartidos</p>
+        <span className="archive-swipe-hint" aria-hidden="true">Desliza para explorar →</span>
+      </div>
       <div ref={track} id="archive-track" className="archive-track" tabIndex={0} aria-label="Imágenes; usa las flechas izquierda y derecha para recorrerlas"
         onKeyDown={e => {
           if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); move(e.key === 'ArrowRight' ? 1 : -1); }
@@ -34,7 +36,7 @@ export default function Archive({ onConfirm }: { onConfirm: () => void }) {
         }}>
         {parties.map((party, index) => <article className="archive-slide" key={party.id} role="group" aria-roledescription="diapositiva" aria-label={`${index + 1} de ${parties.length}: ${party.title}`}>
           <div className="archive-image"><img src={party.cover} alt={party.title} loading="lazy"/></div>
-          <div className="archive-caption"><span>[{String(index + 1).padStart(2, '0')}]</span><div><h3>{party.title}</h3><p>{party.year}</p></div></div>
+          <div className="archive-caption"><h3>{party.title}</h3><span>{party.year}</span></div>
         </article>)}
       </div>
     </div>

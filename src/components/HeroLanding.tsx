@@ -1,22 +1,24 @@
 import HeroVideo from './HeroVideo';
+import { event } from '../config/event';
 import './HeroLanding.css';
 
 export default function HeroLanding({ onConfirm }: { onConfirm: () => void }) {
-  return <section className="hero hero-redesign" id="top" aria-labelledby="hero-wordmark">
-    <h1 className="hero-wordmark" id="hero-wordmark">
-      <img src={`${import.meta.env.BASE_URL}images/halloween-wordmark.svg`} alt="HALLOWEEN" width="660" height="180" fetchPriority="high"/>
-      <span className="hero-wordmark-frame" aria-hidden="true">
-        <i className="crop-mark crop-top-left"/><i className="crop-mark crop-top-right"/>
-        <i className="crop-mark crop-bottom-left"/><i className="crop-mark crop-bottom-right"/>
-      </span>
-    </h1>
-    <div className="hero-bottom">
-      <button type="button" className="hero-event" onClick={onConfirm} aria-label="Confirmar asistencia a la fiesta de disfraces" aria-haspopup="dialog" aria-controls="attendance-modal">
-        <span className="hero-micro-label"><span aria-hidden="true"/>FIESTA DE DISFRACES</span>
-        <span className="hero-event-description">Disfraz recomendado, no obligatorio.</span>
-        <span className="hero-event-date">22 DE OCTUBRE DE 2026</span>
-      </button>
-      <HeroVideo/>
+  return <section className="hero" id="top" aria-labelledby="hero-wordmark">
+    <div className="hero-center">
+      <p className="section-eyebrow">Una noche en The Pink House</p>
+      <h1 className="hero-wordmark" id="hero-wordmark">
+        <img src={`${import.meta.env.BASE_URL}images/halloween-wordmark.svg`} alt="HALLOWEEN" width="660" height="180" fetchPriority="high"/>
+      </h1>
+      <p className="hero-tagline">La casa de siempre. Una noche diferente.</p>
+    </div>
+    <div className="hero-bottom wrapper">
+      <div className="hero-event">
+        <p className="section-eyebrow">Fiesta de disfraces</p>
+        <p className="hero-event-date"><time dateTime={event.eventDate}>22 de octubre de 2026</time><span>Desde las {event.eventTime}</span></p>
+        <p className="hero-event-description">Disfraz recomendado, no obligatorio.</p>
+        <button type="button" className="button" onClick={onConfirm} aria-label="Confirmar asistencia a la fiesta de disfraces" aria-haspopup="dialog" aria-controls="attendance-modal">Me apunto <span aria-hidden="true">↗</span></button>
+      </div>
+      <div className="hero-media"><p className="section-eyebrow">La casa · Ver recorrido</p><HeroVideo/></div>
     </div>
   </section>;
 }

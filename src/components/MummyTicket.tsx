@@ -165,23 +165,25 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         <div className="mummy-ticket-character" ref={character}><Mummy pupilX={pupil.x} pupilY={pupil.y}/></div>
         <div className="mummy-ticket-details">
           <p className="mummy-ticket-brand">THE PINK HOUSE</p>
-          <h3 className="mummy-ticket-title" aria-label="Halloween">HALLO<br/>WEEN</h3>
-          <p className="mummy-ticket-date">{ticketDate}</p>
+          <h3 className="mummy-ticket-title"><img src={`${import.meta.env.BASE_URL}images/halloween-wordmark.svg`} alt="Halloween" width="660" height="180" loading="lazy"/></h3>
+          <p className="mummy-ticket-date">{ticketDate}<span> · {event.eventTime}</span></p>
         </div>
         <PaperCutEdge side="main"/>
       </div>
       <div className="mummy-ticket-stub">
         <button className="mummy-ticket-stub-title" type="button" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal" aria-label="Confirmar asistencia">
-          <span>Trick</span><br/>or <em>treat</em>
+          <span>Trick</span><br/>or treat
         </button>
+        <p className="mummy-ticket-stub-note">Tu entrada<br/>a Halloween.</p>
         <PaperCutEdge side="stub"/>
       </div>
       <button
         ref={cutButton}
         type="button"
         className="ticket-cut-control"
-        aria-label={phase === 'cut' ? 'Volver a ver premio del ticket' : 'Cortar ticket'}
+        aria-label={phase === 'cut' ? 'Volver a ver el plan de la noche' : 'Cortar ticket'}
         aria-controls="prize-modal"
+        aria-describedby="ticket-cut-instructions"
         aria-haspopup="dialog"
         aria-disabled={phase === 'cutting'}
         onPointerEnter={e => { if (e.pointerType === 'mouse') startGesture(e); }}
@@ -207,6 +209,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         <span className={`ticket-scissors ${progress > 0 ? 'is-cutting' : ''}`} aria-hidden="true"><Scissors/></span>
       </button>
     </div>
+    <p className="ticket-cut-hint" id="ticket-cut-instructions">Desliza por la línea del ticket para descubrir el plan de la noche.<span className="sr-only"> Con teclado, selecciona la línea y presiona Enter.</span></p>
     <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado.' : ''}</span>
   </div>;
 }

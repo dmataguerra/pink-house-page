@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { parties } from '../data/parties';
 import './Archive.css';
 
-export default function Archive() {
+export default function Archive({ onConfirm }: { onConfirm: () => void }) {
   const track = useRef<HTMLDivElement>(null);
 
   const move = (direction: number) => {
@@ -22,6 +22,7 @@ export default function Archive() {
       <div className="archive-description">
         <p>Somos estudiantes que hacemos pedas caseras, pero esta vez quisimos subir el nivel.</p>
         <p>El disfraz es opcional, pero habrá felicitación al mejor disfraz.</p>
+        <button type="button" className="attendance-link" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">Me apunto <span aria-hidden="true">↗</span></button>
       </div>
     </div>
     <div className="archive-carousel" role="region" aria-roledescription="carrusel" aria-label="Recuerdos de Pink House" data-reveal>

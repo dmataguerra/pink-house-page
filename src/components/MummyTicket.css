@@ -7,7 +7,7 @@
   --stub-y: 12px;
   --stub-rotation: -2deg;
   position: relative;
-  padding-right: var(--detachment-space);
+  padding-inline: calc(var(--detachment-space) / 2);
 }
 .mummy-ticket { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) var(--stub-width); min-height: 300px; color: var(--site-text); isolation: isolate; }
 .mummy-ticket-main { position: relative; display: grid; grid-template-columns: minmax(0, .55fr) minmax(0, 1.45fr); min-width: 0; background: var(--site-surface); border: 1px solid var(--site-border); border-right: 0; border-radius: var(--site-radius) 0 0 var(--site-radius); overflow: hidden; }

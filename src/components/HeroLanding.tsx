@@ -13,12 +13,11 @@ export default function HeroLanding({ onConfirm }: { onConfirm: () => void }) {
     </div>
     <div className="hero-bottom wrapper">
       <div className="hero-event">
-        <p className="section-eyebrow">Fiesta de disfraces</p>
-        <p className="hero-event-date"><time dateTime={event.eventDate}>22 de octubre de 2026</time><span>Desde las {event.eventTime}</span></p>
+        <p className="hero-event-date"><time dateTime={event.eventDate}>22 de octubre de 2026</time></p>
         <p className="hero-event-description">Disfraz recomendado, no obligatorio.</p>
         <button type="button" className="button" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal"><span className="button-label">Confirmar asistencia</span><span aria-hidden="true">↗</span></button>
       </div>
-      <div className="hero-media"><p className="section-eyebrow">Recorrido de Pink House</p><HeroVideo/></div>
+      <div className="hero-media"><HeroVideo/></div>
     </div>
   </section>;
 }

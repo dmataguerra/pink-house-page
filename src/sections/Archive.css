@@ -18,7 +18,7 @@
 }
 @media (max-width: 700px) {
   .archive-swipe-hint { display: block; }
-  .archive-track { margin-right: calc(-1 * var(--site-inset)); padding-right: var(--site-inset); border-radius: 0; }
+  .archive-track { border-radius: 0; }
   .archive-slide { flex-basis: 82%; }
   .archive-caption { margin-top: 12px; }
 }

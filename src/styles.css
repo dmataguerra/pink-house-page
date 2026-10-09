@@ -8,7 +8,7 @@
   --site-muted: #bcb4be;
   --site-accent: #f49aba;
   --site-border: #f1ede824;
-  --site-inset: clamp(20px, 4vw, 64px);
+  --site-inset: max(clamp(20px, 4vw, 64px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --site-width: 1280px;
   --site-radius: 8px;
   --site-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;

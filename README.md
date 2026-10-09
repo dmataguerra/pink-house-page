@@ -6,7 +6,7 @@
   <a href="https://calendar.app.google/HCNWJHqhFCBNuWdn9">Confirmar asistencia</a>
 </p>
 
-<p align="center"><a href="https://github.com/dmataguerra/pink-house-page/actions/workflows/deploy.yml"><img src="https://github.com/dmataguerra/pink-house-page/actions/workflows/deploy.yml/badge.svg" alt="Estado del despliegue a GitHub Pages" /></a></p>
+<p align="center">Sitio oficial · React + Vite · Publicación preparada para Cloudflare Pages</p>
 
 ## La casa de siempre. Una noche diferente.
 
@@ -42,14 +42,14 @@ Halloween combina luz roja y ámbar, fotografía cinematográfica, tipografía e
 
 ## Desarrollo local
 
-Construido con React, TypeScript, Vite y GSAP. Usa Node.js 22, la misma versión del workflow de publicación.
+Construido con React, TypeScript, Vite y GSAP. Usa Node.js 22.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Abre la dirección indicada por Vite con la ruta `/pink-house-page/`.
+Abre la dirección indicada por Vite en la ruta `/`.
 
 ```sh
 npm run typecheck
@@ -70,13 +70,16 @@ Al cambiar de temática, revisa también los textos, las imágenes y los metadat
 
 ### Publicación
 
-El [workflow de GitHub Pages](.github/workflows/deploy.yml) instala las dependencias, genera `dist/` y publica el sitio. Se ejecuta con cambios en `main` o mediante ejecución manual. Un PR abierto por sí solo no publica la nueva versión.
+La publicación está preparada para **Cloudflare Pages**: conecta el repositorio, usa `npm run build` y publica la carpeta `dist/`. Cloudflare puede compilar automáticamente la rama seleccionada sin GitHub Actions. Consulta la [guía de publicación y dominio propio](docs/CLOUDFLARE.md).
+
+El [workflow anterior de GitHub Pages](.github/workflows/deploy.yml) queda como alternativa manual. El enlace público de la cabecera se actualizará cuando se confirme la nueva dirección publicada.
 
 ## Documentación
 
 - [Guía para colaborar](CONTRIBUTING.md)
 - [Notas de implementación y continuidad](docs/CONTINUITY.md)
 - [Identidad y uso de assets](docs/BRAND.md)
+- [Cloudflare Pages y dominio propio](docs/CLOUDFLARE.md)
 
 El código y los assets no tienen una licencia de reutilización abierta declarada. Consulta las notas de identidad antes de reutilizar material visual o tipográfico.
 

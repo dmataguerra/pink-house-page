@@ -14,4 +14,4 @@ Usa imágenes optimizadas y títulos HTML. No añadas direcciones privadas, cred
 
 La configuración central está en `src/config/event.ts`; algunos textos editoriales están en los componentes y requieren revisión al cambiar de edición. Confirma fechas, horarios y enlaces con el organizador.
 
-La publicación se realiza mediante GitHub Pages. Publicar o fusionar una propuesta requiere autorización del responsable del proyecto.
+La publicación está preparada para Cloudflare Pages con integración Git; consulta `docs/CLOUDFLARE.md`. Publicar o fusionar una propuesta requiere autorización del responsable del proyecto.

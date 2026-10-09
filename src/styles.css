@@ -127,6 +127,9 @@ button.button:focus-visible,button.button-arrow:focus-visible{outline:2px solid 
 .button-with-arrow:hover span{transform:translateX(3px)}
 
 /* Continue the archive's editorial grid through attendance and the footer. */
+.closing-scene { position: relative; isolation: isolate; background: #050505; }
+.closing-scene::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('/images/pink-house-ambient-background.webp') center / 100% 100% no-repeat; opacity: .22; pointer-events: none; }
+.closing-scene .admission, .closing-scene .footer { background: transparent; }
 .admission.section.wrapper {
   max-width: none;
   padding: clamp(120px, 11.1vw, 210px) var(--site-inset) clamp(70px, 6.5vw, 125px);

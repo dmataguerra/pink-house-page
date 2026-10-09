@@ -1,66 +1,45 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Archive from './sections/Archive';
 import HeroLanding from './components/HeroLanding';
 import HeroInterface from './components/HeroInterface';
 import AttendanceModal from './components/AttendanceModal';
-import MummyTicket from './components/MummyTicket';
 import PrizeModal from './components/PrizeModal';
-
+import Editorial from './sections/Editorial';
+import AdmissionTicket from './sections/AdmissionTicket';
 gsap.registerPlugin(ScrollTrigger);
-
 export default function App() {
-  const root = useRef<HTMLDivElement>(null);
-  const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
-  const [prizeModalOpen, setPrizeModalOpen] = useState(false);
-  const confirmAttendance = () => setAttendanceModalOpen(true);
-
-  useLayoutEffect(() => {
-    const context = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach(element => gsap.from(element, {
-          y: 24, opacity: 0, duration: .7, ease: 'power2.out',
-          scrollTrigger: { trigger: element, start: 'top 92%', once: true },
-        }));
-      });
-      return () => mm.revert();
-    }, root);
-    return () => context.revert();
-  }, []);
-
-  return <div ref={root}>
-    <HeroInterface/>
-    <main>
-      <HeroLanding onConfirm={confirmAttendance}/>
-      <Archive/>
-      <section className="admission section wrapper" id="rsvp" aria-labelledby="admission-title">
-        <div className="section-heading" data-reveal>
-          <div>
-            <p className="section-eyebrow">02 / Tu entrada</p>
-            <h2 className="section-title" id="admission-title">Tu lugar<br/>en la casa.</h2>
-          </div>
-          <div className="section-description">
-            <p>Lo que pasa en The Pink House<br/>se queda en la Pink House.</p>
-            <button type="button" className="button" onClick={confirmAttendance} aria-haspopup="dialog" aria-controls="attendance-modal"><span className="button-label">Confirmar asistencia</span></button>
-          </div>
-        </div>
-        <MummyTicket onConfirm={confirmAttendance} onWin={() => setPrizeModalOpen(true)}/>
-      </section>
-    </main>
-    <footer className="footer wrapper">
-      <div className="footer-main">
-        <div className="footer-identity">
-          <a href="#top" className="footer-brand" aria-label="Volver al inicio">
-            <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark.svg`} alt="PINK HOUSE" width="860" height="260" loading="lazy"/>
-          </a>
-          <p className="footer-credit">© 2026 dmataguerra</p>
-        </div>
-        <a href="#top" className="footer-back-top">Volver arriba</a>
-      </div>
-    </footer>
-    <AttendanceModal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}/>
-    <PrizeModal open={prizeModalOpen} onClose={() => setPrizeModalOpen(false)}/>
-  </div>;
+ const root = useRef<HTMLDivElement>(null);
+ const [attendanceModalOpen,setAttendanceModalOpen] = useState(false);
+ const [prizeModalOpen,setPrizeModalOpen] = useState(false);
+ const confirmAttendance = () => setAttendanceModalOpen(true);
+ useLayoutEffect(() => {
+  const context = gsap.context(() => {
+   const mm = gsap.matchMedia();
+   mm.add('(prefers-reduced-motion: no-preference)',() => {
+    gsap.from('.hero-word',{yPercent:-50,opacity:0,duration:.5,stagger:.1,ease:'power1.out'});
+    gsap.from('.hero-description, .hero-tagline',{yPercent:-50,opacity:0,duration:.5,delay:.25,ease:'power1.out'});
+    gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach(element => gsap.from(element,{
+     y:28,opacity:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:element,start:'top 92%',once:true},
+    }));
+   });
+   return () => mm.revert();
+  },root);
+  return () => context.revert();
+ },[]);
+ return <div ref={root}>
+  <HeroInterface onConfirm={confirmAttendance}/>
+  <main>
+   <HeroLanding onConfirm={confirmAttendance}/>
+   <Editorial onConfirm={confirmAttendance} onSchedule={() => setPrizeModalOpen(true)}/>
+   <AdmissionTicket onConfirm={confirmAttendance} onSchedule={() => setPrizeModalOpen(true)}/>
+  </main>
+  <footer className="footer"><div className="footer-main">
+   <div><a href="#top" className="footer-brand" aria-label="Volver al inicio">THE PINK HOUSE</a><p className="footer-credit">© 2026 dmataguerra</p></div>
+   <a href="#top" className="footer-back-top">Volver arriba ↑</a>
+  </div></footer>
+  <AttendanceModal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}/>
+  <PrizeModal open={prizeModalOpen} onClose={() => setPrizeModalOpen(false)}/>
+ </div>;
 }
+

@@ -1,6 +1,6 @@
 export const parties = [
-  { id: 'memory-01', title: 'Referencia OG', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-knife.png`, status: 'Noche pasada', demo: true },
-  { id: 'memory-02', title: 'The Pink House', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-house.png`, status: 'Noche pasada', demo: true },
-  { id: 'memory-03', title: 'Cuidado con el guardia', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-mask.png`, status: 'Noche pasada', demo: true },
+  { id: 'memory-01', title: 'Referencia OG', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-knife-cinematic.png`, status: 'Noche pasada', demo: true },
+  { id: 'memory-02', title: 'The Pink House', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-house-cinematic.webp`, status: 'Noche pasada', demo: true },
+  { id: 'memory-03', title: 'Cuidado con el guardia', date: '—', year: '2026', cover: `${import.meta.env.BASE_URL}images/archive-mask-cinematic.webp`, status: 'Noche pasada', demo: true },
 ];
 

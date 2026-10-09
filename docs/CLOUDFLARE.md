@@ -32,6 +32,8 @@ Abre `http://localhost:4173/`. Las rutas del build actual parten de `/`, compati
 
 ## Dominio propio
 
+El proyecto de Cloudflare se llama `pink-house-page` y su dirección gratuita es **https://pink-house-page.pages.dev/**. Usa esa dirección mientras no haya un dominio propio registrado y autorizado. La preferencia actual es `www.pinkhouse.mx`, únicamente si no requiere pago: el registro de `pinkhouse.mx` es de pago y no está autorizado comprarlo. Conectar un dominio que ya se posee no sustituye su registro ni renovación.
+
 Después de comprobar la dirección `pages.dev`, entra al proyecto en **Custom domains → Set up a custom domain** y añade el dominio confirmado por el propietario.
 
 - Para el dominio raíz, la zona debe estar en la misma cuenta de Cloudflare y usar sus nameservers.

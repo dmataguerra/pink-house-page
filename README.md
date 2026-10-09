@@ -1,12 +1,12 @@
 <p align="center"><img src="docs/images/pink-house-banner.svg" alt="The Pink House — sitio oficial, edición Halloween 2026" width="100%" /></p>
 
 <p align="center">
-  <a href="https://dmataguerra.github.io/pink-house-page/">Visitar The Pink House</a> ·
+  <a href="https://pink-house-page.pages.dev/">Visitar The Pink House</a> ·
   <a href="https://www.instagram.com/david_mata_g/">Pedir ubicación</a> ·
   <a href="https://calendar.app.google/HCNWJHqhFCBNuWdn9">Confirmar asistencia</a>
 </p>
 
-<p align="center">Sitio oficial · React + Vite · Publicación preparada para Cloudflare Pages</p>
+<p align="center">Sitio oficial · React + Vite · Cloudflare Pages</p>
 
 ## La casa de siempre. Una noche diferente.
 
@@ -72,7 +72,7 @@ Al cambiar de temática, revisa también los textos, las imágenes y los metadat
 
 La publicación está preparada para **Cloudflare Pages**: conecta el repositorio, usa `npm run build` y publica la carpeta `dist/`. Cloudflare puede compilar automáticamente la rama seleccionada sin GitHub Actions. Consulta la [guía de publicación y dominio propio](docs/CLOUDFLARE.md).
 
-El [workflow anterior de GitHub Pages](.github/workflows/deploy.yml) queda como alternativa manual. El enlace público de la cabecera se actualizará cuando se confirme la nueva dirección publicada.
+El [workflow anterior de GitHub Pages](.github/workflows/deploy.yml) queda como alternativa manual. La dirección de Cloudflare es [pink-house-page.pages.dev](https://pink-house-page.pages.dev/).
 
 ## Documentación
 

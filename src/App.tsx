@@ -28,7 +28,7 @@ export default function App() {
     <section className="admission section wrapper" id="rsvp" aria-labelledby="admission-title">
       <div className="section-heading" data-reveal>
         <div><p className="section-eyebrow"><span aria-hidden="true"/>ASISTENCIA</p><h2 id="admission-title">ENTRA A<br/>LA LISTA</h2></div>
-        <p>Lo que pasa en The Pink House<br/>podría terminar en el archivo.</p>
+        <p>Lo que pasa en The Pink House<br/>se queda en la Pink House.</p>
       </div>
       <MummyTicket onConfirm={() => setAttendanceModalOpen(true)} onWin={() => setPrizeModalOpen(true)}/>
     </section>

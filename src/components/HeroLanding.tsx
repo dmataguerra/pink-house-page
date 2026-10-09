@@ -12,7 +12,7 @@ export default function HeroLanding({ onConfirm }: { onConfirm: () => void }) {
  },[]);
  return <section className="hero" id="top" aria-labelledby="hero-wordmark">
   <svg className="hero-layer-filter" aria-hidden="true" width="0" height="0"><defs><filter id="hero-foreground-opacity" colorInterpolationFilters="sRGB"><feComponentTransfer><feFuncA type="linear" slope="1.04" intercept="-0.02"/></feComponentTransfer></filter></defs></svg>
-  <img className="hero-art hero-backdrop" src={`${import.meta.env.BASE_URL}images/halloween-portrait-scene.webp`} alt="" width="1440" height="1280" fetchPriority="high"/>
+  <picture><source media="(max-width: 1024px)" srcSet={`${import.meta.env.BASE_URL}images/halloween-portrait-scene-mobile.webp`}/><img className="hero-art hero-backdrop" src={`${import.meta.env.BASE_URL}images/halloween-portrait-scene.webp`} alt="" width="1440" height="1280" fetchPriority="high"/></picture>
   <p className="hero-event-metadata"><strong>Halloween 2026</strong><br/>22 de octubre · Desde las 20:00</p>
   <div className="hero-header-countdown"><span className="hero-countdown-label">Nos vemos en</span><Countdown/></div>
   <div className="hero-content">
@@ -31,7 +31,7 @@ export default function HeroLanding({ onConfirm }: { onConfirm: () => void }) {
      <div className="hero-word hero-house" aria-hidden="true">HOUSE</div>
     </div>
     <p className="hero-tagline">La casa de siempre.<br/>Una noche diferente.<br/>The Pink House.</p>
-    <img className="hero-art hero-character" src={`${import.meta.env.BASE_URL}images/halloween-portrait-cutout.webp`} alt="Invitado con máscara de Halloween y overol de trabajo bajo una luz roja cinematográfica" width="1440" height="1280" fetchPriority="high"/>
+    <picture><source media="(max-width: 1024px)" srcSet={`${import.meta.env.BASE_URL}images/halloween-portrait-cutout-mobile.webp`}/><img className="hero-art hero-character" src={`${import.meta.env.BASE_URL}images/halloween-portrait-cutout.webp`} alt="Invitado con máscara de Halloween y overol de trabajo bajo una luz roja cinematográfica" width="1440" height="1280" fetchPriority="high"/></picture>
     <div className="hero-media"><HeroVideo/></div>
    </div>
    <div className="hero-slider">

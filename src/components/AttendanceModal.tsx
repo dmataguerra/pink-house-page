@@ -25,7 +25,7 @@ export default function AttendanceModal({ open, onClose }: AttendanceModalProps)
         </a>
         <a className="attendance-option attendance-option-confirm" href={event.attendanceUrl} target="_blank" rel="noopener noreferrer" aria-label="Confirmar asistencia (se abre en una pestaña nueva)">
           <span className="attendance-option-media">
-            <img className="attendance-map-image" src={`${import.meta.env.BASE_URL}images/archive-location.webp`} alt="" width="640" height="320"/>
+            <img className="attendance-map-image" src={`${import.meta.env.BASE_URL}images/archive-location-documentary.webp`} alt="" width="640" height="320"/>
           </span>
           <span className="attendance-option-body">
             <span className="attendance-option-title">Confirmar asistencia</span>

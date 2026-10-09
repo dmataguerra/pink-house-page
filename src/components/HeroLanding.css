@@ -61,7 +61,10 @@
  .hero-date { order:2; margin-left:auto; margin-right:59px; width:auto; }
  .hero-house { order:3; margin-left:auto; }
  .hero-description { order:4; flex:0 1 auto; position:relative; left:auto; top:auto; width:238px; margin:auto 0 0; max-width:238px; font-size:15px; line-height:15px; }
- .hero-intro { margin-bottom:32px; }
+ .hero-intro { margin-bottom:0; text-shadow:0 1px 5px #000; }
+ .hero-details { display:none; }
+ .hero-description { width:calc(100% - 112px); max-width:238px; line-height:1.25; }
+ .hero-description::before { content:''; position:absolute; inset:-18px -12px; background:#170907b8; filter:blur(16px); z-index:-1; }
  .hero-details-label { margin-bottom:8px; }
  .hero-tagline { display:none; }
  .hero-media { width:88px; height:144px; right:16px; bottom:56px; }
@@ -70,7 +73,7 @@
  .hero-slide-pagination { left:16px; top:16px; transform:none; }
  .hero-header { padding:16px; grid-template-columns:1fr auto; align-items:center; }
  .hero-header-logo { min-height:40px; font-size:24px; letter-spacing:-.18px; padding-top:3px; }
- .hero-event-metadata { top:70px; left:16px; }
+ .hero-event-metadata { top:70px; left:16px; line-height:1.3; text-shadow:0 1px 4px #000; }
  .hero-header-countdown { display:none; }
  .hero-menu-button { width:40px; height:40px; }
  .hero-slide-action { bottom:24px; right:16px; }

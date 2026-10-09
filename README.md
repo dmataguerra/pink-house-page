@@ -2,7 +2,7 @@
 
 ## Estado actual
 
-La implementación está pausada para revisión en la rama `codex/reference-fidelity-halloween`. Los cambios siguen sin commit para conservar todo el trabajo editable. No se ha hecho deploy, merge ni push.
+La implementación se mantiene en la rama `codex/reference-fidelity-halloween`. Los cambios terminados se guardan en commits locales. No se ha hecho deploy, merge ni push.
 
 La página local se sirve en:
 
@@ -90,6 +90,14 @@ Para repetir la comparación visual:
 ```
 
 ## Estado de cierre de esta iteración
+
+- Mejoras móviles: detalles separados del hero en un resumen blanco, CTA de asistencia visible de 52px y contraste reforzado en la introducción.
+- Validación posterior a las mejoras móviles y bebidas: build correcto y 35/35 pruebas Playwright aprobadas; capturas en `output/qa/mobile-improvements/`.
+- Archive móvil reduce su recorrido de 300vh a 170vh y muestra el título completo sobre una base legible.
+- Hero móvil usa variantes WebP de 1440px: sus dos capas suman 135 KB frente a 855 KB originales (84% menos).
+- Premio, ubicación y cuchillo se sirven en WebP: 341 KB frente a 6,9 MB de PNG (95% menos). Los PNG originales se conservan.
+- La segunda entrada del archivo es `What's your poison?`, con fotografía de bebidas y el texto: `Trae lo que te gusta tomar. También habrá bebidas de nuestra parte.`
+- Arte nuevo: `public/images/archive-drinks-documentary.webp`, generado con la herramienta integrada. Prompt: fotografía documental de película 35mm de una mesa de bebidas en fiesta Halloween, botellas sin marca, vasos rojos, cubeta de hielo y una mano sirviendo; iluminación roja y ámbar, grano, textura natural, sin texto ni acabado CGI.
 
 - El gradiente intenso fue revisado en captura Playwright y quedó aprobado visualmente para esta iteración.
 - El header quedó como `THE PINK HOUSE` y la etiqueta duplicada `__005` fue retirada.

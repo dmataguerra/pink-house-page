@@ -12,9 +12,9 @@ type EditorialProps = { onConfirm: () => void; onSchedule: () => void };
 const image = (name: string) => `${import.meta.env.BASE_URL}images/${name}`;
 const transitionWords = 'PINK HOUSE ARCHIVE'.split(' ');
 const collageImages = [
-  image('archive-knife-cinematic.png'), image('archive-party-cinematic.webp'), image('archive-mask-cinematic.webp'),
-  image('archive-party-cinematic.webp'), image('archive-house-cinematic.webp'),
-  image('archive-location-documentary.png'), image('archive-party-cinematic.webp'), image('archive-prize-documentary.png'),
+  image('archive-knife-cinematic.webp'), image('archive-party-cinematic.webp'), image('archive-mask-cinematic.webp'),
+  image('archive-party-cinematic.webp'), image('archive-drinks-documentary.webp'),
+  image('archive-location-documentary.webp'), image('archive-party-cinematic.webp'), image('archive-prize-documentary.webp'),
 ];
 
 function SectionLabel({ title, count }: { title: string; count: string }) {
@@ -47,7 +47,7 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
             previewBackground.current?.style.setProperty('--preview-expand', String(1 + Math.max(0, (progress - .85) / .15) * .1));
             const entry = Math.max(0, Math.min(1, (works.current?.getBoundingClientRect().top ?? 0) / window.innerHeight));
             worksStage.current?.style.setProperty('--archive-entry', String(entry));
-            setWordCount(Math.min(transitionWords.length, 1 + Math.floor(progress / .82 * (transitionWords.length - 1))));
+            setWordCount(window.innerWidth <= 1024 ? transitionWords.length : Math.min(transitionWords.length, 1 + Math.floor(progress / .82 * (transitionWords.length - 1))));
           },
         });
         ScrollTrigger.create({
@@ -91,11 +91,17 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
   const highlights = [
     { letter: 'A', title: <>22 de octubre.<br/>Desde las<br/>20:00.</>, mobileTitle: '22 de octubre. Desde las 20:00.', src: image('archive-house-cinematic.webp'), action: onSchedule, label: 'Ver los detalles de la noche' },
     { letter: 'B', title: <>Disfraz<br/>recomendado.</>, mobileTitle: 'Ven con disfraz.', src: image('archive-mask-cinematic.webp'), action: onConfirm, label: 'Disfraz recomendado, no obligatorio. Confirmar asistencia' },
-    { letter: 'C', title: <>Concurso<br/>y premio<br/>al mejor.</>, mobileTitle: 'Concurso y premio al mejor disfraz.', src: image('archive-prize-documentary.png'), action: onSchedule, label: 'Concurso y premio al mejor disfraz. Ver las actividades de Halloween' },
-    { letter: 'D', title: <>La ubicación<br/>al confirmar<br/>asistencia.</>, mobileTitle: 'Ubicación al confirmar.', src: image('archive-location-documentary.png'), action: onConfirm, label: 'Confirmar asistencia y consultar la ubicación' },
+    { letter: 'C', title: <>Concurso<br/>y premio<br/>al mejor.</>, mobileTitle: 'Concurso y premio al mejor disfraz.', src: image('archive-prize-documentary.webp'), action: onSchedule, label: 'Concurso y premio al mejor disfraz. Ver las actividades de Halloween' },
+    { letter: 'D', title: <>La ubicación<br/>al confirmar<br/>asistencia.</>, mobileTitle: 'Ubicación al confirmar.', src: image('archive-location-documentary.webp'), action: onConfirm, label: 'Confirmar asistencia y consultar la ubicación' },
   ];
 
   return <div className="editorial" ref={root}>
+    <section className="mobile-event-summary" aria-label="Tu noche en The Pink House">
+      <p className="mobile-event-summary-label">HALLOWEEN / 22.10.2026</p>
+      <h2>Tu noche<br/>en la casa.</h2>
+      <dl><div><dt>Cuándo</dt><dd>22 de octubre · 20:00</dd></div><div><dt>Disfraz</dt><dd>Recomendado, no obligatorio.<br/>Premio al mejor de la noche.</dd></div><div><dt>Dónde</dt><dd>Ubicación al confirmar.</dd></div></dl>
+      <button type="button" className="mobile-rsvp-action" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">Confirmar asistencia <span aria-hidden="true">↗</span></button>
+    </section>
     <section className="editorial-identity editorial-fullscreen" id="archive" aria-labelledby="identity-title">
       <SectionLabel title="La casa" count="001"/>
       <div className="editorial-centered editorial-identity-content">
@@ -123,7 +129,7 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
         <div className="editorial-preview-background" ref={previewBackground} aria-hidden="true"/>
         <div className="editorial-centered editorial-preview-content">
           <h2 className="editorial-statement" id="archive-intro-title" aria-label={transitionWords.join(' ')}>
-            {transitionWords.slice(0, wordCount).map((word, index) => <span key={`${word}-${index}`}>{index > 0 && ' '}{index >= 8 ? <strong>{word}</strong> : word}</span>)}
+            {transitionWords.map((word, index) => <span className={index >= wordCount ? 'archive-word-pending' : undefined} key={`${word}-${index}`}>{index > 0 && ' '}{word}</span>)}
           </h2>
         </div>
       </div>
@@ -142,7 +148,7 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
         </div>
         <h2 className="editorial-works-title">{parties[activeImage].title}</h2>
         <div className="editorial-works-info">
-          <p>Estudiantes que hacen pedas caseras.<br/>Este año quisimos subir el nivel.<br/>Ven a descubrirlo.</p>
+          <p>{parties[activeImage].description || <>Estudiantes que hacen pedas caseras.<br/>Este año quisimos subir el nivel.<br/>Ven a descubrirlo.</>}</p>
           <span className="editorial-works-date">22.10.2026</span>
           <div className="editorial-works-pagination" role="group" aria-label="Recorrer el archivo">
             {parties.map((party, index) => <button type="button" key={party.id} onClick={() => selectArchive(index)} className={index === activeImage ? 'is-active' : ''} aria-label={`Ver ${party.title}`} aria-pressed={index === activeImage}/>) }

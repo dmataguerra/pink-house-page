@@ -43,7 +43,7 @@ export default function App() {
           </div>
           <div className="section-description">
             <p>Lo que pasa en The Pink House<br/>se queda en la Pink House.</p>
-            <button type="button" className="button" onClick={confirmAttendance} aria-haspopup="dialog" aria-controls="attendance-modal">Confirmar asistencia <span aria-hidden="true">↗</span></button>
+            <button type="button" className="button" onClick={confirmAttendance} aria-haspopup="dialog" aria-controls="attendance-modal"><span className="button-label">Confirmar asistencia</span><span aria-hidden="true">↗</span></button>
           </div>
         </div>
         <MummyTicket onConfirm={confirmAttendance} onWin={() => setPrizeModalOpen(true)}/>

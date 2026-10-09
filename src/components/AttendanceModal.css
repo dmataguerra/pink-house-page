@@ -28,7 +28,7 @@
 .attendance-profile-photo { object-position: 35% 66%; transform: scale(1.45); transform-origin: 0% 65%; }
 .attendance-option-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .attendance-option-title { font-size: 16px; font-weight: 500; line-height: 1.4; letter-spacing: -.025em; overflow-wrap: anywhere; }
-.attendance-option-description { color: var(--site-muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.attendance-option-description { color: var(--site-muted); font-size: var(--type-detail); line-height: 1.5; overflow-wrap: anywhere; }
 .attendance-option-arrow { display: grid; place-items: center; color: var(--site-accent); }
 .attendance-option-arrow svg { width: 18px; height: 18px; }
 @media (hover: hover) and (pointer: fine) {
@@ -43,7 +43,7 @@
   .attendance-option { grid-template-columns: 44px minmax(0, 1fr) 18px; gap: 12px; }
   .attendance-option-media { width: 44px; height: 52px; }
   .attendance-option-title { font-size: 14px; }
-  .attendance-option-description { font-size: 11px; }
+  .attendance-option-description { font-size: var(--type-label); }
 }
 @keyframes attendance-modal-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes attendance-backdrop-enter { from { opacity: 0; } to { opacity: 1; } }

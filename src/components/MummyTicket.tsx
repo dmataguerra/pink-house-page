@@ -54,7 +54,8 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
   const [progress, setProgress] = useState(0);
   const [cutDirection, setCutDirection] = useState<1 | -1>(1);
   const [phase, setPhase] = useState<'intact' | 'cutting' | 'cut'>('intact');
-  const gesture = useRef<{ direction: 1 | -1; start: number; last: number; progress: number; pointerId: number } | null>(null);
+  const gesture = useRef<{ direction: 1 | -1; start: number; last: number; progress: number; pointerId: number; originX: number; originY: number; canDrag: boolean; moved: boolean } | null>(null);
+  const suppressPointerClick = useRef(false);
   const complete = useRef(false);
   const revealTimer = useRef<number | undefined>(undefined);
   const cutButton = useRef<HTMLButtonElement>(null);
@@ -112,20 +113,30 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
   }
 
   function startGesture(e: PointerEvent<HTMLButtonElement>) {
-    if (complete.current || !e.isPrimary) return;
+    if (!e.isPrimary || e.button !== 0) return;
+    suppressPointerClick.current = false;
+    if (complete.current) return;
     const start = position(e);
-    // Begin at either end so crossing the dotted line cannot accidentally win.
-    if (start > .14 && start < .86) return;
-    gesture.current = { direction: start < .5 ? 1 : -1, start, last: start, progress: 0, pointerId: e.pointerId };
+    // Capture every press for taps; a cut gesture still starts at either end.
+    gesture.current = {
+      direction: start < .5 ? 1 : -1, start, last: start, progress: 0,
+      pointerId: e.pointerId, originX: e.clientX, originY: e.clientY,
+      canDrag: start <= .14 || start >= .86, moved: false,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
     setCutDirection(gesture.current.direction);
     setProgress(0);
   }
 
   function moveGesture(e: PointerEvent<HTMLButtonElement>) {
     if (complete.current) return;
-    if (!gesture.current && e.pointerType === 'mouse') startGesture(e);
     const active = gesture.current;
     if (!active || active.pointerId !== e.pointerId) return;
+    if (Math.hypot(e.clientX - active.originX, e.clientY - active.originY) >= 6) {
+      active.moved = true;
+      suppressPointerClick.current = true;
+    }
+    if (!active.canDrag || !active.moved) return;
     const bounds = e.currentTarget.getBoundingClientRect();
     if (e.clientX < bounds.left - 20 || e.clientX > bounds.right + 20) {
       resetGesture();
@@ -152,6 +163,13 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
     }
   }
 
+  function endGesture(e: PointerEvent<HTMLButtonElement>) {
+    resetGesture();
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  }
+
   const style = {
     '--cut-progress': `${progress * 100}%`,
     '--scissors-position': `${cutDirection === -1 ? 100 - progress * 100 : progress * 100}%`,
@@ -174,42 +192,46 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         <button className="mummy-ticket-stub-title" type="button" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal" aria-label="Confirmar asistencia">
           <span>Trick</span><br/>or treat
         </button>
-        <p className="mummy-ticket-stub-note">Tu entrada<br/>a Halloween.</p>
+        <p className="mummy-ticket-stub-note">Tu entrada<br/>a la casa.</p>
         <PaperCutEdge side="stub"/>
       </div>
       <button
         ref={cutButton}
         type="button"
         className="ticket-cut-control"
-        aria-label={phase === 'cut' ? 'Volver a ver el plan de la noche' : 'Cortar ticket'}
+        aria-label={phase === 'cut' ? 'Volver a ver el plan de la noche' : 'Abrir el ticket y ver el plan de la noche'}
         aria-controls="prize-modal"
         aria-describedby="ticket-cut-instructions"
         aria-haspopup="dialog"
         aria-disabled={phase === 'cutting'}
-        onPointerEnter={e => { if (e.pointerType === 'mouse') startGesture(e); }}
-        onPointerDown={e => {
-          if (e.pointerType === 'mouse' || complete.current) return;
-          e.currentTarget.setPointerCapture(e.pointerId);
-          startGesture(e);
-        }}
+        onPointerDown={startGesture}
         onPointerMove={moveGesture}
-        onPointerLeave={e => { if (e.pointerType === 'mouse') resetGesture(); }}
-        onPointerUp={e => { if (e.pointerType !== 'mouse') resetGesture(); }}
-        onPointerCancel={resetGesture}
+        onPointerUp={endGesture}
+        onPointerCancel={endGesture}
         onLostPointerCapture={resetGesture}
         onKeyDown={e => {
-          if (e.key !== 'Enter' && e.key !== ' ') return;
-          e.preventDefault();
-          if (phase === 'cut') onWin(); else finishCut();
+          // Keep the button's native Enter/Space activation after a drag.
+          if (e.key === 'Enter' || e.key === ' ') suppressPointerClick.current = false;
         }}
-        onClick={() => { if (phase === 'cut') onWin(); }}
+        onClick={e => {
+          if (suppressPointerClick.current && e.detail !== 0) {
+            suppressPointerClick.current = false;
+            return;
+          }
+          if (phase === 'cutting') return;
+          if (phase === 'cut') {
+            cutButton.current?.focus({ preventScroll: true });
+            onWin();
+          } else finishCut();
+        }}
       >
         <span className="ticket-perforation" aria-hidden="true"/>
         <span className="ticket-cut-trail" style={cutDirection === -1 ? {top: 'auto', bottom: 0} : undefined} aria-hidden="true"/>
+        <span className="ticket-drag-cue" aria-hidden="true"><svg viewBox="0 0 20 32" fill="none"><path d="m5 8 5-5 5 5M10 3v26m-5-5 5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
         <span className={`ticket-scissors ${progress > 0 ? 'is-cutting' : ''}`} aria-hidden="true"><Scissors/></span>
       </button>
     </div>
-    <p className="ticket-cut-hint" id="ticket-cut-instructions">Desliza por la línea del ticket para descubrir el plan de la noche.<span className="sr-only"> Con teclado, selecciona la línea y presiona Enter.</span></p>
+    <p className="ticket-cut-hint" id="ticket-cut-instructions">{phase === 'cut' ? 'Haz clic o toca las tijeras para volver a ver el plan de la noche.' : 'Haz clic o toca las tijeras, o arrastra de un extremo al otro por la línea para descubrir el plan de la noche.'}<span className="sr-only"> Con teclado, selecciona las tijeras y presiona Enter o espacio.</span></p>
     <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado.' : ''}</span>
   </div>;
 }

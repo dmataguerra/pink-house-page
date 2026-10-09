@@ -44,7 +44,7 @@ export default function Countdown() {
   return <div className="countdown-wrap"><div className="countdown" role="timer" aria-label="Cuenta regresiva para el 22 de octubre de 2026 a las 20:00">
     {values.map((value, i) => {
       const formatted = String(value).padStart(2, '0');
-      return <div key={i}><strong><span className="countdown-value-accessible">{formatted}</span>{[...formatted].map((digit, index) => <Digit key={index} value={digit}/>)}</strong><span>{['DÍAS', 'HORAS', 'MINUTOS', 'SEGUNDOS'][i]}</span></div>;
+      return <div key={i}><strong><span className="countdown-value-accessible">{formatted}</span>{[...formatted].map((digit, index) => <Digit key={index} value={digit}/>)}</strong><span className="countdown-label"><span className="countdown-label-full">{['DÍAS', 'HORAS', 'MINUTOS', 'SEGUNDOS'][i]}</span><span className="countdown-label-compact" aria-hidden="true">{['DÍAS', 'HRS', 'MIN', 'SEG'][i]}</span></span></div>;
     })}
   </div></div>;
 }

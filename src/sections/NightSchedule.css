@@ -1,12 +1,12 @@
 .schedule-modal { width: min(500px, calc(100% - 32px)); }
 .schedule-modal .attendance-modal-header { margin-bottom: 12px; }
 .schedule-modal .attendance-modal-header h2 { font-size: 26px; }
-.schedule-eyebrow { margin-bottom: 26px; color: var(--site-muted); font: 10px/1.6 var(--site-mono); }
+.schedule-eyebrow { margin-bottom: 26px; color: var(--site-muted); font: var(--type-label)/1.6 var(--site-mono); }
 .schedule-list { list-style: none; padding: 0; margin: 0; }
 .schedule-item { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: baseline; gap: 24px; padding: 19px 0; border-top: 1px solid var(--site-border); }
 .schedule-item time { color: var(--site-accent); font: 13px/1.5 var(--site-mono); font-variant-numeric: tabular-nums; }
 .schedule-item h3 { font-size: 16px; font-weight: 400; line-height: 1.5; letter-spacing: -.025em; }
-.schedule-note { padding-top: 12px; color: var(--site-muted); font-size: 10px; line-height: 1.6; }
+.schedule-note { padding-top: 12px; color: var(--site-muted); font-size: var(--type-label); line-height: 1.6; }
 @media (max-width: 600px) {
   .schedule-modal .attendance-modal-header h2 { font-size: 23px; }
   .schedule-item { grid-template-columns: 48px minmax(0, 1fr); gap: 16px; }

@@ -24,9 +24,9 @@ export default function Archive() {
         <p>El disfraz es opcional, pero habrá felicitación al mejor disfraz.</p>
       </div>
     </div>
-    <div className="archive-carousel" role="region" aria-roledescription="carrusel" aria-label="Recuerdos de Pink House" data-reveal>
+    <div className="archive-carousel" role="region" aria-roledescription="carrusel" aria-label="Archivo visual de Pink House" data-reveal>
       <div className="archive-carousel-heading">
-        <p className="section-eyebrow">Recuerdos compartidos</p>
+        <p className="section-eyebrow">Archivo visual</p>
         <span className="archive-swipe-hint" aria-hidden="true">Desliza para explorar →</span>
       </div>
       <div ref={track} id="archive-track" className="archive-track" tabIndex={0} aria-label="Imágenes; usa las flechas izquierda y derecha para recorrerlas"

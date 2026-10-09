@@ -34,7 +34,9 @@ Abre `http://localhost:4173/`. Las rutas del build actual parten de `/`, compati
 
 `functions/videos/pink-house.mp4.js` obtiene el archivo original mediante `env.ASSETS` y entrega respuestas `206` con `Content-Range` y `Accept-Ranges`. Transmite los bytes sin cargar el archivo completo en memoria. `public/_routes.json` limita las invocaciones a ese MP4; el resto de la web conserva el servicio estático. No requiere una base de datos, almacenamiento adicional ni plan de pago. Las solicitudes del video usan la cuota gratuita de Pages Functions.
 
-Las pruebas del protocolo se ejecutan con `node --test tests/video-range.test.mjs`. Comprueba también el reproductor ampliado sobre la dirección publicada: Vite local soporta Range y no reproduce por sí solo la limitación del servidor estático de Pages.
+`npm run build` calcula la longitud real del MP4 en `cloudflare/video-metadata.js`, ejecuta las pruebas del protocolo y compila la web. La longitud generada cubre el caso en que `ASSETS` omite ese header. La función utiliza `FixedLengthStream` para que el runtime emita la longitud exacta de cada fragmento.
+
+Las pruebas del protocolo también se ejecutan con `node --test tests/video-range.test.mjs`. Comprueba el reproductor ampliado sobre la dirección publicada: Vite local soporta Range y no reproduce por sí solo la limitación del servidor estático de Pages.
 
 ## Dominio propio
 

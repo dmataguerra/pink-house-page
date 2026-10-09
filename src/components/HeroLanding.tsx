@@ -25,7 +25,6 @@ export default function HeroLanding({ onConfirm }: { onConfirm: () => void }) {
       <div className="hero-details">
        <p className="hero-details-label">Halloween en la casa:</p>
        <p><time dateTime={`${event.eventDate}T${event.eventTime}:00${event.utcOffset}`}>22 de octubre de 2026 · 20:00</time><br/>Disfraz recomendado, no obligatorio.<br/>Concurso y premio al mejor disfraz.<br/>Ubicación al confirmar.</p>
-       <button className="hero-confirm" type="button" onClick={onConfirm} aria-label="Confirmar asistencia" aria-haspopup="dialog" aria-controls="attendance-modal">Confirmar asistencia <span aria-hidden="true">↗</span></button>
       </div>
      </div>
      <div className="hero-word hero-date" aria-hidden="true">22</div>

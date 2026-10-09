@@ -43,7 +43,7 @@ export default function App() {
           </div>
           <div className="section-description">
             <p>Lo que pasa en The Pink House<br/>se queda en la Pink House.</p>
-            <button type="button" className="button" onClick={confirmAttendance} aria-haspopup="dialog" aria-controls="attendance-modal"><span className="button-label">Confirmar asistencia</span><span aria-hidden="true">↗</span></button>
+            <button type="button" className="button" onClick={confirmAttendance} aria-haspopup="dialog" aria-controls="attendance-modal"><span className="button-label">Confirmar asistencia</span></button>
           </div>
         </div>
         <MummyTicket onConfirm={confirmAttendance} onWin={() => setPrizeModalOpen(true)}/>
@@ -51,12 +51,14 @@ export default function App() {
     </main>
     <footer className="footer wrapper">
       <div className="footer-main">
-        <a href="#top" className="footer-brand" aria-label="Volver al inicio">
-          <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark.svg`} alt="PINK HOUSE" width="860" height="260" loading="lazy"/>
-        </a>
-        <p>Nos vemos en la casa.</p>
+        <div className="footer-identity">
+          <a href="#top" className="footer-brand" aria-label="Volver al inicio">
+            <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark.svg`} alt="PINK HOUSE" width="860" height="260" loading="lazy"/>
+          </a>
+          <p className="footer-credit">© 2026 dmataguerra</p>
+        </div>
+        <a href="#top" className="footer-back-top">Volver arriba</a>
       </div>
-      <div className="footer-bottom"><span>© 2026 dmataguerra</span><a href="#top">Volver arriba ↑</a></div>
     </footer>
     <AttendanceModal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}/>
     <PrizeModal open={prizeModalOpen} onClose={() => setPrizeModalOpen(false)}/>

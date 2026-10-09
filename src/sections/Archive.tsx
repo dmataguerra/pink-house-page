@@ -20,8 +20,8 @@ export default function Archive() {
         <h2 className="section-title" id="archive-title">Pink House<br/>Archive</h2>
       </div>
       <div className="section-description">
-        <p>Vienes «un rato», te picas con el Kahoot y, cuando te das cuenta, ya estás defendiendo a tu equipo en el beer pong. La próxima anécdota de Pink House puede empezar contigo.</p>
-        <p>Ven con disfraz si te late. Habrá concurso y felicitación al mejor de la noche.</p>
+        <p>Estudiantes que hacen pedas caseras; sin embargo, este año quisimos subir el nivel. Ven a descubrirlo.</p>
+        <p>Recomendado venir con disfraz (no obligatorio). Habrá concurso y premio al mejor de la noche.</p>
       </div>
     </div>
     <div className="archive-carousel" role="region" aria-roledescription="carrusel" aria-label="Archivo visual de Pink House" data-reveal>

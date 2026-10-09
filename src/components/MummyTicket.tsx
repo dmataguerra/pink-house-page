@@ -231,7 +231,7 @@ export default function MummyTicket({ onConfirm, onWin }: MummyTicketProps) {
         <span className={`ticket-scissors ${progress > 0 ? 'is-cutting' : ''}`} aria-hidden="true"><Scissors/></span>
       </button>
     </div>
-    <p className="ticket-cut-hint" id="ticket-cut-instructions">{phase === 'cut' ? 'Haz clic o toca las tijeras para volver a ver el plan de la noche.' : 'Haz clic o toca las tijeras, o arrastra de un extremo al otro por la línea para descubrir el plan de la noche.'}<span className="sr-only"> Con teclado, selecciona las tijeras y presiona Enter o espacio.</span></p>
+    <p className="ticket-cut-hint" id="ticket-cut-instructions">{phase === 'cut' ? 'Haz clic o toca las tijeras para volver a ver el plan de la noche.' : 'Desliza las tijeras a través del ticket'}<span className="sr-only"> También puedes hacer clic o tocar las tijeras. Con teclado, selecciona las tijeras y presiona Enter o espacio.</span></p>
     <span className="ticket-cut-status" role="status">{phase === 'cut' ? 'Ticket cortado.' : ''}</span>
   </div>;
 }

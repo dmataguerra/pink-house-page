@@ -1,7 +1,6 @@
 .hero-video { position:relative; width:100%; height:100%; }
 .hero-video-open { position:relative; display:block; width:100%; height:100%; padding:0; color:#fff; border:1px solid #fff; border-radius:.8333333vw; background:#000; cursor:pointer; overflow:hidden; }
-.hero-video-open video { display:block; width:100%; height:100%; object-fit:cover; filter:grayscale(1); pointer-events:none; transition:filter .5s; }
-.hero-video-open:hover video { filter:grayscale(0); }
+.hero-video-open video { display:block; width:100%; height:100%; object-fit:cover; filter:grayscale(1) sepia(1) saturate(2.4) hue-rotate(-24deg); pointer-events:none; }
 .hero-video-cue { position:absolute; bottom:.8333333vw; left:1.9444444vw; display:flex; align-items:center; gap:5px; white-space:nowrap; pointer-events:none; font:.9027778vw/1.1 'FoundersGrotesk-Medium',Arial,sans-serif; text-shadow:0 1px 4px #000; }
 .hero-video-cue::before { content:''; position:absolute; background:#ff2443; border-radius:100%; height:.4166667vw; width:.4166667vw; left:-.9027778vw; }
 .hero-video-location { display:none; }
@@ -10,7 +9,7 @@
 .hero-video-modal .attendance-modal-header { margin-bottom:12px; gap:12px; }
 .hero-video-modal .attendance-modal-header h2 { font-size:18px; letter-spacing:-.02em; }
 .hero-video-modal .attendance-modal-close { color:#fff; border-color:#fff5; }
-.hero-video-full { display:block; width:100%; max-height:calc(90dvh - 100px); aspect-ratio:16 / 9; object-fit:contain; background:#000; }
+.hero-video-full { display:block; width:100%; max-height:calc(90dvh - 100px); aspect-ratio:16 / 9; object-fit:contain; background:#000; filter:grayscale(1) sepia(1) saturate(2.4) hue-rotate(-24deg); }
 @media (max-width:1024px) {
  .hero-video-open { border-radius:5px; }
  .hero-video-cue { bottom:16px; font-size:10px; left:auto; right:7px; transform:rotate(180deg); writing-mode:vertical-rl; }

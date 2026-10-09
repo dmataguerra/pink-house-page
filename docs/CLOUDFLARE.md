@@ -1,6 +1,6 @@
 # Publicar The Pink House en Cloudflare Pages
 
-La web es estática: React, TypeScript y Vite generan la carpeta `dist/`. RSVP abre los destinos existentes; countdown, navegación, modales, ticket y video funcionan en el navegador. No requiere Functions ni servidor propio.
+La web es estática: React, TypeScript y Vite generan la carpeta `dist/`. RSVP abre los destinos existentes; countdown, navegación, modales y ticket funcionan en el navegador. Una única Pages Function sirve el MP4 con respuestas HTTP Range para conservar la continuidad al ampliar el reproductor y permitir avanzar en el video.
 
 ## Integración con GitHub
 
@@ -29,6 +29,12 @@ npm run preview
 Abre `http://localhost:4173/`. Las rutas del build actual parten de `/`, compatible con una dirección `pages.dev` y con un dominio propio. Las imágenes y el MP4 usan `import.meta.env.BASE_URL`.
 
 `public/_headers` configura caché prolongada para los bundles con hash y cabeceras básicas. Las imágenes sin hash conservan la política normal de Cloudflare para que una actualización no quede retenida durante un año.
+
+## Reproducción del MP4
+
+`functions/videos/pink-house.mp4.js` obtiene el archivo original mediante `env.ASSETS` y entrega respuestas `206` con `Content-Range` y `Accept-Ranges`. Transmite los bytes sin cargar el archivo completo en memoria. `public/_routes.json` limita las invocaciones a ese MP4; el resto de la web conserva el servicio estático. No requiere una base de datos, almacenamiento adicional ni plan de pago. Las solicitudes del video usan la cuota gratuita de Pages Functions.
+
+Las pruebas del protocolo se ejecutan con `node --test tests/video-range.test.mjs`. Comprueba también el reproductor ampliado sobre la dirección publicada: Vite local soporta Range y no reproduce por sí solo la limitación del servidor estático de Pages.
 
 ## Dominio propio
 

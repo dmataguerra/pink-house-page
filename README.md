@@ -45,6 +45,8 @@ Los principales assets finales están en `public/images/`:
 - `archive-party-cinematic.webp`
 - `archive-prize.webp`
 - `archive-location.webp`
+- `archive-prize-documentary.png`
+- `archive-location-documentary.png`
 - `archive-knife-cinematic.png`
 - `instagram-profile-cinematic.webp`
 

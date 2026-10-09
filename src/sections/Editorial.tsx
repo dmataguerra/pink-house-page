@@ -14,7 +14,7 @@ const transitionWords = 'PINK HOUSE ARCHIVE'.split(' ');
 const collageImages = [
   image('archive-knife-cinematic.png'), image('archive-party-cinematic.webp'), image('archive-mask-cinematic.webp'),
   image('archive-party-cinematic.webp'), image('archive-house-cinematic.webp'),
-  image('archive-location.webp'), image('archive-party-cinematic.webp'), image('archive-prize.webp'),
+  image('archive-location-documentary.png'), image('archive-party-cinematic.webp'), image('archive-prize-documentary.png'),
 ];
 
 function SectionLabel({ title, count }: { title: string; count: string }) {
@@ -91,8 +91,8 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
   const highlights = [
     { letter: 'A', title: <>22 de octubre.<br/>Desde las<br/>20:00.</>, mobileTitle: '22 de octubre. Desde las 20:00.', src: image('archive-house-cinematic.webp'), action: onSchedule, label: 'Ver los detalles de la noche' },
     { letter: 'B', title: <>Disfraz<br/>recomendado.</>, mobileTitle: 'Ven con disfraz.', src: image('archive-mask-cinematic.webp'), action: onConfirm, label: 'Disfraz recomendado, no obligatorio. Confirmar asistencia' },
-    { letter: 'C', title: <>Concurso<br/>y premio<br/>al mejor.</>, mobileTitle: 'Concurso y premio al mejor disfraz.', src: image('archive-prize.webp'), action: onSchedule, label: 'Concurso y premio al mejor disfraz. Ver las actividades de Halloween' },
-    { letter: 'D', title: <>La ubicación<br/>al confirmar<br/>asistencia.</>, mobileTitle: 'Ubicación al confirmar.', src: image('archive-location.webp'), action: onConfirm, label: 'Confirmar asistencia y consultar la ubicación' },
+    { letter: 'C', title: <>Concurso<br/>y premio<br/>al mejor.</>, mobileTitle: 'Concurso y premio al mejor disfraz.', src: image('archive-prize-documentary.png'), action: onSchedule, label: 'Concurso y premio al mejor disfraz. Ver las actividades de Halloween' },
+    { letter: 'D', title: <>La ubicación<br/>al confirmar<br/>asistencia.</>, mobileTitle: 'Ubicación al confirmar.', src: image('archive-location-documentary.png'), action: onConfirm, label: 'Confirmar asistencia y consultar la ubicación' },
   ];
 
   return <div className="editorial" ref={root}>

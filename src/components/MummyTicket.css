@@ -167,6 +167,13 @@
   .prize-modal .attendance-modal-header h2 { font-size: 34px; }
 }
 
+@media (max-width: 360px) {
+  .mummy-ticket-title { font-size: clamp(22px, 8vw, 29px); }
+  .mummy-ticket-brand { font-size: 7px; }
+  .mummy-ticket-stub { padding-inline: 8px; }
+  .mummy-ticket-stub-title { font-size: clamp(19px, 6vw, 22px); }
+}
+
 @keyframes ticket-hint-nudge { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 @keyframes ticket-scissors-snip { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
 @keyframes ticket-stub-release {
@@ -190,5 +197,5 @@
 @media (prefers-reduced-motion: reduce) {
   .mummy-ticket-stub,.mummy-ticket-confirm,.ticket-scissors,.ticket-paper-edge,.ticket-cut-trail,.ticket-perforation { transition: none; }
   .mummy-pupil { transition: none; }
-  .mummy-ticket-intact .ticket-cut-hint svg,.ticket-scissors.is-cutting svg,.mummy-ticket-cutting .mummy-ticket-stub,.mummy-ticket-cutting .mummy-ticket-main,.mummy-ticket-stub-title { animation: none; }
+  .mummy-ticket-intact .ticket-cut-hint svg,.ticket-scissors.is-cutting svg,.mummy-ticket-cutting .mummy-ticket-stub,.mummy-ticket-cutting .mummy-ticket-main,.mummy-ticket-intact .mummy-ticket-stub-title,.mummy-ticket-stub-title:hover { animation: none; }
 }

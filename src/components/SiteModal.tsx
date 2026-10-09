@@ -62,7 +62,14 @@ export default function SiteModal({ id, title, open, onClose, children, classNam
     <div className="attendance-modal-content">
       <header className="attendance-modal-header">
         <h2 id={`${id}-title`}>{title}</h2>
-        <button type="button" className="attendance-modal-close" onClick={onClose} aria-label="Cerrar modal" autoFocus>
+        <button type="button" className="attendance-modal-close" onClick={onClose} onPointerUp={e => {
+          if (e.pointerType !== 'touch') return;
+          const bounds = e.currentTarget.getBoundingClientRect();
+          if (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom) return;
+          window.setTimeout(() => {
+            if (dialogRef.current?.open) onClose();
+          }, 0);
+        }} aria-label="Cerrar modal" autoFocus>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
         </button>
       </header>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 260" fill="none">
+  <title>PINK HOUSE</title>
+  <defs>
+    <!-- Match the footer's ellipse farthest-corner at top left across the entire 860 x 260 wordmark. -->
+    <radialGradient id="footerGradient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="scale(1216.223663641 367.695526217)">
+      <stop offset="0%" stop-color="#ed5290"/>
+      <stop offset="25%" stop-color="#c72e6c"/>
+      <stop offset="55%" stop-color="#661034"/>
+      <stop offset="85%" stop-color="#080607"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+  </defs>
+  <g stroke="url(#footerGradient)" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="12" d="M19 235 33 111c38-15 73-17 70 7-4 29-40 43-73 42"/>
+    <path stroke-width="9" d="m120 215 20-133m-29 11 50-12m-56 139 43-6"/>
+    <path stroke-width="10" d="m170 211 9-134 60 109 20-133"/>
+    <path stroke-width="12" d="m276 183 18-133m67-17-74 86 73 55"/>
+    <path stroke-width="10" d="m403 186 6-137m74-24-16 153m-61-60 67-23"/>
+    <path stroke-width="12" d="M544 61c-51 5-63 108-23 118 38 10 67-112 23-118Z"/>
+    <path stroke-width="10" d="m597 40-17 114c-4 35 42 42 55 3 10-29 14-83 18-115"/>
+    <path stroke-width="12" d="M724 50c-27-14-61 7-53 35 6 21 54 29 48 59-4 26-38 44-65 20"/>
+    <path stroke-width="10" d="m752 30 76-13m-67 14-20 145 73-23m-62-60 61-12"/>
+  </g>
+  <g fill="url(#footerGradient)">
+    <path d="m11 236 18-126 12-5-15 129-6 11zm24-126 31-13-23 17zm139 99 8-16-5 27zm100-20 13-96 9-9-11 102zm130-4 7-19-1 27zm64-18 9-106 10-13-14 119zm122-112 11-9-6 24zm150 135 8-18 1 16zm11-146 85-16-74 23z"/>
+  </g>
+</svg>

@@ -46,7 +46,7 @@
   pointer-events: auto;
   transition: left 240ms cubic-bezier(.22, 1, .36, 1), width 240ms ease;
 }
-.hero-header-logo img { display: block; width: 100%; height: auto; filter: drop-shadow(0 0 .7px #ed52908c); }
+.hero-header-logo img { display: block; width: 100%; height: auto; }
 .hero-header-countdown {
   position: absolute;
   top: var(--hero-header-top);

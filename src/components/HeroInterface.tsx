@@ -24,7 +24,7 @@ export default function HeroInterface() {
   return <div className={`hero-interface${surface.scrolled ? ' is-scrolled' : ''}${surface.header ? ' is-header-on-paper' : ''}`}>
     <header className="hero-header" aria-label="Halloween en Pink House">
       <a href="#top" className="hero-header-logo" aria-label="Pink House — volver al inicio">
-        <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark-gradient.svg`} alt="PINK HOUSE" width="860" height="260"/>
+        <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark.svg`} alt="PINK HOUSE" width="860" height="260"/>
       </a>
       <div className="hero-header-countdown"><Countdown/></div>
     </header>

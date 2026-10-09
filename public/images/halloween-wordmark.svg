@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 180" fill="none">
+  <title>HALLOWEEN</title>
+  <g stroke="#f1ede8" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+    <path d="m12 166 9-110m48-15-12 115m-42-54 45-19"/>
+    <path stroke-width="7" d="m75 153 51-119 18 105m-52-34 45-15"/>
+    <path d="m171 25-19 113 45-9m24-118-12 112 40-13"/>
+    <path d="M289 24c-35-9-59 102-27 104 35 3 61-99 27-104Z"/>
+    <path stroke-width="7" d="m328 25 5 107 39-88 11 75 47-111"/>
+    <path d="m447 18 43-10m-40 11-19 100 43-8m-32-48 40-9m29-41 43-6m-41 6-19 100 46-8m-36-45 41-9"/>
+    <path d="m564 102 15-95 49 82 17-81"/>
+  </g>
+  <g fill="#f1ede8"><path d="m10 164 7-21 2 27zm116-132 5 14-8-1zm91-21 9-9-5 25zm107 14 10-7-4 23zm166-20 16-3-17 10zm138 84 7-21-2 28z"/></g>
+</svg>

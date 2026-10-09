@@ -1,17 +1,16 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ScrollStory from './sections/ScrollStory';
-import Countdown from './components/Countdown';
+import HeroLanding from './components/HeroLanding';
+import HeroInterface from './components/HeroInterface';
 import AttendanceModal from './components/AttendanceModal';
 import MummyTicket from './components/MummyTicket';
 import PrizeModal from './components/PrizeModal';
-import { event } from './config/event';
 import { parties } from './data/parties';
 gsap.registerPlugin(ScrollTrigger);
 export default function App() {
   const root = useRef<HTMLDivElement>(null);
-  const [showFloatingCountdown, setShowFloatingCountdown] = useState(false);
   const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
   const [prizeModalOpen, setPrizeModalOpen] = useState(false);
   useLayoutEffect(() => {
@@ -30,22 +29,8 @@ export default function App() {
     },root);
     return () => context.revert();
   },[]);
-  useEffect(() => {
-    const updateFloatingCountdown = () => {
-      const hero = root.current?.querySelector('.hero');
-      setShowFloatingCountdown(!!hero && hero.getBoundingClientRect().bottom <= 0);
-    };
-    updateFloatingCountdown();
-    window.addEventListener('scroll', updateFloatingCountdown, { passive: true });
-    window.addEventListener('resize', updateFloatingCountdown);
-    return () => {
-      window.removeEventListener('scroll', updateFloatingCountdown);
-      window.removeEventListener('resize', updateFloatingCountdown);
-    };
-  },[]);
-  const rsvp = (label = 'CONFIRMAR ASISTENCIA', pink = false) => <span className="button-group"><button type="button" className={`button button-with-arrow ${pink ? 'button-pink' : ''}`} onClick={() => setAttendanceModalOpen(true)} aria-haspopup="dialog" aria-controls="attendance-modal">{label} <span aria-hidden="true">›</span></button></span>;
-  return <div ref={root} className="has-floating-countdown"><header className="site-nav wrapper" id="top"><a href="#top" className="brand"><img className="brand-logo" src={`${import.meta.env.BASE_URL}images/pink-house-logo.png`} alt="THE PINK HOUSE"/></a><div className="nav-right"><span>22.10.26</span>{rsvp('CONFIRMAR')}</div></header><div className={`floating-countdown ${showFloatingCountdown ? 'is-visible' : ''}`} aria-hidden={!showFloatingCountdown}><Countdown/></div><main>
-    <section className="hero wrapper"><div className="hero-title" data-reveal><h1>HALLOWEEN<br/>EN THE<br/>PINK HOUSE</h1><div className="hero-meta"><span>EVENTO EL</span><strong>22 DE OCTUBRE DE 2026</strong></div></div><div className="hero-side" data-reveal><div><Countdown/></div><div className="hero-rsvp"><p>Disfraz recomendado.<br/><span>No obligatorio.</span></p><span className="button-group"><a className="button button-pink" href={event.attendanceUrl} target="_blank" rel="noopener noreferrer">Añadir a mi calendario</a></span></div></div></section>
+  return <div ref={root}><HeroInterface/><main>
+    <HeroLanding onConfirm={() => setAttendanceModalOpen(true)}/>
     <ScrollStory/>
     <section className="archive section wrapper" id="archive"><div className="section-heading" data-reveal><p>El archivo.<br/>Recuerdos compartidos.</p><h2>FIESTA DE DISFRACES</h2></div><div className="archive-gallery">{parties.map(party=><article className="archive-card" key={party.id} aria-label={party.title}><div className="archive-image">{party.cover && <img src={party.cover} alt={party.title} loading="lazy"/>}</div></article>)}</div></section>
     <section className="admission section wrapper" id="rsvp"><div className="section-heading" data-reveal><h2>ENTRA A<br/>LA LISTA</h2><p>Lo que pasa en The Pink House<br/>podría terminar en el archivo.</p></div><MummyTicket onConfirm={() => setAttendanceModalOpen(true)} onWin={() => setPrizeModalOpen(true)}/></section>

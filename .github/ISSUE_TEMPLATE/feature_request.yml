@@ -1,0 +1,16 @@
+name: Proponer una mejora
+description: Una idea para la página oficial o una próxima edición.
+title: "[Idea] "
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Tu propuesta
+      description: ¿Qué cambiarías y cómo ayudaría a los invitados?
+    validations:
+      required: true
+  - type: textarea
+    id: edition
+    attributes:
+      label: Edición o sección
+      description: ¿Es para Halloween, una futura edición o la página en general?

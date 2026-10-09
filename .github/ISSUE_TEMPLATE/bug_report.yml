@@ -1,0 +1,28 @@
+name: Reportar un problema
+description: Algo no funciona o no se ve bien en The Pink House.
+title: "[Problema] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: ¿Qué ocurrió?
+      description: Explica lo que viste y lo que esperabas.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Cómo reproducirlo
+      description: Indica los pasos y la sección de la página.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Dispositivo y navegador
+      placeholder: Por ejemplo, iPhone con Safari o Android con Chrome.
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Capturas y contexto
+      description: Evita incluir datos privados o la ubicación de la casa.

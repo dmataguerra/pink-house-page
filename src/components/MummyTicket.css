@@ -190,5 +190,5 @@
 @media (prefers-reduced-motion: reduce) {
   .mummy-ticket-stub,.mummy-ticket-confirm,.ticket-scissors,.ticket-paper-edge,.ticket-cut-trail,.ticket-perforation { transition: none; }
   .mummy-pupil { transition: none; }
-  .mummy-ticket-intact .ticket-cut-hint svg,.ticket-scissors.is-cutting svg,.mummy-ticket-cutting .mummy-ticket-stub,.mummy-ticket-cutting .mummy-ticket-main,.mummy-ticket-stub-title { animation: none; }
+  .mummy-ticket-intact .ticket-cut-hint svg,.ticket-scissors.is-cutting svg,.mummy-ticket-cutting .mummy-ticket-stub,.mummy-ticket-cutting .mummy-ticket-main,.mummy-ticket-intact .mummy-ticket-stub-title,.mummy-ticket-stub-title:hover { animation: none; }
 }

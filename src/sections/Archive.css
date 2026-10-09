@@ -1,9 +1,9 @@
 .archive.archive-redesign {
-  --archive-inset: clamp(20px, 2.78vw, 64px);
-  --archive-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --archive-inset: var(--site-inset);
+  --archive-mono: var(--site-mono);
   width: 100%; max-width: none;
   padding: clamp(120px, 11.1vw, 210px) 0 clamp(70px, 6.5vw, 125px);
-  color: #050505; background: #f1ede8; overflow: hidden;
+  color: var(--site-ink); background: var(--site-paper); overflow: hidden;
 }
 .archive-intro {
   display: grid; grid-template-columns: 39% 39%; justify-content: space-between; align-items: start;
@@ -14,7 +14,7 @@
 .archive-eyebrow > span { width: 7px; height: 7px; flex: 0 0 7px; background: currentColor; }
 .archive-redesign .archive-title {
   display: flex; flex-direction: column; margin-top: 18px;
-  font-family: 'Nue Haas Grotesk Text Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--site-display);
   font-weight: 600; font-size: clamp(32px, 3.3333vw, 72px); letter-spacing: -.03em; line-height: 1; text-align: justify;
 }
 .archive-title-line { display: flex; justify-content: space-between; }
@@ -47,14 +47,14 @@
   .archive-controls button:not(:disabled):hover { color: #c72e6c; }
 }
 @media (max-width: 1000px) {
-  .archive.archive-redesign { --archive-inset: 36px; padding-top: 120px; }
+  .archive.archive-redesign { padding-top: 120px; }
   .archive-intro { width: calc(100% - 2 * var(--archive-inset)); grid-template-columns: 43% 43%; min-height: 300px; }
   .archive-redesign .archive-title { font-size: clamp(30px, 3.83vw, 42px); }
   .archive-description { padding-top: 76px; font-size: 16px; }
   .archive-slide { flex-basis: calc((100% - var(--archive-inset) - 20px) / 1.8); }
 }
 @media (max-width: 600px) {
-  .archive.archive-redesign { --archive-inset: 20px; padding-top: 110px; padding-bottom: 55px; }
+  .archive.archive-redesign { padding-top: 110px; padding-bottom: 55px; }
   .archive-intro { display: block; min-height: 0; margin-bottom: 100px; }
   .archive-redesign .archive-title { font-size: 32px; max-width: 100%; margin-top: 22px; }
   .archive-description { padding-top: 65px; font-size: 16px; }

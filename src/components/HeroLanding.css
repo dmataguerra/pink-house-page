@@ -1,14 +1,14 @@
 /* The opening composition is isolated from the archive, ticket and modal styles. */
 .hero-interface,
 .hero.hero-redesign {
-  --hero-inset: clamp(20px, 2.78vw, 64px);
+  --hero-inset: var(--site-inset);
   --hero-frame-inset: clamp(12px, 1.39vw, 32px);
   --hero-header-top: calc(clamp(20px, 1.39vw, 32px) + env(safe-area-inset-top, 0px));
   --hero-counter-width: clamp(210px, 17vw, 300px);
   --hero-logo-width: clamp(116px, 8.9vw, 170px);
   --hero-header-gap: 24px;
   --hero-micro-size: clamp(11px, .83vw, 16px);
-  --hero-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --hero-mono: var(--site-mono);
 }
 
 .hero.hero-redesign {
@@ -23,13 +23,14 @@
   overflow: clip;
 }
 
-/* Preserve the existing full-width glow, including its height at wide viewports. */
+/* Keep the laser artwork separate from the controls and cropped to the viewport. */
 .hero.hero-redesign::before {
   left: 0;
   width: 100%;
-  height: calc(min(100svh, 1000px) + var(--hero-video-gap));
+  height: 100%;
   bottom: auto;
   transform: none;
+  background: linear-gradient(180deg, #05050524, transparent 25%, transparent 62%, #050505a6), url('/images/pink-house-laser-background.webp') center / cover no-repeat, #050505;
 }
 
 .hero-interface { position: fixed; inset: 0; z-index: 20; pointer-events: none; }
@@ -61,15 +62,19 @@
 .hero-interface.is-scrolled .hero-header-logo {
   left: calc(100% - max(var(--hero-inset), env(safe-area-inset-right, 0px)) - var(--hero-counter-width) - var(--hero-header-gap) - var(--hero-logo-width));
 }
+.hero-interface.is-header-on-paper .hero-header { color: var(--site-ink); }
+.hero-interface { --header-surface: #050505; --header-fade: #05050500; }
+.hero-interface.is-header-on-paper { --header-surface: var(--site-paper); --header-fade: #ddd7ca00; }
 .hero-interface.is-scrolled .hero-header::before {
-  content: '';
-  position: absolute;
+  content: ''; position: absolute;
   top: calc(var(--hero-header-top) - 10px);
   right: calc(max(var(--hero-inset), env(safe-area-inset-right, 0px)) - 12px);
   width: calc(var(--hero-counter-width) + var(--hero-header-gap) + var(--hero-logo-width) + 24px);
-  height: 72px;
-  background: linear-gradient(#050505ed, #050505bf 78%, #05050500);
+  height: 78px;
+  background: linear-gradient(var(--header-surface) 55%, var(--header-fade));
 }
+.hero-interface.is-header-on-paper .hero-header-logo img { filter: brightness(0); }
+.hero-interface.is-header-on-paper .countdown > div > span { color: #4d4746; }
 
 .hero-viewfinder {
   position: absolute;
@@ -91,17 +96,23 @@
 .viewfinder-mid::after { content: ''; position: absolute; top: 50%; left: 0; width: 10px; border-top: 1px solid currentColor; }
 .viewfinder-mid-left { left: 0; }
 .viewfinder-mid-right { right: 0; transform: translateY(-50%) rotate(180deg); }
+.hero-viewfinder.is-top-on-paper .crop-top-left,
+.hero-viewfinder.is-top-on-paper .crop-top-right,
+.hero-viewfinder.is-middle-on-paper .viewfinder-mid,
+.hero-viewfinder.is-bottom-on-paper .crop-bottom-left,
+.hero-viewfinder.is-bottom-on-paper .crop-bottom-right { color: var(--site-ink); }
 
 .hero.hero-redesign .hero-wordmark {
   position: absolute;
   top: 50svh;
   left: 50%;
-  width: clamp(300px, 26vw, 500px);
+  width: clamp(340px, 39vw, 680px);
   margin: 0;
   transform: translate(-50%, -50%);
   line-height: 0;
 }
-.hero-wordmark > img { display: block; width: 100%; height: auto; animation: hero-wordmark-enter 600ms ease-out both; }
+.hero-wordmark::before { content: ''; position: absolute; inset: -80% -20%; z-index: -1; background: radial-gradient(ellipse, #050505a6 10%, #05050555 45%, transparent 72%); pointer-events: none; }
+.hero-wordmark > img { display: block; width: 100%; height: auto; filter: drop-shadow(0 0 1px #ff8db580) drop-shadow(0 0 22px #ed52903d); animation: hero-wordmark-enter 600ms ease-out both; }
 .hero-wordmark-frame { position: absolute; inset: -16px; color: #f1ede8; opacity: .55; pointer-events: none; }
 .hero-bottom {
   position: absolute;
@@ -161,10 +172,8 @@
 @media (min-width: 1600px) { .hero-event { width: 320px; } .hero-event-description { max-width: 300px; } }
 @media (max-width: 1000px) {
   .hero.hero-redesign { min-height: 100svh; }
+  .hero.hero-redesign::before { background-size: auto, 100% 100%; }
   .hero-interface, .hero.hero-redesign { --hero-counter-width: 210px; --hero-logo-width: 116px; --hero-header-gap: 18px; }
-}
-@media (min-width: 601px) and (max-width: 1000px) {
-  .hero-interface, .hero.hero-redesign { --hero-inset: 36px; }
 }
 @media (max-width: 600px) {
   .hero-interface, .hero.hero-redesign { --hero-counter-width: 178px; --hero-logo-width: 106px; --hero-header-gap: 14px; --hero-micro-size: 11px; }
@@ -174,7 +183,7 @@
   .hero-header-countdown .countdown > div > span { font-size: 8px; }
   .hero-header-logo { min-height: 44px; }
   .hero-interface.is-scrolled { --hero-logo-width: 94px; }
-  .hero.hero-redesign .hero-wordmark { width: min(70vw, 320px); }
+  .hero.hero-redesign .hero-wordmark { width: min(82vw, 390px); }
   .hero-bottom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: 14px; }
   .hero-event { width: 100%; min-height: 96px; }
   .hero-event-description { margin-top: 14px; max-width: 160px; }
@@ -188,7 +197,7 @@
   .viewfinder-mid::after { width: 6px; }
 }
 @media (max-width: 360px) {
-  .hero-interface, .hero.hero-redesign { --hero-inset: 18px; --hero-counter-width: 160px; --hero-logo-width: 88px; --hero-header-gap: 10px; }
+  .hero-interface, .hero.hero-redesign { --hero-counter-width: 160px; --hero-logo-width: 88px; --hero-header-gap: 10px; }
   .hero-interface.is-scrolled { --hero-logo-width: 82px; }
   .hero-bottom { gap: 12px; }
   .hero-event-date { font-size: 9px; }

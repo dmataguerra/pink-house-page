@@ -4,7 +4,7 @@ import './HeroLanding.css';
 export default function HeroLanding({ onConfirm }: { onConfirm: () => void }) {
   return <section className="hero hero-redesign" id="top" aria-labelledby="hero-wordmark">
     <h1 className="hero-wordmark" id="hero-wordmark">
-      <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark.svg`} alt="PINK HOUSE" width="860" height="260"/>
+      <img src={`${import.meta.env.BASE_URL}images/pink-house-wordmark-gradient.svg`} alt="PINK HOUSE" width="860" height="260" fetchPriority="high"/>
       <span className="hero-wordmark-frame" aria-hidden="true">
         <i className="crop-mark crop-top-left"/><i className="crop-mark crop-top-right"/>
         <i className="crop-mark crop-bottom-left"/><i className="crop-mark crop-bottom-right"/>

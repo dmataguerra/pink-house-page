@@ -18,7 +18,7 @@ La referencia visual analizada es `https://13322566869.com/`, principalmente su 
 - Video MP4 existente en el reproductor flotante y reproducción ampliada con controles nativos.
 - Header mínimo, menú modal, navegación por anclas, countdown, RSVP y modal de agenda.
 - Secciones editoriales blancas, transición sticky, archivo visual, tarjetas A/B/C/D y contenido español del evento.
-- Panel `PINK HOUSE ARCHIVE` con gradiente sincronizado al scroll: naranja brillante, foco ámbar móvil y rojo carmesí.
+- Panel `PINK HOUSE ARCHIVE` en marfil cálido (`#e9e3d8`) con tipografía carbón (`#24221e`), sin gradiente, conservando el deslizamiento para dar descanso a la paleta roja/ámbar.
 - `Referencia OG` ahora usa `public/images/archive-knife-cinematic.png`, con mango de madera y filo de sierra.
 - Ticket de momia reintroducido con corte por arrastre, mouse, touch y teclado; ojos, tijeras y línea de corte usan el acento `#e85a32`.
 - El header muestra únicamente `THE PINK HOUSE`.
@@ -99,7 +99,7 @@ Para repetir la comparación visual:
 - La segunda entrada del archivo es `What's your poison?`, con fotografía de bebidas y el texto: `Trae lo que te gusta tomar. También habrá bebidas de nuestra parte.`
 - Arte nuevo: `public/images/archive-drinks-documentary.webp`, generado con la herramienta integrada. Prompt: fotografía documental de película 35mm de una mesa de bebidas en fiesta Halloween, botellas sin marca, vasos rojos, cubeta de hielo y una mano sirviendo; iluminación roja y ámbar, grano, textura natural, sin texto ni acabado CGI.
 
-- El gradiente intenso fue revisado en captura Playwright y quedó aprobado visualmente para esta iteración.
+- El panel neutro de Archive fue revisado en capturas móviles Playwright y la compilación pasa.
 - El header quedó como `THE PINK HOUSE` y la etiqueta duplicada `__005` fue retirada.
 - La unión visual entre `Tu entrada __004` y el ticket fue validada en 1440×900, 390×844 y 320×760.
 - La comprobación focalizada posterior a esos cambios pasó 9/9 pruebas.

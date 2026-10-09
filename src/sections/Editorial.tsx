@@ -42,8 +42,6 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
           onUpdate: trigger => {
             const progress = trigger.progress;
             previewBackground.current?.style.setProperty('--preview-progress', String(progress));
-            // Warm orange at entry, deep red as the archive panel fills the viewport.
-            previewBackground.current?.style.setProperty('--preview-color-progress', String(progress));
             previewBackground.current?.style.setProperty('--preview-expand', String(1 + Math.max(0, (progress - .85) / .15) * .1));
             const entry = Math.max(0, Math.min(1, (works.current?.getBoundingClientRect().top ?? 0) / window.innerHeight));
             worksStage.current?.style.setProperty('--archive-entry', String(entry));
@@ -68,7 +66,6 @@ export default function Editorial({ onConfirm, onSchedule }: EditorialProps) {
       media.add('(prefers-reduced-motion: reduce)', () => {
         setWordCount(transitionWords.length);
         previewBackground.current?.style.setProperty('--preview-progress', '1');
-        previewBackground.current?.style.setProperty('--preview-color-progress', '1');
         worksStage.current?.style.setProperty('--archive-zoom', '1');
         works.current?.style.setProperty('--archive-metadata', '1');
         works.current?.style.setProperty('--archive-visibility', 'visible');

@@ -202,12 +202,18 @@
   .hero-event-date { font-size: 9px; }
   .hero-micro-label { gap: 4px; font-size: 9px; }
 }
+@media (max-width: 300px) {
+  .hero-interface, .hero.hero-redesign { --hero-counter-width: 144px; --hero-logo-width: 78px; }
+  .hero-interface.is-scrolled { --hero-logo-width: 78px; }
+  .hero-header-countdown .countdown strong { font-size: 18px; }
+  .hero-header-countdown .countdown > div > span { font-size: 7px; }
+}
 @media (max-height: 550px) and (orientation: landscape) {
-  .hero.hero-redesign { min-height: max(100svh, 360px); }
+  .hero.hero-redesign { min-height: max(100svh, 320px); }
   .hero.hero-redesign .hero-wordmark { top: 46%; width: min(30vw, 280px); }
   .hero-event-description { margin-top: 8px; }
   .hero-event-date { margin-top: 6px; }
-  .hero-video { width: 215px; }
+  .hero-video { width: 215px; max-width: 100%; justify-self: end; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-wordmark > img { animation: none; }

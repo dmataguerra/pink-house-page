@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/images/pink-house-banner.svg" alt="The Pink House — sitio oficial, edición Halloween 2026" width="100%" /></p>
+# The Pink House — Halloween 2026
 
 <p align="center">
   <a href="https://pink-house-page.pages.dev/">Visitar The Pink House</a> ·
@@ -28,17 +28,17 @@ Actualmente estamos en **modo Halloween**. Una noche de disfraces, música, jueg
 
 ## Explora la página
 
-- **La casa:** nuestra historia y el espíritu de esta edición.
-- **La noche:** fecha, disfraces, concurso y cómo conseguir la ubicación.
-- **Pink House Archive:** imágenes y mensajes que forman parte de nuestra identidad.
-- **Tu entrada:** confirma tu asistencia y abre el ticket de la momia para descubrir el plan de la noche.
-- **Locación:** un recorrido en video, con reproducción ampliada.
+- **Sobre la noche:** el espíritu de The Pink House y de esta edición.
+- **Los detalles:** fecha, disfraces, concurso, bebidas y cómo conseguir la ubicación.
+- **Pedas anteriores:** cinco espacios, `PEDA 01` a `PEDA 05`, con nombres y recuerdos por completar.
+- **Tu entrada:** abre el ticket de la momia desde el menú para descubrir el plan de la noche.
+- **Juriquilla:** mapa 3D en video y esfera interactiva con UAQ, UVM, ENES y The Pink House.
 
 La página incluye cuenta regresiva, navegación móvil, imágenes optimizadas y una alternativa de movimiento reducido. El ticket funciona con mouse, pantalla táctil y teclado.
 
 ## Una identidad que cambia de temporada
 
-Halloween combina luz roja y ámbar, fotografía cinematográfica, tipografía editorial y espacios claros que dan respiro al recorrido. Las siguientes ediciones podrán cambiar su atmósfera conservando el nombre, el archivo y la forma de encontrarnos.
+El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity), con contenido y fotografías propios. Combina fondo negro, naranja (`#ff641a`), una fotografía de fiesta con luz naranja/ámbar y una imagen de comunidad en blanco y negro, ambas con grano analógico visible. Los assets activos son `public/images/after-dark-party-grain.webp` y `public/images/after-dark-community-grain.webp`. El menú flotante, la cuenta regresiva y el archivo acompañan el recorrido. Las siguientes ediciones podrán cambiar su atmósfera conservando el nombre y la forma de encontrarnos.
 
 ## Desarrollo local
 
@@ -61,9 +61,12 @@ npm run build
 | Contenido | Archivo |
 | :--- | :--- |
 | Fecha, hora, Instagram y asistencia | [`src/config/event.ts`](src/config/event.ts) |
-| Entradas del archivo | [`src/data/parties.ts`](src/data/parties.ts) |
-| Hero y composición principal | [`src/components/HeroLanding.tsx`](src/components/HeroLanding.tsx) |
-| Secciones y textos editoriales | [`src/sections/Editorial.tsx`](src/sections/Editorial.tsx) |
+| Hero, textos y composición principal | [`src/App.tsx`](src/App.tsx) |
+| Menú y cuenta regresiva flotante | [`src/components/AfterDarkHeader.tsx`](src/components/AfterDarkHeader.tsx) |
+| Pedas anteriores | [`src/sections/AfterDarkFAQ.tsx`](src/sections/AfterDarkFAQ.tsx) |
+| Mapa de Juriquilla y footer | [`src/sections/AfterDarkClosing.tsx`](src/sections/AfterDarkClosing.tsx) |
+| Reproducción del mapa 3D | [`src/components/AfterDarkLocation.tsx`](src/components/AfterDarkLocation.tsx) |
+| Renderer del nuevo video | [`aerial/scripts/render-after-dark.ts`](aerial/scripts/render-after-dark.ts) |
 | Fotos, ilustraciones y video | [`public/`](public/) |
 
 Al cambiar de temática, revisa también los textos, las imágenes y los metadatos de `index.html`.
@@ -79,6 +82,8 @@ El [workflow anterior de GitHub Pages](.github/workflows/deploy.yml) queda como 
 - [Guía para colaborar](CONTRIBUTING.md)
 - [Notas de implementación y continuidad](docs/CONTINUITY.md)
 - [Identidad y uso de assets](docs/BRAND.md)
+- [Fotografías y video del diseño After Dark](docs/AFTER_DARK_ASSETS.md)
+- [Variante naranja final y prompt de edición](docs/ORANGE_PALETTE.md)
 - [Cloudflare Pages y dominio propio](docs/CLOUDFLARE.md)
 
 El código y los assets no tienen una licencia de reutilización abierta declarada. Consulta las notas de identidad antes de reutilizar material visual o tipográfico.

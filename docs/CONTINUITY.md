@@ -1,6 +1,44 @@
 # The Pink House — estado de continuidad
 
-## Estado actual
+## Actualización 11 oct2026 — referencia After Dark
+
+El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity), adaptado al contenido y a los assets propios de The Pink House. Esta actualización reemplaza la composición editorial anterior en la página activa; el historial que sigue debajo se conserva como registro de las iteraciones previas.
+
+### Estado actual de la página
+
+- Fondo negro, superficies oscuras y acento naranja `#ff641a`, con una intensidad equivalente a la composición roja original. La elección final del usuario es naranja/ámbar; las variantes anteriores se conservan como archivo. La tipografía activa usa Arial/Helvetica.
+- Hero con `THE PINK HOUSE`, edición `HALLOWEEN`, fecha `22 OCT 2026`, confirmación de asistencia y dos fotografías originales: fiesta con iluminación naranja/ámbar y manos reunidas en blanco y negro.
+- Header flotante con el nombre `THE PINK HOUSE`, sin año ni icono de casita. Menú con navegación, asistencia, agenda y `Tu entrada`.
+- Información propia en las secciones `Sobre la noche`, detalles del evento y cómo encontrarnos. La fecha y hora se mantienen: jueves 22 de octubre de 2026, desde las 20:00, hora del centro de México. Los horarios posteriores de la agenda siguen siendo sugeridos.
+- La sección `Pedas anteriores`, con ancla `#archive`, contiene exactamente cinco píldoras `PEDA 01` a `PEDA 05`. Cada una abre el placeholder `Nombre y recuerdos próximamente.`; no se inventaron nombres, fechas ni recuerdos. La sección reemplaza las preguntas frecuentes. No hay chatbot.
+- El ticket de momia se abre desde `Tu entrada` en el menú, dentro de un modal. Conserva corte con mouse, touch y teclado y el acceso al plan de la noche.
+- Barra fija con `FALTA:`, cuenta regresiva, fecha e inicio. Se oculta cuando entra el footer para evitar tapar el cierre.
+- Footer con `PRÓXIMO EVENTO:` y botón `HALLOWEEN`, además del nombre y el lema de la casa.
+- Esfera interactiva basada en la geografía local de Juriquilla, Querétaro, con los cuatro puntos suministrados para el video: UAQ, UVM, ENES y The Pink House. Conserva esos puntos y su relación espacial. Las coordenadas y la dirección privada no se repiten en esta documentación pública.
+
+### Assets y video
+
+- Foto naranja final con grano: `public/images/after-dark-party-grain.webp`, 1254 × 1254, calidad WebP 92, 466,920 bytes. Editada con la herramienta integrada de imágenes; grano visible verificado a 600 y 345 px, con PNG y variantes anteriores conservados. Procedencia y prompt en `docs/ORANGE_PALETTE.md`.
+- Foto de comunidad con grano: `public/images/after-dark-community-grain.webp`, en blanco y negro; el original se conserva.
+- Mapa de la esfera: `public/images/juriquilla-map.svg`; se adapta a la esfera sin convertir los puntos locales en ubicaciones globales.
+- Video final: `public/videos/pink-house-after-dark.mp4`, 17 segundos, 1280 × 720, 30 fps, 510 cuadros y H.264/yuv420p, sin audio y con faststart; 12,014,590 bytes. Comienza exactamente 3 segundos después del inicio de la variante naranja anterior. Poster `public/images/pink-house-after-dark-preview.webp`, extraído del nuevo cuadro inicial a calidad WebP 90. Metadatos, conteo de cuadros y decodificación completa verificados sin errores en `output/after-dark-video-orange/qa.json`. La versión naranja completa de 20 segundos y su poster se conservan en `output/after-dark-video-orange/full-20s.mp4` y `poster-full-20s.webp`. La geografía, los cuatro puntos y la paleta naranja/ámbar se mantienen.
+- Renderer reproducible: `aerial/scripts/render-after-dark.ts`, apoyado en el renderer de geometría existente y los datos locales; empieza en el cuadro fuente 390 y produce 510 cuadros. Sus carpetas de trabajo incluyen `v2-start390-17s` para evitar reutilizar cuadros antiguos. El video original `public/videos/pink-house.mp4` se conserva. Los datos incluyen OpenStreetMap, Overture y Microsoft; alturas estimadas y volumen ilustrativo de ENES se mantienen documentados en `docs/AFTER_DARK_ASSETS.md`.
+
+### Archivos activos para continuar
+
+- `src/App.tsx`: composición, contenido del evento y estado de los modales.
+- `src/components/AfterDarkHeader.tsx`: header, menú y barra con cuenta regresiva.
+- `src/components/AfterDarkLocation.tsx`: poster, reproducción del mapa y vista ampliada.
+- `src/sections/AfterDarkFAQ.tsx` y `AfterDarkFAQ.css`: archivo de cinco pedas; el nombre del archivo se conserva por integración, aunque ya no muestra FAQ.
+- `src/sections/AfterDarkClosing.tsx` y `AfterDarkClosing.css`: esfera de Juriquilla y footer.
+- `src/styles.css`: paleta, composición general, responsive y estilos de modales.
+- `src/components/MummyTicket.tsx`, `src/components/Countdown.tsx` y `src/config/event.ts`: ticket, cuenta regresiva y datos confirmados.
+
+La ruta de desarrollo actual es `/`: ejecutar `npm run dev` y abrir la dirección que indique Vite. La verificación final del navegador sigue en curso y no se declara cerrada aquí. Esta actualización no registra deploy, merge, push ni commit nuevos.
+
+---
+
+## Historial anterior — referencia editorial
 
 La implementación se mantiene en la rama `codex/reference-fidelity-halloween`. Los cambios terminados se guardan en commits locales. No se ha hecho deploy, merge ni push.
 

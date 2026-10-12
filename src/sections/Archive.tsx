@@ -34,7 +34,7 @@ export default function Archive() {
           if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); move(e.key === 'ArrowRight' ? 1 : -1); }
           else if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); e.currentTarget.scrollTo({ left: e.key === 'Home' ? 0 : e.currentTarget.scrollWidth, behavior: 'instant' }); }
         }}>
-        {parties.map((party, index) => <article className="archive-slide" key={party.id} role="group" aria-roledescription="diapositiva" aria-label={`${index + 1} de ${parties.length}: ${party.title}`}>
+        {parties.slice(0, 3).map((party, index) => <article className="archive-slide" key={party.id} role="group" aria-roledescription="diapositiva" aria-label={`${index + 1} de 3: ${party.title}`}>
           <div className="archive-image"><img src={party.cover} alt={party.title} loading="lazy"/></div>
           <div className="archive-caption"><h3>{party.title}</h3><span>{party.year}</span></div>
         </article>)}

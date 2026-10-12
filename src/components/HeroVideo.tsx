@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import SiteModal from './SiteModal';
 import './HeroVideo.css';
 
-const source = `${import.meta.env.BASE_URL}videos/pink-house.mp4?v=enes-trimmed-20261008`;
+const source = `${import.meta.env.BASE_URL}videos/acercamiento-orbital.mp4?v=orbital-20261008`;
 const poster = `${import.meta.env.BASE_URL}images/pink-house-video-preview.webp`;
 
 export default function HeroVideo() {

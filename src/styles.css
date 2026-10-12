@@ -55,10 +55,11 @@ h1,h2,h3,p,dl,dd { margin:0; }
 .ad-status { position:fixed; z-index:25; bottom:20px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:48px; padding:11px 20px; border-radius:50px; background:#202020b3; backdrop-filter:blur(50px); font-size:12px; line-height:1.2; font-weight:700; white-space:nowrap; }
 .ad-status div { display:flex; flex-direction:column; }
 .ad-status span { color:#8f8585; }
-.ad-status-countdown .countdown { display:flex; flex-direction:row; gap:0; color:#ff641a; font-size:12px; font-weight:700; line-height:1.2; font-variant-numeric:tabular-nums; }
-.ad-status-countdown .countdown>div { display:flex; flex-direction:row; }
-.ad-status-countdown .countdown>div:not(:last-child)::after { content:':'; }
-.ad-status-countdown .countdown strong { font:inherit; }
+.ad-status-countdown .countdown-wrap { display:block; }
+.ad-status-countdown .countdown { display:flex; align-items:center; flex-direction:row; gap:0; min-height:14px; color:#ff641a; font-size:12px; font-weight:700; line-height:1.2; font-variant-numeric:tabular-nums; }
+.ad-status-countdown .countdown>div { display:flex; flex-direction:row; align-items:center; }
+.ad-status-countdown .countdown>div:not(:last-child)::after { content:':'; margin-inline:1px; color:#ff641a; }
+.ad-status-countdown .countdown strong { display:flex; align-items:center; justify-content:flex-start; font:inherit; line-height:inherit; }
 .ad-status-countdown .countdown .countdown-digit,.ad-status-countdown .countdown .countdown-digit>span { color:#ff641a; }
 .ad-status-countdown .countdown-label { display:none; }
 .ad-status { transition:opacity .2s ease; }
@@ -119,7 +120,7 @@ h1,h2,h3,p,dl,dd { margin:0; }
   .ad-data-list>div { gap:12px; }
   .ad-data-spaced { gap:24px; }
   .ad-status { width:calc(100% - 20px); justify-content:space-between; gap:8px; bottom:max(12px, env(safe-area-inset-bottom, 0px)); font-size:10px; padding:12px 16px; }
-  .ad-status-countdown .countdown { font-size:10px; }
+  .ad-status-countdown .countdown { min-height:12px; font-size:10px; }
   .ad-navigation-modal .attendance-modal-header { margin-bottom:40px; }
   .ad-navigation-modal .attendance-modal-close { width:128px; flex-basis:128px; }
   .ad-menu-grid { grid-template-columns:1fr; gap:35px; }

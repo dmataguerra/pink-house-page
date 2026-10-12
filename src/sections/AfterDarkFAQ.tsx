@@ -6,7 +6,7 @@ type AfterDarkFAQProps = {
   onSchedule: () => void;
 };
 
-const previousParties = Array.from({ length: 5 }, (_, index) => String(index + 1).padStart(2, '0'));
+const previousParties = Array.from({ length: 3 }, (_, index) => String(index + 1).padStart(2, '0'));
 
 function PreviousParty({ number }: { number: string }) {
   const [open, setOpen] = useState(false);

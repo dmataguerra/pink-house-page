@@ -7,7 +7,6 @@ import SiteModal from './components/SiteModal';
 import MummyTicket from './components/MummyTicket';
 import AfterDarkFAQ from './sections/AfterDarkFAQ';
 import AfterDarkClosing from './sections/AfterDarkClosing';
-import { event } from './config/event';
 import OpeningCollage from './components/OpeningCollage';
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}images/${name}`;
@@ -31,8 +30,8 @@ export default function App() {
     <main id="main" className="ad-page">
       <section className="ad-hero" id="top" aria-labelledby="event-title">
         <header className="ad-event-heading">
-          <div className="ad-title-row"><h1 id="event-title">THE PINK HOUSE</h1><span className="ad-edition">HALLOWEEN</span></div>
-          <time className="ad-date" dateTime={`${event.eventDate}T${event.eventTime}:00${event.utcOffset}`}>22 OCT 2026</time>
+          <div className="ad-title-row"><h1 id="event-title">THE PINK HOUSE</h1></div>
+          <div className="ad-date">HALLOWEEN</div>
           <button className="ad-heading-cta" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">CONFIRMAR ASISTENCIA <span aria-hidden="true">↗</span></button>
         </header>
         <div className="ad-photo-pair">

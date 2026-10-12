@@ -21,15 +21,26 @@
   inset: 8% 12%;
   z-index: -1;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(255, 104, 18, .18), rgba(118, 42, 7, .08) 42%, transparent 72%);
-  filter: blur(34px);
+  background: radial-gradient(ellipse, rgba(255, 92, 18, .34), rgba(255, 164, 46, .14) 38%, transparent 72%);
+  filter: blur(46px);
   pointer-events: none;
 }
 
 .after-dark-planet {
   position: relative;
-  width: min(860px, calc(100% - 40px), 82vw);
+  width: min(860px, calc(100% - 40px), 92svh);
   aspect-ratio: 1;
+}
+
+.after-dark-planet::before {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 119, 22, .22) 0 42%, rgba(255, 185, 52, .08) 58%, transparent 74%);
+  filter: blur(28px);
+  pointer-events: none;
 }
 
 .after-dark-planet-canvas {
@@ -76,11 +87,11 @@
   display: flex;
   align-items: center;
   gap: .85em;
-  min-height: 44px;
-  padding: .25em .5em .25em .25em;
+  min-height: 32px;
+  padding: 0;
   border: 0;
   border-radius: 50px;
-  background: rgba(255, 130, 35, .05);
+  background: transparent;
   color: #d79b62;
   font-family: var(--site-body, Arial, Helvetica, sans-serif);
   font-size: 12px;
@@ -106,13 +117,14 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 1.35em;
-  height: 1.35em;
-  border: 2px solid #fff;
+  width: 1.7em;
+  height: 1.7em;
+  border: 1.5px solid currentColor;
   border-radius: 50%;
 }
 
-.after-dark-planet-marker-ring > span { width: .35em; height: .35em; border-radius: 50%; background: #fff; }
+.after-dark-planet-marker-ring > span { width: .32em; height: .32em; border-radius: 50%; background: currentColor; }
+.after-dark-planet-marker > span:last-child { padding: .55em .75em; border-radius: 999px; background: rgba(32, 18, 8, .78); backdrop-filter: blur(12px); }
 
 .after-dark-footer {
   position: relative;
@@ -142,7 +154,7 @@
 @media (max-width: 767px) {
   .after-dark-universe { min-height: 680px; }
   .after-dark-planet { width: min(560px, calc(100% - 20px)); }
-  .after-dark-planet-marker { font-size: 9px; gap: .4em; padding-right: .5em; }
+  .after-dark-planet-marker { font-size: 9px; gap: .4em; }
   .after-dark-planet-marker-ring { width: 1em; height: 1em; border-width: 1.5px; }
   .after-dark-planet-marker-ring > span { width: .25em; height: .25em; }
   .after-dark-footer { grid-template-columns: 1fr; gap: 28px; padding: 10px 10px calc(20px + env(safe-area-inset-bottom, 0px)); font-size: 24px; }

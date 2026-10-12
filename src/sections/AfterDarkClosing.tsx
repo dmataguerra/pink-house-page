@@ -43,11 +43,11 @@ float haze(vec2 p) {
 void main() {
   vec2 p = uv * 2. - 1.;
   float radius = length(p);
-  float halo = exp(-pow(max(length(p - vec2(0., -.04)) - .55, 0.), 2.) * 15.) * .29;
-  float bloom = exp(-(p.x * p.x / .27 + pow(p.y + .68, 2.) / .115)) * .36;
+  float halo = exp(-pow(max(length(p - vec2(0., -.04)) - .55, 0.), 2.) * 12.) * .38;
+  float bloom = exp(-(p.x * p.x / .27 + pow(p.y + .68, 2.) / .115)) * .42;
   if (radius > .724) {
     float edgeFade = 1. - smoothstep(.84, 1., radius);
-    gl_FragColor = vec4(mix(vec3(1., .38, .035), vec3(1., .72, .16), bloom * 2.), min(halo + bloom, .65) * edgeFade);
+    gl_FragColor = vec4(mix(vec3(1., .30, .02), vec3(1., .72, .16), bloom * 2.), min(halo + bloom, .8) * edgeFade);
     return;
   }
   vec2 face = p / .72;
@@ -66,7 +66,7 @@ void main() {
   float pink = 1. - smoothstep(-.72, .25, normal.y);
   vec3 accent = mix(vec3(.86, .30, .035), vec3(1., .64, .12), pink);
   vec3 water = mix(vec3(.18, .08, .018), vec3(.25, .12, .025), pink);
-  vec3 fogColor = mix(vec3(.72, .30, .055), vec3(1., .62, .15), .5 + pink * .25);
+  vec3 fogColor = mix(vec3(.95, .35, .04), vec3(1., .72, .18), .5 + pink * .25);
   vec3 softenedTerrain = mix(water, accent, terrain * .62);
   vec3 color = mix(softenedTerrain, fogColor, fog * .28) * (.42 + .52 * light + .12 * fillLight);
   color += accent * pow(1. - normal.z, 4.) * (.1 + .08 * pink);

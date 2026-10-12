@@ -68,14 +68,14 @@ void main() {
   vec3 water = mix(vec3(.18, .08, .018), vec3(.25, .12, .025), pink);
   vec3 fogColor = mix(vec3(.95, .35, .04), vec3(1., .72, .18), .5 + pink * .25);
   vec3 softenedTerrain = mix(water, accent, terrain);
-  vec3 color = mix(softenedTerrain, fogColor, fog * .38) * (.42 + .52 * light + .12 * fillLight);
+  vec3 color = mix(softenedTerrain, fogColor, fog * .27) * (.42 + .52 * light + .12 * fillLight);
   color += accent * pow(1. - normal.z, 4.) * (.1 + .08 * pink);
   float highlight = pow(max(dot(reflect(-normalize(vec3(-.45, .7, 1.)), normal), vec3(0., 0., 1.)), 0.), 35.);
   color += vec3(1., .65, .26) * highlight * .055;
   color *= .97 + noise(coordinates * 1700.) * .06;
   float veilNoise = haze(p * 1.7 + coordinates * 1.2 + vec2(time * .025, -time * .018));
-  float frontVeil = smoothstep(.34, .74, veilNoise) * (.34 + .18 * (1. - normal.z));
-  float edgeVeil = smoothstep(.52, .92, radius) * .16;
+  float frontVeil = smoothstep(.34, .74, veilNoise) * (.22 + .12 * (1. - normal.z));
+  float edgeVeil = smoothstep(.52, .92, radius) * .11;
   color = mix(color, fogColor, min(.68, frontVeil + edgeVeil));
   float edge = 1. - smoothstep(.717, .724, radius);
   gl_FragColor = vec4(color, edge);

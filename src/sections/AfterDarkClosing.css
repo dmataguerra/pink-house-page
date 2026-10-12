@@ -10,6 +10,9 @@
   display: grid;
   place-items: center;
   position: relative;
+  width: 100vw;
+  left: calc(50% + (100vw - 100%) / 2);
+  transform: translateX(-50%);
   min-height: min(100svh, 900px);
   margin-top: 0;
   background: transparent;
@@ -33,7 +36,7 @@
 
 .after-dark-planet {
   position: relative;
-  width: min(860px, calc(100% - 40px), 92svh);
+  width: min(860px, calc(100vw - 24px), 92svh);
   aspect-ratio: 1;
 }
 
@@ -168,7 +171,7 @@
 
 @media (max-width: 767px) {
   .after-dark-universe { min-height: 680px; }
-  .after-dark-planet { width: min(560px, calc(100% - 20px)); }
+  .after-dark-planet { width: min(560px, calc(100vw - 20px), 92svh); }
   .after-dark-planet-marker { font-size: 9px; gap: .4em; }
   .after-dark-planet-marker-ring { width: 1em; height: 1em; border-width: 1.5px; }
   .after-dark-planet-marker-ring > span { width: .25em; height: .25em; }

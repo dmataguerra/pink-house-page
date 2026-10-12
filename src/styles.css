@@ -47,10 +47,11 @@ h1,h2,h3,p,dl,dd { margin:0; }
 .cinematic-media-video { filter:grayscale(1); }
 .ad-facts,.ad-plan { padding-top:200px; }
 .ad-data-list { grid-column:7/-1; display:grid; gap:3px; font-size:16px; line-height:1.4; font-weight:700; letter-spacing:-.025em; }
-.ad-data-list>div { display:grid; grid-template-columns:1fr 2fr; gap:20px; }
+.ad-data-list>div { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:20px; }
 .ad-data-list dt,.ad-data-list dd { font-weight:700; }
+.ad-data-list dd { min-width:0; overflow-wrap:anywhere; }
 .ad-data-spaced { gap:16px; }
-.ad-inline-link { display:inline-flex; gap:8px; padding:5px 0; min-height:36px; font-size:inherit; font-weight:inherit; border:0; background:none; text-decoration:underline; text-underline-offset:4px; }
+.ad-inline-link { display:inline-flex; align-items:baseline; gap:8px; max-width:100%; padding:5px 0; min-height:36px; font-size:inherit; font-weight:inherit; border:0; background:none; text-decoration:underline; text-underline-offset:4px; text-align:left; white-space:normal; }
 .ad-inline-link:hover { color:#ff9654; }
 .ad-status { position:fixed; z-index:25; bottom:20px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:48px; padding:11px 20px; border-radius:50px; background:#202020b3; backdrop-filter:blur(50px); font-size:12px; line-height:1.2; font-weight:700; white-space:nowrap; }
 .ad-status div { display:flex; flex-direction:column; }
@@ -117,7 +118,7 @@ h1,h2,h3,p,dl,dd { margin:0; }
   .ad-location { margin-top:160px; aspect-ratio:1; }
   .ad-facts,.ad-plan { padding-top:160px; }
   .ad-data-list { grid-column:2/-1; font-size:14px; line-height:1.4; gap:10px; }
-  .ad-data-list>div { gap:12px; }
+  .ad-data-list>div { grid-template-columns:minmax(0,1fr) minmax(0,1.7fr); gap:12px; }
   .ad-data-spaced { gap:24px; }
   .ad-status { width:calc(100% - 20px); justify-content:space-between; gap:8px; bottom:max(12px, env(safe-area-inset-bottom, 0px)); font-size:10px; padding:12px 16px; }
   .ad-status-countdown .countdown { min-height:12px; font-size:10px; }

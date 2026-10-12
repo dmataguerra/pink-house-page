@@ -27,8 +27,19 @@ precision highp float;
 varying vec2 uv;
 uniform sampler2D geography;
 uniform vec2 rotation;
+uniform float time;
 const float PI = 3.14159265359;
-float grain(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float noise(vec2 p) {
+  vec2 i = floor(p), f = fract(p);
+  f = f * f * (3. - 2. * f);
+  return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y);
+}
+float haze(vec2 p) {
+  return noise(p * 2.3 + vec2(time * .018, -time * .012)) * .6
+    + noise(p * 5.1 - vec2(time * .01, time * .016)) * .3
+    + noise(p * 11. + time * .008) * .1;
+}
 void main() {
   vec2 p = uv * 2. - 1.;
   float radius = length(p);
@@ -36,7 +47,7 @@ void main() {
   float bloom = exp(-(p.x * p.x / .27 + pow(p.y + .68, 2.) / .115)) * .36;
   if (radius > .724) {
     float edgeFade = 1. - smoothstep(.84, 1., radius);
-    gl_FragColor = vec4(mix(vec3(1., .23, .03), vec3(1., .50, .06), bloom * 2.), min(halo + bloom, .65) * edgeFade);
+    gl_FragColor = vec4(mix(vec3(1., .38, .035), vec3(1., .72, .16), bloom * 2.), min(halo + bloom, .65) * edgeFade);
     return;
   }
   vec2 face = p / .72;
@@ -47,17 +58,21 @@ void main() {
   vec3 world = vec3(cy * tilted.x - sy * tilted.z, tilted.y, sy * tilted.x + cy * tilted.z);
   vec2 coordinates = vec2(atan(world.x, world.z) / (2. * PI) + .5, .5 - asin(clamp(world.y, -1., 1.)) / PI);
   float map = texture2D(geography, coordinates).r;
-  float texture = smoothstep(.09, .76, map);
+  float terrain = smoothstep(.18, .72, map);
+  float mist = haze(coordinates * 3. + p * .45);
+  float fog = smoothstep(.25, .82, mist + (1. - normal.z) * .22);
   float light = max(dot(normal, normalize(vec3(-.45, .7, 1.))), 0.);
   float fillLight = max(dot(normal, normalize(vec3(.55, -.35, .6))), 0.);
   float pink = 1. - smoothstep(-.72, .25, normal.y);
-  vec3 accent = mix(vec3(.98, .23, .025), vec3(1., .50, .06), pink);
-  vec3 water = mix(vec3(.14, .035, .005), vec3(.16, .055, .005), pink);
-  vec3 color = mix(water, accent, texture) * (.30 + .65 * light + .12 * fillLight);
+  vec3 accent = mix(vec3(.86, .30, .035), vec3(1., .64, .12), pink);
+  vec3 water = mix(vec3(.18, .08, .018), vec3(.25, .12, .025), pink);
+  vec3 fogColor = mix(vec3(.72, .30, .055), vec3(1., .62, .15), .5 + pink * .25);
+  vec3 softenedTerrain = mix(water, accent, terrain * .62);
+  vec3 color = mix(softenedTerrain, fogColor, fog * .28) * (.42 + .52 * light + .12 * fillLight);
   color += accent * pow(1. - normal.z, 4.) * (.1 + .08 * pink);
   float highlight = pow(max(dot(reflect(-normalize(vec3(-.45, .7, 1.)), normal), vec3(0., 0., 1.)), 0.), 35.);
   color += vec3(1., .65, .26) * highlight * .055;
-  color *= .975 + grain(coordinates * 1700.) * .05;
+  color *= .97 + noise(coordinates * 1700.) * .06;
   float edge = 1. - smoothstep(.717, .724, radius);
   gl_FragColor = vec4(color, edge);
 }
@@ -83,8 +98,6 @@ function JuriquillaGlobe({ onConfirm }: { onConfirm: () => void }) {
   const reset = useRef<() => void>(() => {});
   const [ready, setReady] = useState(false);
   const [contextVersion, setContextVersion] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null);
-  const selectedLocation = locations.find(location => location.id === selected);
 
   useEffect(() => {
     const element = canvas.current;
@@ -156,6 +169,7 @@ function JuriquillaGlobe({ onConfirm }: { onConfirm: () => void }) {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       gl.uniform1i(gl.getUniformLocation(program, 'geography'), 0);
       const orientation = gl.getUniformLocation(program, 'rotation');
+      const clock = gl.getUniformLocation(program, 'time');
       const resize = () => {
         const size = Math.max(1, Math.round(element.clientWidth * Math.min(window.devicePixelRatio, 1.5)));
         element.width = size;
@@ -163,6 +177,7 @@ function JuriquillaGlobe({ onConfirm }: { onConfirm: () => void }) {
         gl.viewport(0, 0, size, size);
         if (textureLoaded) {
           gl.uniform2f(orientation, rotation.current.yaw, rotation.current.pitch);
+          gl.uniform1f(clock, performance.now() * .001);
           gl.drawArrays(gl.TRIANGLES, 0, 6);
           projectMarkers();
         }
@@ -184,6 +199,7 @@ function JuriquillaGlobe({ onConfirm }: { onConfirm: () => void }) {
           rotation.current.yaw += elapsed * .000028 * resume;
         }
         gl.uniform2f(orientation, rotation.current.yaw, rotation.current.pitch);
+        gl.uniform1f(clock, time * .001);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         projectMarkers();
         if (!reducedMotion || dragging || Math.abs(velocity) > .000005) frame = requestAnimationFrame(draw);
@@ -311,29 +327,17 @@ function JuriquillaGlobe({ onConfirm }: { onConfirm: () => void }) {
     }
   }, [contextVersion]);
 
-  const resetView = () => {
-    reset.current();
-    zoom.current = 1;
-    if (canvas.current) canvas.current.style.transform = 'scale(1)';
-  };
   return <>
-    <div className="after-dark-map-heading"><p className="after-dark-map-kicker">THE PINK HOUSE · 2026</p><h2>JURIQUILLA, QUERÉTARO</h2><p id="globe-instructions">ARRASTRA PARA EXPLORAR</p></div>
     <div className={`after-dark-planet ${ready ? 'is-webgl-ready' : ''}`}>
       <div className="after-dark-planet-fallback" style={{ opacity: ready ? 0 : 1 }} aria-hidden="true"><img src={mapTexture} alt="" /></div>
-      <canvas ref={canvas} className={`after-dark-planet-canvas${ready ? ' is-ready' : ''}`} style={{ opacity: ready ? 1 : 0 }} tabIndex={0} role="img" aria-label="Mapa de Juriquilla adaptado a una esfera. Usa las flechas para girar y la tecla Inicio para volver." aria-describedby="globe-instructions" />
+      <canvas ref={canvas} className={`after-dark-planet-canvas${ready ? ' is-ready' : ''}`} style={{ opacity: ready ? 1 : 0 }} tabIndex={0} role="img" aria-label="Mapa de Juriquilla adaptado a una esfera. Usa las flechas para girar y la tecla Inicio para volver." />
       <div className="after-dark-planet-moments" aria-label="Ubicaciones de Juriquilla">
-        {locations.map(location => <button key={location.id} ref={element => { if (element) markerElements.current.set(location.id, element); else markerElements.current.delete(location.id); }} className={`after-dark-planet-marker after-dark-planet-marker--${location.id}`} type="button" onClick={() => { if (location.id === 'house') onConfirm(); else setSelected(location.id); }} aria-label={location.id === 'house' ? 'The Pink House, confirmar asistencia' : `${location.label}, zona de Juriquilla`}>
+        {locations.map(location => <button key={location.id} ref={element => { if (element) markerElements.current.set(location.id, element); else markerElements.current.delete(location.id); }} className={`after-dark-planet-marker after-dark-planet-marker--${location.id}`} type="button" onClick={location.id === 'house' ? onConfirm : undefined} aria-label={location.id === 'house' ? 'The Pink House, confirmar asistencia' : `${location.label}, zona de Juriquilla`}>
           <span className="after-dark-planet-marker-ring" aria-hidden="true"><span /></span>
           <span>{location.label}</span>
         </button>)}
       </div>
     </div>
-    {selectedLocation && <aside className="after-dark-map-place" aria-label={`Información de ${selectedLocation.label}`}>
-      <button type="button" className="after-dark-map-place-close" onClick={() => setSelected(null)} aria-label="Cerrar información de la ubicación">×</button>
-      <h3>{selectedLocation.label}</h3><p>Zona de Juriquilla</p>
-      <button type="button" className="after-dark-map-place-cta" onClick={onConfirm}>NOS VEMOS EN THE PINK HOUSE <span aria-hidden="true">→</span></button>
-    </aside>}
-    <div className="after-dark-map-caption"><span>MAPA INTERACTIVO · ARRASTRA · DESPLAZA PARA ACERCAR</span><button type="button" onClick={resetView}>VOLVER A JURIQUILLA <span aria-hidden="true">↺</span></button></div>
   </>;
 }
 

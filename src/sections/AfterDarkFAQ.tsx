@@ -23,7 +23,7 @@ function PreviousParty({ number }: { number: string }) {
         onClick={() => setOpen(value => !value)}
       >
         <span>PEDA {number}</span>
-        <span className="ad-faq-arrow" aria-hidden="true">↓</span>
+        <span className="ad-faq-arrow" aria-hidden="true" />
       </button>
     </h3>
     <div id={`${id}-panel`} className="ad-faq-panel" aria-labelledby={`${id}-button`} hidden={!open}>

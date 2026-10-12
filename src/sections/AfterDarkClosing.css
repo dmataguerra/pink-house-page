@@ -15,9 +15,20 @@
   background: transparent;
 }
 
+.after-dark-universe::before {
+  content: '';
+  position: absolute;
+  inset: 8% 12%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 104, 18, .18), rgba(118, 42, 7, .08) 42%, transparent 72%);
+  filter: blur(34px);
+  pointer-events: none;
+}
+
 .after-dark-planet {
   position: relative;
-  width: min(780px, calc(100% - 40px), 82vw);
+  width: min(860px, calc(100% - 40px), 82vw);
   aspect-ratio: 1;
 }
 
@@ -69,8 +80,8 @@
   padding: .25em .5em .25em .25em;
   border: 0;
   border-radius: 50px;
-  background: rgba(0, 0, 0, .1);
-  color: #fff;
+  background: rgba(255, 130, 35, .05);
+  color: #d79b62;
   font-family: var(--site-body, Arial, Helvetica, sans-serif);
   font-size: 12px;
   font-weight: 800;
@@ -79,14 +90,15 @@
   white-space: nowrap;
   cursor: pointer;
   pointer-events: auto;
-  transition: background-color .2s ease, transform .2s ease;
+  opacity: .72;
+  transition: background-color .2s ease, opacity .2s ease, transform .2s ease;
   transform: translate(-.9em, -50%);
 }
 
 .after-dark-planet-marker--house { color: #ff641a; }
 .after-dark-planet-marker--house .after-dark-planet-marker-ring { border-color: #ff641a; }
 
-.after-dark-planet-marker:hover { background: rgba(0, 0, 0, .65); transform: translate(-.9em, -50%) scale(1.06); }
+.after-dark-planet-marker:hover { background: rgba(255, 130, 35, .16); opacity: 1; transform: translate(-.9em, -50%) scale(1.06); }
 .after-dark-planet-marker:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 
 .after-dark-planet-marker-ring {
@@ -129,17 +141,13 @@
 
 @media (max-width: 767px) {
   .after-dark-universe { min-height: 680px; }
-  .after-dark-planet { width: min(494px, calc(100% - 20px)); }
+  .after-dark-planet { width: min(560px, calc(100% - 20px)); }
   .after-dark-planet-marker { font-size: 9px; gap: .4em; padding-right: .5em; }
   .after-dark-planet-marker-ring { width: 1em; height: 1em; border-width: 1.5px; }
   .after-dark-planet-marker-ring > span { width: .25em; height: .25em; }
   .after-dark-footer { grid-template-columns: 1fr; gap: 28px; padding: 10px 10px calc(20px + env(safe-area-inset-bottom, 0px)); font-size: 24px; }
   .after-dark-footer-brand > span { font-size: 24px; }
   .after-dark-footer-heading { margin-bottom: 6px; font-size: 20px; }
-  .after-dark-map-heading { top: 10px; left: 10px; }
-  .after-dark-map-caption { right: 10px; left: 10px; bottom: 10px; }
-  .after-dark-map-caption button { font-size: 9px; padding-inline: 10px; }
-  .after-dark-map-caption > span { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

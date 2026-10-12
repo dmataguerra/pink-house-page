@@ -36,8 +36,8 @@ export default function App() {
           <button className="ad-heading-cta" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">CONFIRMAR ASISTENCIA <span aria-hidden="true">↗</span></button>
         </header>
         <div className="ad-photo-pair">
-          <img src={asset('after-dark-community-grain.webp')} alt="Manos de amigos reunidas en una fiesta de Halloween, en blanco y negro con grano de película" width="1254" height="1254"/>
           <img src={asset('after-dark-party-grain.webp')} alt="Amigos celebrando Halloween bajo una luz naranja y ámbar, con textura de película" width="1254" height="1254" fetchPriority="high"/>
+          <img src={asset('after-dark-community-grain.webp')} alt="Manos de amigos reunidas en una fiesta de Halloween, en blanco y negro con grano de película" width="1254" height="1254"/>
         </div>
       </section>
       <section className="ad-about ad-numbered" id="about" aria-labelledby="about-title">

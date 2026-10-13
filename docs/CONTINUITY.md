@@ -1,18 +1,32 @@
 # The Pink House — estado de continuidad
 
-## Actualización 11 oct2026 — referencia After Dark
+## Estado activo — 13 de octubre de 2026
+
+La implementación actual y sus pendientes están en `docs/GLOBE_IMPLEMENTATION_AUDIT.txt`. Este estado reemplaza las descripciones históricas de abajo. La vista de desarrollo es `http://127.0.0.1:5174/`, con acceso al cierre en `/#mapa`.
+
+El globo usa Three.js r182/WebGL2: esfera geográfica, ruido Worley deformado por el cursor, corona con dos buffers y composición final. Una capa fija de tamaño de viewport se ejecuta desde la carga inicial y se revela con el scroll recuperado de la referencia. Conserva el mapa local, los cuatro puntos y sus acciones, movimiento reducido, arrastre, teclado y recuperación de contexto. Todos los botones visibles del globo y el CTA independiente de asistencia se retiraron por petición del usuario.
+
+El footer tiene logo pequeño a la izquierda, próximo evento y contador a la derecha. La última elección restaura el tejado de HOUSE sobre PINK, refinado con mejor simetría, peso y espaciado. Está aplicado en header, introducción y footer; este último conserva el 70% de la altura del bloque del evento. SVG de proporción 214/144, header de 64/52px. Evidencia y antes/después en `output/logo-refined`. Hay seis conceptos en `output/logo-variants` y ocho tipografías originales en `output/logo-typography`. El archivo conserva EL 30, TRIO FEST y HALLOWEEN 2025; su descripción es «Tuvo que aprender a caminar para que HALLOWEEN 26 pudiera correr».
+
+El plan tiene nueve actividades: película preparty «La venganza del charro negro» sin hora asignada, Inicio 8:00pm, Dinámicas 8:10pm, Piñata 9:00pm, Concurso de disfraz 9:20pm, Foto grupal 9:40pm, Beer pong 10:30pm, Batalla de Tilín insano 11:30pm y Perreo intenso 12:00am. Fuente central `src/data/nightSchedule.ts`; componente `NightSchedule.tsx`. La medianoche usa fecha 23 de octubre. Validación específica 21/21 y capturas en `output/itinerary-qa`.
+
+Asistencia, agenda y entrada comparten un modal oscuro con bordes rojos y tipografía Inter. Las dos imágenes de enlaces, recortes y URLs originales están preservados y verificados en `output/modal-qa`. Las evidencias del renderer están en `output/globe-qa`. No se ha publicado, desplegado, enviado ni fusionado ningún cambio de esta sesión.
+
+## Historial de estados previos
+
+## Actualización 12 oct2026 — referencia After Dark
 
 El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity), adaptado al contenido y a los assets propios de The Pink House. Esta actualización reemplaza la composición editorial anterior en la página activa; el historial que sigue debajo se conserva como registro de las iteraciones previas.
 
 ### Estado actual de la página
 
-- Fondo negro, superficies oscuras y acento naranja `#ff641a`, con una intensidad equivalente a la composición roja original. La elección final del usuario es naranja/ámbar; las variantes anteriores se conservan como archivo. La tipografía activa usa Arial/Helvetica.
-- Hero con `THE PINK HOUSE`, edición `HALLOWEEN`, fecha `22 OCT 2026`, confirmación de asistencia y dos fotografías originales: fiesta con iluminación naranja/ámbar y manos reunidas en blanco y negro.
+- Fondo negro, superficies oscuras y rojo `#f11313`, con luces rosas/magenta en la esfera. La instrucción posterior del usuario reemplazó naranja/ámbar por la paleta de la referencia; los originales se conservan. La tipografía activa es Inter Variable con licencia OFL incluida.
+- Hero con `THE PINK HOUSE`, edición `HALLOWEEN`, fecha `22 OCT 2026`, confirmación de asistencia y dos fotografías originales: fiesta con duotono rojo por CSS y manos reunidas en blanco y negro.
 - Header flotante con el nombre `THE PINK HOUSE`, sin año ni icono de casita. Menú con navegación, asistencia, agenda y `Tu entrada`.
 - Información propia en las secciones `Sobre la noche`, detalles del evento y cómo encontrarnos. La fecha y hora se mantienen: jueves 22 de octubre de 2026, desde las 20:00, hora del centro de México. Los horarios posteriores de la agenda siguen siendo sugeridos.
-- La sección `Pedas anteriores`, con ancla `#archive`, contiene exactamente cinco píldoras `PEDA 01` a `PEDA 05`. Cada una abre el placeholder `Nombre y recuerdos próximamente.`; no se inventaron nombres, fechas ni recuerdos. La sección reemplaza las preguntas frecuentes. No hay chatbot.
+- La sección `Pedas anteriores`, con ancla `#archive`, contiene exactamente tres píldoras `PEDA 01` a `PEDA 03`. Cada una abre el placeholder `Nombre y recuerdos próximamente.`; no se inventaron nombres, fechas ni recuerdos. La sección reemplaza las preguntas frecuentes. No hay chatbot.
 - El ticket de momia se abre desde `Tu entrada` en el menú, dentro de un modal. Conserva corte con mouse, touch y teclado y el acceso al plan de la noche.
-- Barra fija con `FALTA:`, cuenta regresiva, fecha e inicio. Se oculta cuando entra el footer para evitar tapar el cierre.
+- Barra fija con `FALTA:`, cuenta regresiva, fecha e inicio. Se oculta cuando entra el cierre completo para evitar tapar la esfera y sus controles.
 - Footer con `PRÓXIMO EVENTO:` y botón `HALLOWEEN`, además del nombre y el lema de la casa.
 - Esfera interactiva basada en la geografía local de Juriquilla, Querétaro, con los cuatro puntos suministrados para el video: UAQ, UVM, ENES y The Pink House. Conserva esos puntos y su relación espacial. Las coordenadas y la dirección privada no se repiten en esta documentación pública.
 
@@ -21,7 +35,7 @@ El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de Méxi
 - Foto naranja final con grano: `public/images/after-dark-party-grain.webp`, 1254 × 1254, calidad WebP 92, 466,920 bytes. Editada con la herramienta integrada de imágenes; grano visible verificado a 600 y 345 px, con PNG y variantes anteriores conservados. Procedencia y prompt en `docs/ORANGE_PALETTE.md`.
 - Foto de comunidad con grano: `public/images/after-dark-community-grain.webp`, en blanco y negro; el original se conserva.
 - Mapa de la esfera: `public/images/juriquilla-map.svg`; se adapta a la esfera sin convertir los puntos locales en ubicaciones globales.
-- Video final: `public/videos/pink-house-after-dark.mp4`, 17 segundos, 1280 × 720, 30 fps, 510 cuadros y H.264/yuv420p, sin audio y con faststart; 12,014,590 bytes. Comienza exactamente 3 segundos después del inicio de la variante naranja anterior. Poster `public/images/pink-house-after-dark-preview.webp`, extraído del nuevo cuadro inicial a calidad WebP 90. Metadatos, conteo de cuadros y decodificación completa verificados sin errores en `output/after-dark-video-orange/qa.json`. La versión naranja completa de 20 segundos y su poster se conservan en `output/after-dark-video-orange/full-20s.mp4` y `poster-full-20s.webp`. La geografía, los cuatro puntos y la paleta naranja/ámbar se mantienen.
+- Variante de video anterior conservada: `public/videos/pink-house-after-dark.mp4`, 17 segundos, 1280 × 720, 30 fps, 510 cuadros y H.264/yuv420p, sin audio y con faststart; 12,014,590 bytes. Comienza exactamente 3 segundos después del inicio de la variante naranja anterior. Poster `public/images/pink-house-after-dark-preview.webp`, extraído del nuevo cuadro inicial a calidad WebP 90. Metadatos, conteo de cuadros y decodificación completa verificados sin errores en `output/after-dark-video-orange/qa.json`. La versión naranja completa de 20 segundos y su poster se conservan en `output/after-dark-video-orange/full-20s.mp4` y `poster-full-20s.webp`. La geografía, los cuatro puntos y la paleta naranja/ámbar se mantienen.
 - Renderer reproducible: `aerial/scripts/render-after-dark.ts`, apoyado en el renderer de geometría existente y los datos locales; empieza en el cuadro fuente 390 y produce 510 cuadros. Sus carpetas de trabajo incluyen `v2-start390-17s` para evitar reutilizar cuadros antiguos. El video original `public/videos/pink-house.mp4` se conserva. Los datos incluyen OpenStreetMap, Overture y Microsoft; alturas estimadas y volumen ilustrativo de ENES se mantienen documentados en `docs/AFTER_DARK_ASSETS.md`.
 
 ### Archivos activos para continuar
@@ -29,12 +43,12 @@ El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de Méxi
 - `src/App.tsx`: composición, contenido del evento y estado de los modales.
 - `src/components/AfterDarkHeader.tsx`: header, menú y barra con cuenta regresiva.
 - `src/components/AfterDarkLocation.tsx`: poster, reproducción del mapa y vista ampliada.
-- `src/sections/AfterDarkFAQ.tsx` y `AfterDarkFAQ.css`: archivo de cinco pedas; el nombre del archivo se conserva por integración, aunque ya no muestra FAQ.
+- `src/sections/AfterDarkFAQ.tsx` y `AfterDarkFAQ.css`: archivo de tres pedas; el nombre del archivo se conserva por integración, aunque ya no muestra FAQ.
 - `src/sections/AfterDarkClosing.tsx` y `AfterDarkClosing.css`: esfera de Juriquilla y footer.
 - `src/styles.css`: paleta, composición general, responsive y estilos de modales.
 - `src/components/MummyTicket.tsx`, `src/components/Countdown.tsx` y `src/config/event.ts`: ticket, cuenta regresiva y datos confirmados.
 
-La ruta de desarrollo actual es `/`: ejecutar `npm run dev` y abrir la dirección que indique Vite. La verificación final del navegador sigue en curso y no se declara cerrada aquí. Esta actualización no registra deploy, merge, push ni commit nuevos.
+La ruta de desarrollo actual es `/`: ejecutar `npm run dev` y abrir la dirección que indique Vite. El recorrido activo usa `acercamiento-orbital.mp4`, con poster propio `juriquilla-orbital-preview.webp`, pausa automática y vista plana interactiva. El estudio, inventario de cambios y comprobaciones de navegador están en `docs/AFTER_DARK_EXPERIENCE.md`. Esta actualización no registra deploy, merge, push ni commit nuevos.
 
 ---
 

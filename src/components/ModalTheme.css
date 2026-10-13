@@ -1,0 +1,88 @@
+/* Dialogs share the page's Inter typography, red strokes and dark capsules.
+   Navigation keeps its own header layout; link thumbnails keep their existing CSS. */
+.ph-dialog.attendance-modal {
+  width: min(560px, calc(100% - 40px));
+  max-height: calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  color: var(--site-accent);
+  background: #0b0b0bf0;
+  border: 1px solid #f1131366;
+  border-radius: 28px;
+  box-shadow: 0 24px 100px #000b;
+  backdrop-filter: blur(28px);
+}
+.ph-dialog.attendance-modal::backdrop { background: #000a; backdrop-filter: blur(12px); }
+.ph-dialog.attendance-modal > .attendance-modal-content { padding: 32px; }
+.ph-dialog.attendance-modal .attendance-modal-header { align-items: flex-start; gap: 20px; margin-bottom: 28px; }
+.ph-dialog.attendance-modal .attendance-modal-header h2 {
+  color: var(--site-accent);
+  font: 750 40px/.98 var(--site-body);
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+  padding-top: 3px;
+}
+.ph-dialog.attendance-modal .attendance-modal-close {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  color: var(--site-accent);
+  background: transparent;
+  border: 1px solid var(--site-accent);
+  border-radius: 50%;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+.ph-dialog.attendance-modal .attendance-modal-close svg { width: 20px; height: 20px; }
+.ph-dialog .attendance-intro { margin-bottom: 28px; }
+.ph-dialog .attendance-eyebrow {
+  margin-bottom: 12px;
+  color: var(--site-muted);
+  font: 700 11px/1.25 var(--site-body);
+  letter-spacing: -.02em;
+}
+.ph-dialog .attendance-introduction { color: var(--site-muted); font: 500 14px/1.4 var(--site-body); letter-spacing: -.02em; }
+.ph-dialog .attendance-options { gap: 12px; }
+.ph-dialog .attendance-option {
+  grid-template-columns: 48px minmax(0, 1fr) 40px;
+  gap: 16px;
+  padding: 20px;
+  color: var(--site-accent);
+  background: #f1131307;
+  border: 1px solid #f1131340;
+  border-radius: 18px;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+.ph-dialog .attendance-option-title { font: 750 18px/1.12 var(--site-body); letter-spacing: -.035em; text-transform: uppercase; }
+.ph-dialog .attendance-option-description { color: var(--site-muted); font: 500 12px/1.4 var(--site-body); letter-spacing: -.02em; }
+.ph-dialog .attendance-option-arrow { width: 40px; height: 40px; border: 1px solid #f1131359; border-radius: 50%; }
+.ph-dialog .attendance-option-arrow svg { width: 18px; height: 18px; }
+.ph-dialog.attendance-modal.ad-ticket-modal { width: min(1000px, calc(100% - 40px)); }
+.ph-dialog.attendance-modal.ad-video-modal { width: min(1100px, calc(100% - 40px)); }
+.ph-dialog .schedule-eyebrow { font: 700 11px/1.4 var(--site-body); letter-spacing: -.02em; }
+.ph-dialog .schedule-item { gap: 20px; border-top-color: #f1131333; }
+.ph-dialog .schedule-item time { font: 700 13px/1.4 var(--site-body); font-variant-numeric: tabular-nums; }
+.ph-dialog .schedule-item h3 { font: 650 16px/1.4 var(--site-body); letter-spacing: -.025em; }
+.ph-dialog .schedule-note { padding-top: 18px; }
+@media (hover: hover) and (pointer: fine) {
+  .ph-dialog.attendance-modal .attendance-modal-close:hover { color: #0b0b0b; background: var(--site-accent); }
+  .ph-dialog .attendance-option:hover { background: #f1131314; border-color: var(--site-accent); }
+}
+@media (max-width: 600px) {
+  .ph-dialog.attendance-modal,
+  .ph-dialog.attendance-modal.ad-ticket-modal,
+  .ph-dialog.attendance-modal.ad-video-modal { width: calc(100% - 20px); max-height: calc(100dvh - 20px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: 24px; }
+  .ph-dialog.attendance-modal > .attendance-modal-content { padding: 20px; }
+  .ph-dialog.attendance-modal .attendance-modal-header { gap: 12px; margin-bottom: 24px; }
+  .ph-dialog.attendance-modal .attendance-modal-header h2 { font-size: 30px; padding-top: 6px; }
+  .ph-dialog .attendance-intro { margin-bottom: 24px; }
+  .ph-dialog .attendance-eyebrow { font-size: 10px; }
+  .ph-dialog .attendance-introduction { font-size: 13px; }
+  .ph-dialog .attendance-option { grid-template-columns: 44px minmax(0, 1fr) 36px; gap: 12px; padding: 16px 12px; }
+  .ph-dialog .attendance-option-title { font-size: 15px; }
+  .ph-dialog .attendance-option-description { font-size: 11px; }
+  .ph-dialog .attendance-option-arrow { width: 36px; height: 36px; }
+  .ph-dialog .schedule-item { gap: 16px; }
+  .ph-dialog .schedule-item h3 { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ph-dialog.attendance-modal .attendance-modal-close,
+  .ph-dialog .attendance-option { transition: none; }
+}

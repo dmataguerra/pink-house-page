@@ -1,0 +1,219 @@
+THE PINK HOUSE — IMPLEMENTATION / RESUME AUDIT
+Updated: 13 October 2026, America/Mexico_City
+STATUS: Design implementation COMPLETE; new publication request ACTIVE.
+User explicitly authorizes main integration, GitHubPages viaActions, then existing
+CloudflarePages pink-house-page. No additional approval required for these actions.
+Repo dmataguerra/pink-house-page; branch feat/after-dark-experience is18commits
+ahead oforigin/main with0behind, so main canfast-forward. GHauth reusesexisting
+GitCredentialManager credential only in temporaryGH_TOKEN environment; never
+print/storetoken. GHCLI normalauth empty butexistingGCM credential works.
+CF MCPaccount983da7d4f773277f65a2f76e2cd10b62, Gitproject pink-house-page,
+existingproductionbranchcodex/cloudflare-pages. Switchproductiontomain AFTER
+GHworkflow succeeds, then trigger existingGit-baseddeployment frommain.
+GHworkflowdeploy.yml manualdispatch, permissionsPageswrite/OIDC, targetmain.
+GitHubbasebuildpassed, assetprefixaudit10/10, npmtest41/41. LocalGitHubbase
+quick122checkmatrix RUNNING against4174/pink-house-page/, previewsession87166.
+Pendingcommitneededfiles(no debug.log/unusedpedaexperimentals), fast-forwardmain,
+push, workflowdispatch/watch, GHpublicQA; thenCFbranchswitch/deploy/watch/publicQA.
+Keepdev5174running. No DNS/domainpurchase/infrastructuremigration authorized.
+
+PREVIOUS DESIGN STATUS: Previous HOUSE-roof/PINK logo restored and refined;
+new nine-activity itinerary implemented and verified.
+Current logo viewBox0 3 214 144, HOUSE196/PINK182, gap11.66, symmetric U/apex,
+regularized O/S, strongerHOUSE and tightermargins. Header64/52, footer70% size.
+Source SHA A1E5A6724816292D654BE21C591E47FD7C9F7999F5909CEC752F25AB6948D2AE.
+Independent optical review and8/8 vector checks; COMPILED page QA34/34 in
+1440/390/320, output/logo-refined/site-report.json. Localfooter4/4 also passed.
+Itinerary21/21 COMPILED checks in1440/390/320, output/itinerary-qa/report.json;
+prepartyfilm untimed,8timedactivities, midnight datetime23Oct2026. Overviewcopy
+matchesactivities. Build/TypeScript and diffcheck pass. Preview4174 session57068
+stopped afterchecks; keep dev5174/session59292 running. No deployment/push/merge.
+This file supersedes historical contradictory progress notes.
+
+USER OBJECTIVE AND AUTHORIZATION
+Replace existing globe with recovered Nike Three r182 / WebGL2 four-pass system,
+maximum visual/interaction fidelity; preserve local map, own identity and actions.
+User authorizes autonomous edits, relevant tools, browser automation and subagents.
+No deployment, merge, push or publication requested. Preserve unrelated worktree
+changes. Do not reset or clean this checkout. User requests this durable audit so
+any agent can resume after interruption or credit exhaustion.
+
+LATEST USER DESIGN REQUESTS (AUTHORITATIVE)
+- NEWEST REQUEST supersedes Entrada selection: return previous HOUSE-as-roof
+  abovePINK logo, but polish sizebalance/shapes/spacing rather than justrestore.
+  Baseline output/logo-variants/01-tejado.svg. RefinementB selected, applied,
+  integrated withintro/footer214/144 and verifiedsmallheader52/64+footer70%.
+  Do not treat prior Entrada file/results as the newest finalbranding.
+- PREVIOUS SELECTION (SUPERSEDED): user chose06Entrada before returningtoroof.
+  Exact output/logo-variants/06-entrada.svg previouslyserved as
+  public/images/pink-house-after-dark-mark.svg. ViewBox 268/168, red ticket
+  plaque with transparent letter cutouts. Header 64/52 unchanged; footer image
+  70% of event block height (30% smaller), bottom aligned. Intro mask ratio and
+  footer image attributes updated to 268/168. Previous roof logo request below
+  is historical/superseded. PNG output/entrada-applied/logo-entrada.png,804x504.
+  Latest browser QA41/41 in1440/499/390/320; typecheck and production build pass.
+  Both selected+served SHA256:
+  E6DA5C19B434862B45AD9303074A496E7E0383A5A9A19820345A4E2AB6233B0A.
+  output/entrada-applied/report.json/screenshots preserve that historicalstage.
+- Persistent full-viewport animated background from initial mount, revealed near
+  closing with source scroll choreography, rather than a small footer box.
+- ALL visible globe controls removed, including Pause. Keyboard/drag preserved.
+- Standalone Confirm Attendance CTA removed from globe; house marker and footer
+  event attendance actions preserved.
+- Marker pills translucent like Nike: rgba(0,0,0,.1), blur(1rem), clear rings.
+- Production logo HOUSE above as narrow inverted-V roof of letterforms; PINK
+  below with total width6.32% narrower. Own #f11313. Final original SVG viewBox
+  20 0 240 160. Header slightly smaller:64px desktop/52px mobile. Footer logo
+  should match full event text-block height and align its bottom.
+- NEW logo request: logo subagent to create additional varied red PINK HOUSE
+  examples with full creative freedom fitting page. Save alternatives in
+  output/logo-variants; do not replace production logo without selection.
+- LATEST logo request: change the lettering/font and offer more ideas. New
+  eight-option batch with genuinely different letterforms in output/logo-typography;
+  extended, rounded, slab/serif, brush, architectural and technical styles.
+- Footer like Nike reference, own content: small logo left, gray PRÓXIMO EVENTO
+  + red HALLOWEEN + DD:HH:MM:SS right, mobile two columns. Desktop2/6/4 grid
+  with blank middle. Existing event22 October2026 20:00 CDMX.
+- HALLOWEEN2025 archive title stays; description replaced exactly with:
+  Tuvo que aprender a caminar para que HALLOWEEN 26 pudiera correr
+- Redesign entire modal consistent with dark/red/Inter page. Preserve link
+  images and links. Agent must preserve hashes/src and all image crop/style
+  dimensions/object-fit/position/filter/scale/aspect. Preserve focus management.
+
+SOURCE OF TRUTH
+C:/Users/dmata/.codex/visualizations/2026/10/13/01a132bd-c85d-7c33-b38f-e8726ad69ced/nike-globe-investigation/
+  nike-globe-reverse-engineering.md
+  source/custom-source.formatted.js + recovered GLSL/function/method excerpts
+  runtime/runtime-findings.md + webgl/frame capture evidence
+User copy: C:/Users/dmata/.codex/attachments/f383d6b8-9afa-462e-a105-54ffe1c3171f/Pasted text.txt
+Do not ship original Nike art/font/implementation assets in production. Own
+reimplementation mathematics and local juriquilla-map.svg are intentional.
+
+IMPLEMENTED SYSTEM
+src/globe/GlobeRenderer.ts,shaders.ts,interaction.ts,trail.ts,projection.ts,
+quality.ts,presentation.ts. Pinned three and @types/three0.182.0 installed.
+SphereGeometry radius1.56,32x32 + geographic MeshBasicMaterial -> map target;
+animated Worley F1/Perlin gradient anisotropy/pointer warp -> noise target;
+circular masks/morphological expansion/noise displacement -> ping-pong corona;
+difference/exclusion/levels/tint -> final square display plane. Actual WebGL2.
+Square-plane raycast; retained exitUV; direction6, velocity10, speed rise4/fall1.4,
+full speed1.2UV/s, resting envelope.22, strength1.5,radius.3/F,trail.7/F.
+CanvasTexture faded trails. Auto6deg/s; drag.22/.18deg/px, inertia exp(-7.5dt).
+Portable ascending smoothstep complements, latest ping-pong output instead of
+Nike fixed-A alternating presentation. Fixed60Hz feedback, bounded backlog;
+elapsed time controls noise/yaw. Source-matching geographic texture mipmaps.
+Desktop512/DPRcap2; mobile512/384/320 DPRcap1.5/1.2/1; reduced256 static.
+Cleanup for partial construction/map/shader failure, contextloss/restoration,
+resize/media/visibility listeners, RAF, textures/materials/geometries/targets.
+Local four coordinates normalized to supplied local map bounds; rings stay at
+true geographic projection, labels alone clamp/offset for readability.
+
+PERSISTENT PRESENTATION
+AfterDarkClosing portal into .after-dark-site, fixed viewport backdrop z1,
+foreground ad-page/transparent closing z2. Canvas created from first mount,
+offscreenSuspension:false; hidden document still pauses. One context through
+scroll/reversal. Exact source final1.5viewport reveal; translateY(1-p)*H desktop
+or .79H mobile, scale2->1 desktop/1.2mobile, opacity.55->1, yaw offset288p,
+marker threshold.74, mobile blur14->0 with profile cap. Mobile input unlocks
+once globe settles, including reserved footer strip. Canvas CSS geometry measured
+from client layout; raycast uses transformed rect, avoiding double scale/DPR.
+Header/footer/buttons remain actionable via stacking/pointer passthrough.
+
+CURRENT LIVE PROJECT
+http://127.0.0.1:5174/ or http://127.0.0.1:5174/#mapa
+Vite relaunched outside sandbox, current execution session59292.
+Sandbox Chrome cannot access outside-sandbox localhost. Browser QA must run
+require_escalated when needed; previous localhost failures were isolation.
+Playwright available aerial/node_modules/playwright/index.mjs; installed Chrome.
+Keep user dev server5174 running, execution session59292. Production preview4174
+session8731 was stopped after all checks. IABtab1 is the user-facing deliverable.
+
+CURRENT PARALLEL OWNERS
+/root/modal_redesign_final: COMPLETE,43/43 desktop/mobile UI and image invariance.
+/root/footer_verification_final: COMPLETE,4/4 viewport groups/actions/layout.
+/root/final_source_review: COMPLETE,no additional actionable defects. Source
+  shader SHA matches actual controlled GPU proof; output/globe-qa/final-review.md.
+/root/pink_house_logo: both batches COMPLETE with2 specialized typographychildren.
+  First6 in output/logo-variants; next8 distinct original alphabets in
+  output/logo-typography. Both contact sheets inspected by root. New sheet
+  1680x1120; 8SVGs+8transparent512x512PNGs+52/64/100pxproofs. Bundle:
+  output/logo-typography/pink-house-new-typography.zip,188206bytes.
+  Roof source at example creation SHA317A0BDE8A3C6BFAC313FA9F90A39CC56832B5023B41E37B0775FA96B09487B2;
+  now superseded by selected Entrada asset as documented above.
+Root: Closing.tsx/css, global header sizing, regression script, audit/docs,
+full final integration/checks. Shared filesystem; do not edit agent-owned files.
+Earlier rendering/shader/interaction/lifecycle/reveal agents completed; their
+messages may not persist but evidence/source files do. Current agents above
+are fresh resumed tasks. Check collaboration.list_agents for actual status.
+
+VERIFIED EVIDENCE (PRIOR CORE SNAPSHOT)
+- Controlled GPU:18/18 cases, six compiled programs, zero browsererrors on NVIDIA
+  RTX3060Laptop ANGLE D3D11 WebGL2.17 cases framebuffer-byte-exact; remaining
+  one channel differs1/255 out of16,990,208 channels. All corona/composite/
+  sequential feedback exact. output/globe-qa/shaders/summary.md,report.json;
+  scripts/verify-globe-shaders.mjs. Does not prove every GPUdriver equivalence.
+- Live source comparison: desktop core624px/mobile365.04px match exactly;
+  34/34 static uniforms match GPU float32. Source/local screenshots +4 recordings
+  output/globe-qa/live-comparison/summary.md,measurements.json;
+  scripts/compare-globe-live.mjs. Own map/labels/red intentional differences.
+- Persistent reveal:24/24 checks, one canvas/context over7 positions and reversal,
+  pre-footer clock/feedback, source transform <=1px, foreground clickthrough,
+  native dragging. output/globe-qa/reveal/summary.md,measurements.json;
+  scripts/verify-globe-reveal.mjs.
+- Renderer lifecycle29/29, cleanup and restoration/resize/quality/scroll uniforms:
+  output/globe-qa/lifecycle/report.json; scripts/verify-globe-lifecycle.mjs.
+- Unit tests41/41:14 physics/trail/projection +9 presentation +18 video cases.
+  npm run typecheck passed13October after toolbar/footer integration.
+- FINAL development browser matrix407/407 on13October with ALL7 viewports:
+  output/globe-qa/final-development/report.json. All production source frozen
+  including final label capsule correction; zero runtime errors. Earlier source
+  writes/build interrupted two cases viaHMR; stable repeat passes all407.
+- Final production build passes: initial267.41kB gzip83.17, renderer530.55kB
+  gzip136.57, CSS54.50kB gzip11.28. Three stays separate dynamically imported
+  chunk, fetched atinitial globe mount. Standard >500kB warning documented.
+- Modal43/43: output/modal-qa/README.md,after.json; hashes/styles/crops exact.
+- Footer4/4 groups1440/499/390/320: output/footer-qa/local-measurements.json.
+- FINAL production quick matrix122/122 at4174, zero warnings/runtime errors:
+  output/globe-qa/final-production/report.json. Both active videos loaded
+  readyState4 and advanced time during viewport playback. Fallback/recovery pass.
+- Renderer lifecycle29/29 RERUN on13October after final mipmap/presentation code;
+  output/globe-qa/lifecycle/report.json now current with zeroerrors.
+- Modal43/43 and footer4/4 also RERUN against compiled4174; their after.json/
+  local-measurements.json and screenshots now show final production build.
+- git diff --check passes (only normal Windows LF/CRLF informational messages).
+
+LATEST ROOT EDITS
+Integrated AfterDarkFooter, removed ALL obsolete toolbar/footer CSS in Closing;
+removed Pause state/toolbar; marker transparent styles; header64/52; collage logo
+ratio240/160; archive description exact. Browser script now expects no toolbar,
+uses fixed viewport center and settled reveal predicate; keyboard zoom/reset
+remain. Label backdrop now painted by label pseudo-element, extends around ring
+when horizontally aligned; no44px empty pill/disk afterlabelcollision offsets.
+Mobile rings1.7em like desktop. No final source edits while browser checks run.
+
+FINAL DELIVERY / FUTURE RESUME
+All required work completed; no deploy/push/merge. docs/GLOBE_IMPLEMENTATION_REPORT.md
+contains final changes/results and documented intentional map/palette/accessibility/
+portable feedback differences. Footer/modal final images are compiled4174 captures.
+New lettering styles:01Extendida,02Redonda,03Condensada,04Bloque serif,
+05Arquitectura,06Trazo libre,07Codigo,08Editorial. Alloriginal vectorgeometry,
+red#f11313, transparent, no external fontfiles/textnodes. Recommend01 or03 for
+current page,02 warmer,08 elegant. Entrada selection was later superseded by
+restored/refined HOUSE-roof/PINK. For any later choice, update collage mask ratio/footer image intrinsic dimensions
+to selected SVGviewBox ratio if applying a different proposal. Do not repeat whole
+globe investigation unless new code changes/failures justify it.
+
+REPRODUCIBLE CHECKS
+npm test (41tests), npm run typecheck, npm run build.
+QA_BASE_URL=http://127.0.0.1:5174 QA_OUTPUT_DIR=output/globe-qa/final-development
+  npm run test:browser (7viewports407checks).
+After build, npm run preview -- --host 127.0.0.1 --port 4174 --strictPort;
+  QA_BASE_URL=http://127.0.0.1:4174 QA_OUTPUT_DIR=output/globe-qa/final-production
+  npm run test:browser -- --quick (122checks).
+node scripts/verify-globe-lifecycle.mjs (29checks, requiresVitesource routes).
+node scripts/verify-globe-shaders.mjs (18cases, needs preserved source reportpath).
+node scripts/verify-globe-reveal.mjs (24checks, publicNike+local).
+node output/modal-qa/verify-modal.mjs (43checks; do NOT overwritebaseline).
+node output/footer-qa/verify-footer.mjs (4viewportgroups).
+Use properly set PowerShell environment variables when running these commands.
+Browser scripts require outside-sandbox localhost access where sandbox denies it.

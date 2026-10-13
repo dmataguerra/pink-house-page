@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import './AttendanceModal.css';
+import './ModalTheme.css';
 
 type SiteModalProps = {
   id: string;
@@ -25,7 +26,7 @@ export default function SiteModal({ id, title, open, onClose, children, classNam
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     document.documentElement.style.overflow = 'hidden';
-    if (scrollbarWidth > 0) {
+    if (scrollbarWidth > 0 && !getComputedStyle(document.documentElement).scrollbarGutter.includes('stable')) {
       const padding = parseFloat(getComputedStyle(document.documentElement).paddingRight) || 0;
       document.documentElement.style.paddingRight = `${padding + scrollbarWidth}px`;
     }
@@ -35,16 +36,25 @@ export default function SiteModal({ id, title, open, onClose, children, classNam
       dialog.close();
       document.documentElement.style.overflow = previousOverflow;
       document.documentElement.style.paddingRight = previousPadding;
-      previousFocus?.focus({ preventScroll: true });
+      if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     };
   }, [open]);
 
   return <dialog
     ref={dialogRef}
     id={id}
-    className={`attendance-modal ${className}`}
+    className={`attendance-modal ${id === 'navigation-modal' ? '' : 'ph-dialog'} ${className}`}
     aria-modal="true"
     aria-labelledby={`${id}-title`}
+    onKeyDown={event => {
+      if (event.key !== 'Tab') return;
+      const items = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), video[controls], [tabindex]:not([tabindex="-1"])')]
+        .filter(element => element.getClientRects().length > 0 && !element.closest('[inert]'));
+      const first = items[0], last = items[items.length - 1];
+      if (!first || !last) { event.preventDefault(); return; }
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }}
     onCancel={e => { e.preventDefault(); onClose(); }}
     onPointerDown={e => {
       const bounds = e.currentTarget.getBoundingClientRect();

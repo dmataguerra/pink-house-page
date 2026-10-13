@@ -1,348 +1,277 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import type { GlobeCommand, GlobeRenderer, ProjectedMarker } from '../globe/GlobeRenderer';
+import { calcGlobePresentation } from '../globe/presentation';
+import { selectGlobeQuality } from '../globe/quality';
+import AfterDarkFooter from './AfterDarkFooter';
 import './AfterDarkClosing.css';
 
 type AfterDarkClosingProps = {
   onConfirm: () => void;
-  onSchedule: () => void;
-  onMap?: () => void;
 };
 
-// This regional map uses the same supplied points as the existing aerial video.
-// Its local geography is expanded over a sphere; these are not global latitudes.
-const mapBounds = { west: -100.4534, east: -100.4374, south: 20.6988, north: 20.7138 };
+// These local coordinates preserve the relationship used by the supplied aerial map.
 const locations = [
   { id: 'uaq', label: 'UAQ', latitude: 20.70438308336931, longitude: -100.44387705896915 },
   { id: 'uvm', label: 'UVM', latitude: 20.70827004638903, longitude: -100.4453510329209 },
   { id: 'enes', label: 'ENES', latitude: 20.705875489620908, longitude: -100.44812312985161 },
   { id: 'house', label: 'THE PINK HOUSE', latitude: 20.707390681241908, longitude: -100.44438633247219 },
-];
+] as const;
 const mapTexture = `${import.meta.env.BASE_URL}images/juriquilla-map.svg`;
-const vertexShader = `
-attribute vec2 position;
-varying vec2 uv;
-void main() { uv = position * .5 + .5; gl_Position = vec4(position, 0., 1.); }
-`;
-const fragmentShader = `
-precision highp float;
-varying vec2 uv;
-uniform sampler2D geography;
-uniform vec2 rotation;
-uniform float time;
-const float PI = 3.14159265359;
-float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float noise(vec2 p) {
-  vec2 i = floor(p), f = fract(p);
-  f = f * f * (3. - 2. * f);
-  return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y);
-}
-float haze(vec2 p) {
-  return noise(p * 2.3 + vec2(time * .018, -time * .012)) * .6
-    + noise(p * 5.1 - vec2(time * .01, time * .016)) * .3
-    + noise(p * 11. + time * .008) * .1;
-}
-void main() {
-  vec2 p = uv * 2. - 1.;
-  float radius = length(p);
-  float halo = exp(-pow(max(length(p - vec2(0., -.04)) - .55, 0.), 2.) * 12.) * .38;
-  float bloom = exp(-(p.x * p.x / .27 + pow(p.y + .68, 2.) / .115)) * .42;
-  if (radius > .724) {
-    float edgeFade = 1. - smoothstep(.84, 1., radius);
-    gl_FragColor = vec4(mix(vec3(1., .30, .02), vec3(1., .72, .16), bloom * 2.), min(halo + bloom, .8) * edgeFade);
-    return;
-  }
-  vec2 face = p / .72;
-  vec3 normal = vec3(face, sqrt(max(0., 1. - dot(face, face))));
-  float cp = cos(rotation.y), sp = sin(rotation.y);
-  float cy = cos(rotation.x), sy = sin(rotation.x);
-  vec3 tilted = vec3(normal.x, cp * normal.y + sp * normal.z, -sp * normal.y + cp * normal.z);
-  vec3 world = vec3(cy * tilted.x - sy * tilted.z, tilted.y, sy * tilted.x + cy * tilted.z);
-  vec2 coordinates = vec2(atan(world.x, world.z) / (2. * PI) + .5, .5 - asin(clamp(world.y, -1., 1.)) / PI);
-  float map = texture2D(geography, coordinates).r;
-  float terrain = smoothstep(.34, .94, map) * .28;
-  float mist = haze(coordinates * 2.4 + p * .35);
-  float fog = smoothstep(.22, .76, mist + (1. - normal.z) * .24);
-  float light = max(dot(normal, normalize(vec3(-.45, .7, 1.))), 0.);
-  float fillLight = max(dot(normal, normalize(vec3(.55, -.35, .6))), 0.);
-  float pink = 1. - smoothstep(-.72, .25, normal.y);
-  vec3 accent = mix(vec3(.86, .30, .035), vec3(1., .64, .12), pink);
-  vec3 water = mix(vec3(.18, .08, .018), vec3(.25, .12, .025), pink);
-  vec3 fogColor = mix(vec3(.95, .35, .04), vec3(1., .72, .18), .5 + pink * .25);
-  vec3 softenedTerrain = mix(water, accent, terrain);
-  vec3 color = mix(softenedTerrain, fogColor, fog * .27) * (.42 + .52 * light + .12 * fillLight);
-  color += accent * pow(1. - normal.z, 4.) * (.1 + .08 * pink);
-  float highlight = pow(max(dot(reflect(-normalize(vec3(-.45, .7, 1.)), normal), vec3(0., 0., 1.)), 0.), 35.);
-  color += vec3(1., .65, .26) * highlight * .055;
-  color *= .97 + noise(coordinates * 1700.) * .06;
-  float veilNoise = haze(p * 1.7 + coordinates * 1.2 + vec2(time * .025, -time * .018));
-  float frontVeil = smoothstep(.34, .74, veilNoise) * (.22 + .12 * (1. - normal.z));
-  float edgeVeil = smoothstep(.52, .92, radius) * .11;
-  color = mix(color, fogColor, min(.68, frontVeil + edgeVeil));
-  float edge = 1. - smoothstep(.717, .724, radius);
-  gl_FragColor = vec4(color, edge);
-}
-`;
-
-function compileShader(gl: WebGLRenderingContext, kind: number, source: string) {
-  const shader = gl.createShader(kind);
-  if (!shader) throw new Error('Unable to create globe shader.');
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    gl.deleteShader(shader);
-    throw new Error('Unable to compile globe shader.');
-  }
-  return shader;
-}
+const markerBounds = { west: -100.4534, east: -100.4374, south: 20.6988, north: 20.7138 };
+const commands: Record<string, GlobeCommand> = {
+  ArrowLeft: 'left',
+  ArrowRight: 'right',
+  ArrowUp: 'up',
+  ArrowDown: 'down',
+  Home: 'reset',
+  '+': 'closer',
+  '=': 'closer',
+  '-': 'farther',
+};
 
 function JuriquillaGlobe({ onConfirm }: { onConfirm: () => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const surface = useRef<HTMLDivElement>(null);
   const markerElements = useRef(new Map<string, HTMLButtonElement>());
-  const rotation = useRef({ yaw: 0, pitch: 0 });
-  const zoom = useRef(1);
-  const reset = useRef<() => void>(() => {});
-  const [ready, setReady] = useState(false);
+  const renderer = useRef<GlobeRenderer | null>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const previousFocus = useRef<HTMLElement | null>(null);
+  const selectedRef = useRef<(typeof locations)[number] | null>(null);
+  const focusRef = useRef(false);
+  const markersVisibleRef = useRef(false);
+  const instructionsId = useId();
+  const placeTitleId = useId();
+  const [status, setStatus] = useState<'loading' | 'ready' | 'fallback'>('loading');
+  const [selected, setSelected] = useState<(typeof locations)[number] | null>(null);
   const [contextVersion, setContextVersion] = useState(0);
+  const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
+  const [markersVisible, setMarkersVisible] = useState(false);
+  const [interactive, setInteractive] = useState(false);
+  const ready = status === 'ready';
+  useEffect(() => { setPortalHost(document.querySelector<HTMLElement>('.after-dark-site') || document.body); }, []);
+
+  const closePlace = () => {
+    setSelected(null);
+    selectedRef.current = null;
+    previousFocus.current?.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     const element = canvas.current;
-    if (!element) return;
+    const planet = surface.current;
+    if (!element || !planet) return;
     let disposed = false;
-    let frame = 0;
-    let visible = false;
-    let textureLoaded = false;
-    let dragging = false;
-    let lastX = 0, lastY = 0, lastTime = 0;
-    let velocity = 0;
-    let idleUntil = 0;
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const shaders: WebGLShader[] = [];
-    let program: WebGLProgram | null = null;
-    let buffer: WebGLBuffer | null = null;
-    let texture: WebGLTexture | null = null;
-    let observer: IntersectionObserver | undefined;
-    let resizeObserver: ResizeObserver | undefined;
-
-    const projectMarkers = () => {
-      const { yaw, pitch } = rotation.current;
-      const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
-      for (const location of locations) {
-        const marker = markerElements.current.get(location.id);
-        if (!marker) continue;
-        const longitude = ((location.longitude - mapBounds.west) / (mapBounds.east - mapBounds.west) - .5) * Math.PI * 2;
-        const latitude = ((location.latitude - mapBounds.south) / (mapBounds.north - mapBounds.south) - .5) * Math.PI;
-        const x = Math.sin(longitude) * Math.cos(latitude);
-        const y = Math.sin(latitude);
-        const z = Math.cos(longitude) * Math.cos(latitude);
-        const rotatedX = cy * x + sy * z;
-        const rotatedZ = -sy * x + cy * z;
-        const rotatedY = cp * y - sp * rotatedZ;
-        const depth = sp * y + cp * rotatedZ;
-        marker.style.left = `${50 + rotatedX * 36 * zoom.current}%`;
-        marker.style.top = `${50 - rotatedY * 36 * zoom.current}%`;
-        marker.style.opacity = String(Math.min(1, Math.max(0, depth * 4)));
-        marker.style.visibility = depth > .04 ? 'visible' : 'hidden';
-        marker.disabled = depth <= .04;
-        marker.tabIndex = depth > .04 ? 0 : -1;
+    let instance: GlobeRenderer | null = null;
+    let starting = false;
+    let viewLeft = 0, viewScale = 1;
+    let presentationFrame = 0;
+    let lastInteractive = false;
+    const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+    setStatus('loading');
+    const metrics = new Map<string, { width: number; height: number; ring: number; label: number; gap: number }>();
+    const measure = () => {
+      const bounds = planet.getBoundingClientRect();
+      viewLeft = bounds.left; viewScale = bounds.width / Math.max(1, planet.clientWidth);
+      for (const [id, marker] of markerElements.current) metrics.set(id, {
+        width: marker.offsetWidth, height: marker.offsetHeight,
+        ring: (marker.firstElementChild as HTMLElement)?.offsetWidth || 16,
+        label: (marker.lastElementChild as HTMLElement)?.offsetWidth || 70,
+        gap: parseFloat(getComputedStyle(marker).columnGap) || 0,
+      });
+    };
+    const updateMarkers = (markers: ProjectedMarker[]) => {
+      const width = planet.clientWidth, viewport = document.documentElement.clientWidth;
+      const safeLeft = Math.max(0, (8 - viewLeft) / viewScale);
+      const safeRight = Math.min(width, (viewport - viewLeft - 8) / viewScale);
+      const occupied: { left: number; right: number; top: number; bottom: number }[] = [];
+      for (const point of [...markers].sort((a, b) => Number(b.id === 'house') - Number(a.id === 'house'))) {
+        const marker = markerElements.current.get(point.id), metric = metrics.get(point.id);
+        if (!marker || !metric) continue;
+        const right = point.x >= width / 2;
+        // Preserve the ring's geographic anchor; only the label avoids collisions.
+        const left = right ? point.x - metric.width + metric.ring / 2 : point.x - metric.ring / 2;
+        const naturalLabel = left + (right ? 0 : metric.ring + metric.gap);
+        const labelLeft = Math.max(safeLeft, Math.min(safeRight - metric.label, naturalLabel));
+        const labelHeight = Math.min(metric.height, 30);
+        let offset = 0;
+        const overlaps = () => occupied.some(box => labelLeft < box.right + 6 && labelLeft + metric.label > box.left - 6 && point.y + offset - labelHeight / 2 < box.bottom + 4 && point.y + offset + labelHeight / 2 > box.top - 4);
+        while (overlaps() && Math.abs(offset) < 112) offset += point.y < planet.clientHeight / 2 ? -28 : 28;
+        marker.dataset.side = right ? 'right' : 'left';
+        marker.style.left = `${left.toFixed(3)}px`;
+        marker.style.top = `${point.y.toFixed(3)}px`;
+        marker.style.setProperty('--marker-label-offset', `${offset}px`);
+        marker.style.setProperty('--marker-label-x', `${(labelLeft - naturalLabel).toFixed(3)}px`);
+        // The translucent capsule follows the shifted label. When its row is
+        // aligned, extend it around the geographic ring without moving that point.
+        const labelInButton = labelLeft - left;
+        const ringInButton = right ? metric.width - metric.ring : 0;
+        marker.style.setProperty('--marker-pill-left', `${offset ? 0 : Math.min(0, ringInButton - labelInButton) - 3}px`);
+        marker.style.setProperty('--marker-pill-right', `${offset ? 0 : Math.min(0, labelInButton + metric.label - ringInButton - metric.ring) - 3}px`);
+        marker.style.opacity = '1';
+        marker.style.visibility = markersVisibleRef.current ? 'visible' : 'hidden';
+        marker.disabled = !markersVisibleRef.current;
+        marker.tabIndex = markersVisibleRef.current ? 0 : -1;
+        occupied.push({ left: labelLeft, right: labelLeft + metric.label, top: point.y + offset - labelHeight / 2, bottom: point.y + offset + labelHeight / 2 });
       }
     };
-    projectMarkers();
-    reset.current = () => { rotation.current = { yaw: 0, pitch: 0 }; projectMarkers(); };
-    const gl = element.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false });
-    if (!gl) return;
+    const updatePresentation = () => {
+      presentationFrame = 0;
+      if (disposed) return;
+      const quality = selectGlobeQuality(motionPreference.matches);
+      const maxBlur = quality.name === 'mobile-high' ? 6 : quality.name === 'mobile-medium' ? 4 : quality.name === 'mobile-low' ? 2.5 : 14;
+      const pose = calcGlobePresentation({ scrollY: window.scrollY,
+        scrollHeight: document.documentElement.scrollHeight, viewportHeight: planet.clientHeight,
+        mobile: quality.mobile, maxBlur, reducedMotion: motionPreference.matches });
+      planet.style.transform = `translate3d(0, ${pose.y}px, 0) scale(${pose.scale})`;
+      planet.style.opacity = String(pose.opacity);
+      planet.dataset.markersVisible = String(pose.markersVisible);
+      planet.dataset.interactive = String(pose.interactive);
+      element.dataset.globeReveal = pose.progress.toFixed(6);
+      if (markersVisibleRef.current !== pose.markersVisible) {
+        markersVisibleRef.current = pose.markersVisible; setMarkersVisible(pose.markersVisible);
+      }
+      if (lastInteractive !== pose.interactive) { lastInteractive = pose.interactive; setInteractive(pose.interactive); }
+      instance?.setPresentation({ rotationOffset: pose.rotationOffset, blur: pose.blur, active: pose.interactive });
+      measure();
+      for (const marker of markerElements.current.values()) {
+        marker.disabled = !pose.markersVisible; marker.tabIndex = pose.markersVisible ? 0 : -1;
+      }
+    };
+    const requestPresentation = () => { if (!presentationFrame) presentationFrame = requestAnimationFrame(updatePresentation); };
+    const sizeObserver = new ResizeObserver(measure);
+    sizeObserver.observe(planet);
+    const pageObserver = new ResizeObserver(requestPresentation);
+    pageObserver.observe(document.documentElement);
+    window.addEventListener('scroll', requestPresentation, { passive: true });
+    window.addEventListener('resize', requestPresentation, { passive: true });
+    motionPreference.addEventListener('change', requestPresentation);
+    measure();
+    void document.fonts.ready.then(() => { if (!disposed) { measure(); instance?.command('refresh'); } });
+    const start = async () => {
+      if (starting || disposed) return;
+      starting = true;
+      try {
+      const { GlobeRenderer: GlobeRendererClass } = await import('../globe/GlobeRenderer');
+      if (disposed) return;
+      instance = new GlobeRendererClass({
+        canvas: element,
+        mapUrl: mapTexture,
+        markers: locations.map(({ id, latitude, longitude }) => ({ id, latitude, longitude })),
+        markerBounds,
+        offscreenSuspension: false,
+        isFrozen: () => selectedRef.current !== null || focusRef.current,
+        onDragStart: () => { focusRef.current = false; },
+        onStatus: nextStatus => {
+          if (!disposed) {
+            if (nextStatus === 'fallback') {
+              for (const marker of markerElements.current.values()) {
+                for (const property of ['left', 'top', 'opacity', 'visibility', '--marker-label-offset', '--marker-label-x']) marker.style.removeProperty(property);
+                marker.dataset.side = 'left'; marker.disabled = false; marker.tabIndex = 0;
+              }
+            }
+            setStatus(nextStatus);
+            requestPresentation();
+          }
+        },
+        onMarkers: updateMarkers,
+        onContextRestored: () => {
+          if (!disposed) setContextVersion(version => version + 1);
+        },
+      });
+      renderer.current = instance;
+      updatePresentation();
+      } catch {
+        if (!disposed) setStatus('fallback');
+      }
+    };
+    updatePresentation();
+    void start();
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(presentationFrame);
+      sizeObserver.disconnect(); pageObserver.disconnect(); instance?.dispose();
+      window.removeEventListener('scroll', requestPresentation);
+      window.removeEventListener('resize', requestPresentation);
+      motionPreference.removeEventListener('change', requestPresentation);
+      if (renderer.current === instance) renderer.current = null;
+    };
+  }, [contextVersion, portalHost]);
 
-    try {
-      shaders.push(compileShader(gl, gl.VERTEX_SHADER, vertexShader));
-      shaders.push(compileShader(gl, gl.FRAGMENT_SHADER, fragmentShader));
-      program = gl.createProgram();
-      if (!program) throw new Error('Unable to initialize globe.');
-      for (const shader of shaders) gl.attachShader(program, shader);
-      gl.linkProgram(program);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error('Unable to link globe.');
-      gl.useProgram(program);
-      buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
-      const position = gl.getAttribLocation(program, 'position');
-      gl.enableVertexAttribArray(position);
-      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-      texture = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.uniform1i(gl.getUniformLocation(program, 'geography'), 0);
-      const orientation = gl.getUniformLocation(program, 'rotation');
-      const clock = gl.getUniformLocation(program, 'time');
-      const resize = () => {
-        const size = Math.max(1, Math.round(element.clientWidth * Math.min(window.devicePixelRatio, 1.5)));
-        element.width = size;
-        element.height = size;
-        gl.viewport(0, 0, size, size);
-        if (textureLoaded) {
-          gl.uniform2f(orientation, rotation.current.yaw, rotation.current.pitch);
-          gl.uniform1f(clock, performance.now() * .001);
-          gl.drawArrays(gl.TRIANGLES, 0, 6);
-          projectMarkers();
-        }
-      };
-      resizeObserver = new ResizeObserver(resize);
-      resizeObserver.observe(element);
-      resize();
-      const draw = (time: number) => {
-        frame = 0;
-        if (disposed || !visible || !textureLoaded || document.hidden) return;
-        const elapsed = Math.min(32, time - (lastTime || time));
-        lastTime = time;
-        if (!dragging && Math.abs(velocity) > .000005) {
-          rotation.current.yaw += velocity * elapsed;
-          velocity *= Math.pow(.94, elapsed / 16.67);
-        }
-        if (!dragging && !reducedMotion && time > idleUntil && Math.abs(velocity) < .00002) {
-          const resume = Math.min(1, (time - idleUntil) / 1000);
-          rotation.current.yaw += elapsed * .000028 * resume;
-        }
-        gl.uniform2f(orientation, rotation.current.yaw, rotation.current.pitch);
-        gl.uniform1f(clock, time * .001);
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        projectMarkers();
-        if (!reducedMotion || dragging || Math.abs(velocity) > .000005) frame = requestAnimationFrame(draw);
-      };
-      const requestDraw = () => { if (!frame && visible && textureLoaded && !document.hidden) frame = requestAnimationFrame(draw); };
-      const visibilityChange = () => {
-        cancelAnimationFrame(frame);
-        frame = 0;
-        lastTime = 0;
-        if (!document.hidden) requestDraw();
-      };
-      const image = new Image();
-      image.onload = () => {
-        if (disposed || gl.isContextLost()) return;
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        textureLoaded = true;
-        setReady(true);
-        requestDraw();
-      };
-      image.src = mapTexture;
-      observer = new IntersectionObserver(entries => {
-        visible = entries[0].isIntersecting;
-        if (visible) { lastTime = 0; requestDraw(); }
-        else { cancelAnimationFrame(frame); frame = 0; }
-      }, { rootMargin: '100px' });
-      observer.observe(element);
-      const pointerDown = (event: PointerEvent) => {
-        if (event.button !== 0 || !textureLoaded) return;
-        dragging = true;
-        velocity = 0;
-        idleUntil = performance.now() + 3000;
-        lastX = event.clientX;
-        lastY = event.clientY;
-        element.setPointerCapture(event.pointerId);
-        element.classList.add('is-dragging');
-        requestDraw();
-      };
-      const wheel = (event: WheelEvent) => {
-        event.preventDefault();
-        zoom.current = Math.min(1.18, Math.max(.86, zoom.current - event.deltaY * .0008));
-        element.style.transform = `scale(${zoom.current})`;
-        projectMarkers();
-      };
-      const pointerMove = (event: PointerEvent) => {
-        if (!dragging) return;
-        idleUntil = performance.now() + 3000;
-        const scale = Math.PI * 1.5 / element.clientWidth;
-        velocity = reducedMotion ? 0 : (event.clientX - lastX) * scale / 16;
-        rotation.current.yaw += (event.clientX - lastX) * scale;
-        rotation.current.pitch = Math.max(-1.05, Math.min(1.05, rotation.current.pitch + (event.clientY - lastY) * scale));
-        lastX = event.clientX;
-        lastY = event.clientY;
-        requestDraw();
-      };
-      const pointerUp = () => { dragging = false; idleUntil = performance.now() + 3000; element.classList.remove('is-dragging'); requestDraw(); };
-      const lostPointerCapture = () => {
-        if (!dragging) return;
-        velocity = 0;
-        pointerUp();
-      };
-      const keyDown = (event: KeyboardEvent) => {
-        if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(event.key)) return;
-        event.preventDefault();
-        idleUntil = performance.now() + 3000;
-        velocity = 0;
-        if (event.key === 'Home') rotation.current = { yaw: 0, pitch: 0 };
-        if (event.key === 'ArrowLeft') rotation.current.yaw -= .12;
-        if (event.key === 'ArrowRight') rotation.current.yaw += .12;
-        if (event.key === 'ArrowUp') rotation.current.pitch = Math.max(-1.05, rotation.current.pitch - .12);
-        if (event.key === 'ArrowDown') rotation.current.pitch = Math.min(1.05, rotation.current.pitch + .12);
-        requestDraw();
-      };
-      const lostContext = (event: Event) => {
-        event.preventDefault();
-        textureLoaded = false;
-        velocity = 0;
-        dragging = false;
-        element.classList.remove('is-dragging');
-        setReady(false);
-        cancelAnimationFrame(frame);
-        frame = 0;
-      };
-      const restoredContext = () => setContextVersion(version => version + 1);
-      reset.current = () => { rotation.current = { yaw: 0, pitch: 0 }; velocity = 0; idleUntil = performance.now() + 3000; requestDraw(); };
-      element.addEventListener('pointerdown', pointerDown);
-      element.addEventListener('pointermove', pointerMove);
-      element.addEventListener('pointerup', pointerUp);
-      element.addEventListener('pointercancel', lostPointerCapture);
-      element.addEventListener('lostpointercapture', lostPointerCapture);
-      element.addEventListener('wheel', wheel, { passive: false });
-      element.addEventListener('keydown', keyDown);
-      element.addEventListener('webglcontextlost', lostContext);
-      element.addEventListener('webglcontextrestored', restoredContext);
-      document.addEventListener('visibilitychange', visibilityChange);
-      return () => {
-        disposed = true;
-        cancelAnimationFrame(frame);
-        observer?.disconnect();
-        resizeObserver?.disconnect();
-        image.onload = null;
-        element.removeEventListener('pointerdown', pointerDown);
-        element.removeEventListener('pointermove', pointerMove);
-        element.removeEventListener('pointerup', pointerUp);
-        element.removeEventListener('pointercancel', lostPointerCapture);
-        element.removeEventListener('lostpointercapture', lostPointerCapture);
-        element.removeEventListener('wheel', wheel);
-        element.removeEventListener('keydown', keyDown);
-        element.removeEventListener('webglcontextlost', lostContext);
-        element.removeEventListener('webglcontextrestored', restoredContext);
-        document.removeEventListener('visibilitychange', visibilityChange);
-        shaders.forEach(shader => gl.deleteShader(shader));
-        gl.deleteProgram(program);
-        gl.deleteBuffer(buffer);
-        gl.deleteTexture(texture);
-      };
-    } catch {
-      shaders.forEach(shader => gl.deleteShader(shader));
-      if (program) gl.deleteProgram(program);
-      if (buffer) gl.deleteBuffer(buffer);
-      if (texture) gl.deleteTexture(texture);
-      observer?.disconnect();
-      resizeObserver?.disconnect();
-      setReady(false);
-    }
-  }, [contextVersion]);
+  useEffect(() => {
+    renderer.current?.command('refresh');
+    if (selected) closeButton.current?.focus({ preventScroll: true });
+  }, [selected]);
 
-  return <>
-    <div className={`after-dark-planet ${ready ? 'is-webgl-ready' : ''}`}>
-      <div className="after-dark-planet-fallback" style={{ opacity: ready ? 0 : 1 }} aria-hidden="true"><img src={mapTexture} alt="" /></div>
-      <canvas ref={canvas} className={`after-dark-planet-canvas${ready ? ' is-ready' : ''}`} style={{ opacity: ready ? 1 : 0 }} tabIndex={0} role="img" aria-label="Mapa de Juriquilla adaptado a una esfera. Usa las flechas para girar y la tecla Inicio para volver." />
-      <div className="after-dark-planet-moments" aria-label="Ubicaciones de Juriquilla">
-        {locations.map(location => <button key={location.id} ref={element => { if (element) markerElements.current.set(location.id, element); else markerElements.current.delete(location.id); }} className={`after-dark-planet-marker after-dark-planet-marker--${location.id}`} type="button" onClick={location.id === 'house' ? onConfirm : undefined} aria-label={location.id === 'house' ? 'The Pink House, confirmar asistencia' : `${location.label}, zona de Juriquilla`}>
+  const issueCommand = (command: GlobeCommand) => renderer.current?.command(command);
+
+  return <div
+    className="after-dark-globe"
+    onFocusCapture={event => { const target = event.target as HTMLElement; focusRef.current = target === canvas.current && target.matches(':focus-visible'); issueCommand('refresh'); }}
+    onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) { focusRef.current = false; issueCommand('refresh'); } }}
+    onKeyDownCapture={event => {
+      const command = commands[event.key];
+      if (command) {
+        event.preventDefault();
+        issueCommand(command);
+      }
+    }}
+  >
+    {portalHost && createPortal(<div className="after-dark-render-backdrop">
+    <div ref={surface} data-markers-visible="false" data-interactive="false" className={`after-dark-planet ${ready ? 'is-webgl-ready' : 'is-fallback'}`}>
+      <div className="after-dark-planet-fallback" aria-hidden="true"><img src={mapTexture} alt="" /></div>
+      <canvas
+        ref={canvas}
+        className={`after-dark-planet-canvas${ready ? ' is-ready' : ''}`}
+        tabIndex={ready && markersVisible && interactive ? 0 : -1}
+        aria-hidden={!ready || !markersVisible}
+        role="img"
+        aria-label="Mapa interactivo de Juriquilla adaptado a una esfera"
+        aria-describedby={instructionsId}
+      />
+      <div className="after-dark-planet-moments" role="group" aria-label="Ubicaciones de Juriquilla">
+        {locations.map(location => <button
+          key={location.id}
+          ref={element => {
+            if (element) markerElements.current.set(location.id, element);
+            else markerElements.current.delete(location.id);
+          }}
+          className={`after-dark-planet-marker after-dark-planet-marker--${location.id}`}
+          type="button"
+          onPointerEnter={() => renderer.current?.setMarkerHover(location.id)}
+          onPointerLeave={() => renderer.current?.setMarkerHover(null)}
+          onFocus={() => renderer.current?.setMarkerHover(location.id)}
+          onBlur={() => renderer.current?.setMarkerHover(null)}
+          onClick={event => {
+            if (location.id === 'house') onConfirm();
+            else {
+              previousFocus.current = event.currentTarget;
+              selectedRef.current = location;
+              setSelected(location);
+            }
+          }}
+          aria-label={location.id === 'house' ? 'The Pink House, confirmar asistencia' : `${location.label}, zona de Juriquilla`}
+          aria-haspopup={location.id === 'house' ? undefined : 'dialog'}
+        >
           <span className="after-dark-planet-marker-ring" aria-hidden="true"><span /></span>
-          <span>{location.label}</span>
+          <span className="after-dark-planet-marker-label">{location.label}</span>
         </button>)}
       </div>
     </div>
-  </>;
+    </div>, portalHost)}
+      {selected && <div className="after-dark-map-place" role="dialog" aria-labelledby={placeTitleId} onKeyDown={event => {
+        if (event.key === 'Escape') {
+          event.stopPropagation();
+          closePlace();
+        }
+      }}>
+        <button ref={closeButton} className="after-dark-map-place-close" type="button" onClick={closePlace} aria-label="Cerrar ubicación">×</button>
+        <h3 id={placeTitleId}>{selected.label}</h3>
+        <p>Zona de Juriquilla</p>
+      </div>}
+    <span className="after-dark-globe-status" role="status">{status === 'fallback' ? 'Vista estática del mapa. Las ubicaciones siguen disponibles.' : ''}</span>
+    <p id={instructionsId} className="sr-only">Mueve el cursor para interactuar con la atmósfera. Arrastra para girar, usa las flechas y Home para restablecer; selecciona los puntos para explorar ubicaciones.</p>
+  </div>;
 }
 
 export default function AfterDarkClosing({ onConfirm }: AfterDarkClosingProps) {
@@ -350,15 +279,6 @@ export default function AfterDarkClosing({ onConfirm }: AfterDarkClosingProps) {
     <div className="after-dark-universe" id="mapa">
       <JuriquillaGlobe onConfirm={onConfirm} />
     </div>
-    <footer className="after-dark-footer" id="footer">
-      <a className="after-dark-footer-brand" href="#top" aria-label="The Pink House, volver al inicio">
-        <span>PINK<br />HOUSE</span>
-      </a>
-      <p className="after-dark-footer-tagline">LA CASA DE SIEMPRE,<br />UNA NOCHE DIFERENTE.</p>
-      <div className="after-dark-footer-next">
-        <p className="after-dark-footer-heading">PRÓXIMO EVENTO:</p>
-        <button className="after-dark-footer-event" onClick={onConfirm} type="button" aria-label="Halloween, confirmar asistencia">HALLOWEEN</button>
-      </div>
-    </footer>
+    <AfterDarkFooter onConfirm={onConfirm} />
   </section>;
 }

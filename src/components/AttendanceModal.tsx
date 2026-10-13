@@ -12,6 +12,10 @@ function ExternalArrow() {
 
 export default function AttendanceModal({ open, onClose }: AttendanceModalProps) {
   return <SiteModal id="attendance-modal" title="¿Nos vemos?" open={open} onClose={onClose}>
+      <div className="attendance-intro">
+        <p className="attendance-eyebrow">HALLOWEEN 26 · 22 OCTUBRE · 20:00</p>
+        <p className="attendance-introduction">Una noche diferente en la casa de siempre.<br/>Elige cómo encontrarnos.</p>
+      </div>
       <div className="attendance-options">
         <a className="attendance-option attendance-option-instagram" href={`https://www.instagram.com/${event.instagramUsername}/`} target="_blank" rel="noopener noreferrer" aria-label="Pedir ubicación en Instagram (se abre en una pestaña nueva)">
           <span className="attendance-option-media">

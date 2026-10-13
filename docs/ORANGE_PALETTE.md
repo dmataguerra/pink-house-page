@@ -1,6 +1,6 @@
 # The Pink House: orange and amber party photograph
 
-The final active palette uses orange `#ff641a` over deep black, following the user's final color choice. The square party photograph is a lighting edit of the existing original The Pink House scene, created with the built-in `image_gen` tool. Its red illumination was replaced with orange and amber while preserving the people, Halloween makeup, poses, square composition, deep shadows, and photographic grain. It was visually inspected before saving.
+Historical asset record: this previous variant used orange `#ff641a` over deep black. On October 12, 2026 the user requested the red/pink palette of the After Dark reference; the active page now applies a reversible red duotone in CSS while preserving this original. See [current experience](AFTER_DARK_EXPERIENCE.md). The square party photograph is a lighting edit of the existing original The Pink House scene, created with the built-in `image_gen` tool. Its red illumination was replaced with orange and amber while preserving the people, Halloween makeup, poses, square composition, deep shadows, and photographic grain. It was visually inspected before saving.
 
 | Artifact | Path | Dimensions | Size |
 | --- | --- | --- | --- |

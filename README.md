@@ -30,7 +30,7 @@ Actualmente estamos en **modo Halloween**. Una noche de disfraces, música, jueg
 
 - **Sobre la noche:** el espíritu de The Pink House y de esta edición.
 - **Los detalles:** fecha, disfraces, concurso, bebidas y cómo conseguir la ubicación.
-- **Pedas anteriores:** cinco espacios, `PEDA 01` a `PEDA 05`, con nombres y recuerdos por completar.
+- **Fiestas pasadas:** EL 30, TRIO FEST y HALLOWEEN 2025, con sus fotografías y recuerdos.
 - **Tu entrada:** abre el ticket de la momia desde el menú para descubrir el plan de la noche.
 - **Juriquilla:** mapa 3D en video y esfera interactiva con UAQ, UVM, ENES y The Pink House.
 
@@ -38,7 +38,7 @@ La página incluye cuenta regresiva, navegación móvil, imágenes optimizadas y
 
 ## Una identidad que cambia de temporada
 
-El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity), con contenido y fotografías propios. Combina fondo negro, naranja (`#ff641a`), una fotografía de fiesta con luz naranja/ámbar y una imagen de comunidad en blanco y negro, ambas con grano analógico visible. Los assets activos son `public/images/after-dark-party-grain.webp` y `public/images/after-dark-community-grain.webp`. El menú flotante, la cuenta regresiva y el archivo acompañan el recorrido. Las siguientes ediciones podrán cambiar su atmósfera conservando el nombre y la forma de encontrarnos.
+El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity), con contenido y fotografías propios. Combina fondo negro, rojo (`#f11313`), Inter Variable y una esfera con iluminación rosa/magenta. La fotografía de fiesta recibe un duotono rojo mediante CSS y se conserva la imagen de comunidad en blanco y negro, ambas con grano analógico visible. Los originales activos son `public/images/after-dark-party-grain.webp` y `public/images/after-dark-community-grain.webp`. El menú flotante, la cuenta regresiva y el archivo acompañan el recorrido. Consulta [el estudio, cambios y validación](docs/AFTER_DARK_EXPERIENCE.md).
 
 ## Desarrollo local
 
@@ -64,7 +64,8 @@ npm run build
 | Hero, textos y composición principal | [`src/App.tsx`](src/App.tsx) |
 | Menú y cuenta regresiva flotante | [`src/components/AfterDarkHeader.tsx`](src/components/AfterDarkHeader.tsx) |
 | Pedas anteriores | [`src/sections/AfterDarkFAQ.tsx`](src/sections/AfterDarkFAQ.tsx) |
-| Mapa de Juriquilla y footer | [`src/sections/AfterDarkClosing.tsx`](src/sections/AfterDarkClosing.tsx) |
+| Globo de Juriquilla | [`src/sections/AfterDarkClosing.tsx`](src/sections/AfterDarkClosing.tsx), [`src/globe/`](src/globe/) |
+| Footer y próximo evento | [`src/sections/AfterDarkFooter.tsx`](src/sections/AfterDarkFooter.tsx) |
 | Reproducción del mapa 3D | [`src/components/AfterDarkLocation.tsx`](src/components/AfterDarkLocation.tsx) |
 | Renderer del nuevo video | [`aerial/scripts/render-after-dark.ts`](aerial/scripts/render-after-dark.ts) |
 | Fotos, ilustraciones y video | [`public/`](public/) |
@@ -81,6 +82,8 @@ El [workflow anterior de GitHub Pages](.github/workflows/deploy.yml) queda como 
 
 - [Guía para colaborar](CONTRIBUTING.md)
 - [Notas de implementación y continuidad](docs/CONTINUITY.md)
+- [Auditoría para retomar el globo y el diseño actual](docs/GLOBE_IMPLEMENTATION_AUDIT.txt)
+- [Resultado final del globo, modales y footer](docs/GLOBE_IMPLEMENTATION_REPORT.md)
 - [Identidad y uso de assets](docs/BRAND.md)
 - [Fotografías y video del diseño After Dark](docs/AFTER_DARK_ASSETS.md)
 - [Variante naranja final y prompt de edición](docs/ORANGE_PALETTE.md)

@@ -9,7 +9,7 @@ The Pink House es la marca permanente. Halloween es la edición actual.
 - Espacios blancos o marfil para equilibrar los momentos intensos.
 - Texto directo, cercano y centrado en la noche y sus invitados.
 
-La edición actual usa rojo, ámbar, carbón y marfil. La paleta puede cambiar para futuras ediciones conservando el nombre y sus funciones esenciales.
+La edición actual usa rojo `#f11313`, negro, grises oscuros y luces rosas/magenta, siguiendo la elección del organizador del 12 de octubre de 2026. La tipografía activa es Inter Variable, autohospedada con su licencia SIL OFL 1.1. La paleta puede cambiar para futuras ediciones conservando el nombre y sus funciones esenciales.
 
 ## Assets y derechos
 

@@ -4,7 +4,7 @@ La web es estática: React, TypeScript y Vite generan la carpeta `dist/`. RSVP a
 
 ## Integración con GitHub
 
-En Cloudflare, crea una aplicación **Pages** con integración Git y selecciona `dmataguerra/pink-house-page`.
+El proyecto existente **pink-house-page** tiene integración Git con `dmataguerra/pink-house-page`.
 
 | Ajuste | Valor |
 | :--- | :--- |
@@ -14,9 +14,9 @@ En Cloudflare, crea una aplicación **Pages** con integración Git y selecciona 
 | Build output directory | `dist` |
 | Node.js | `22` (también declarado en `.node-version`) |
 
-La rama que contiene la versión completa y la migración es `codex/cloudflare-pages`. Puede publicarse como rama de producción inicial sin fusionarla. Cuando se apruebe su integración a `main`, cambia la rama de producción de Cloudflare a `main`.
+El propietario autorizó integrar el diseño final en `main` y publicar en ambos destinos. La configuración prevista de producción es `main`; sustituye la rama anterior `codex/cloudflare-pages`. Primero se ejecuta GitHub Pages y después se activa la publicación de `main` en el proyecto existente de Cloudflare.
 
-Cloudflare compila y publica los cambios de la rama de producción; otras ramas pueden generar previews. No necesita GitHub Actions. El workflow anterior de GitHub Pages queda disponible únicamente para ejecución manual y usa `npm run build:github` para conservar su ruta antigua.
+Cloudflare compila con `npm run build` y publica los cambios de la rama de producción; otras ramas pueden generar previews. GitHub Pages usa el workflow manual **Deploy Pink House to GitHub Pages**, `.github/workflows/deploy.yml`, ejecutado sobre `main` con `npm run build:github` para la ruta `/pink-house-page/`. Ambos destinos mantienen la misma fuente con distinta base de URLs.
 
 ## Validación local de producción
 

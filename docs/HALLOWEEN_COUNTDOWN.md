@@ -10,6 +10,8 @@ La implementación vive en un worktree aislado. No utiliza los cambios locales p
 
 ### Pulido móvil y modales
 
+La última distribución móvil aprovecha la altura útil de la pantalla: encabezado más ancho en la parte superior, contador en el centro y fecha/hora en el bloque inferior. La fecha y la hora se presentan en dos líneas con más peso visual. La altura se adapta a la pantalla, conserva áreas seguras y permite scroll natural en horizontal. Revisado en 320×568, 375×667, 390×844, 430×932, 600×800, 844×390 y 1440×900; sin desbordamiento horizontal y todo el contenido visible en la primera pantalla en las vistas verticales.
+
 Se eliminan la etiqueta «FALTAN PARA HALLOWEEN» y ambas líneas divisorias del contador y los datos del evento. La fecha, hora y zona horaria permanecen visibles sin separadores. En móvil el título y contador crecen, se reduce el espacio vacío superior y los datos se centran. Se contemplan pantallas bajas, orientación horizontal y áreas seguras.
 
 Los modales usan superficies oscuras neutras, títulos claros, tarjetas sin contornos y botones de cierre de 44 px. El menú pierde el contorno rojo de sus controles y conserva todas sus funciones. El ticket redistribuye su ilustración encima de los datos en pantallas pequeñas para mejorar la lectura.

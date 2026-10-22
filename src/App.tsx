@@ -31,7 +31,7 @@ export default function App() {
         <div className="ad-event-countdown" id="countdown">
           <Countdown hoursOnly/>
           <div className="ad-event-start" id="event-start">
-            <time dateTime={countdownDate().toISOString()}>22 OCTUBRE 2026 <span aria-hidden="true">·</span> INICIO 8:00 PM</time>
+            <time dateTime={countdownDate().toISOString()}><span className="ad-event-day">22 OCTUBRE 2026</span><span className="ad-event-dot" aria-hidden="true">·</span><span className="ad-event-time">INICIO 8:00 PM</span></time>
             <p>HORA DEL CENTRO DE MÉXICO</p>
           </div>
         </div>

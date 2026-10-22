@@ -28,17 +28,16 @@ Actualmente estamos en **modo Halloween**. Una noche de disfraces, música, jueg
 
 ## Explora la página
 
-- **Sobre la noche:** el espíritu de The Pink House y de esta edición.
-- **Los detalles:** fecha, disfraces, concurso, bebidas y cómo conseguir la ubicación.
-- **Fiestas pasadas:** EL 30, TRIO FEST y HALLOWEEN 2025, con sus fotografías y recuerdos.
-- **Tu entrada:** abre el ticket de la momia desde el menú para descubrir el plan de la noche.
-- **Juriquilla:** mapa 3D en video y esfera interactiva con UAQ, UVM, ENES y The Pink House.
+- **Inicio:** header flotante, animación de entrada original, THE PINK HOUSE / HALLOWEEN y confirmación de asistencia.
+- **Cuenta regresiva:** horas totales, minutos y segundos hasta el 22 de octubre de 2026 a las 8:00 pm, hora del centro de México. Usa la fecha real y se mantiene en cero al llegar el evento.
+- **Fecha y hora:** inicio a las 8:00 pm, visible debajo del contador.
+- **Menú:** navegación a inicio, cuenta regresiva y fecha/hora; conserva asistencia, agenda, ticket de la momia e Instagram.
 
 La página incluye cuenta regresiva, navegación móvil, imágenes optimizadas y una alternativa de movimiento reducido. El ticket funciona con mouse, pantalla táctil y teclado.
 
 ## Una identidad que cambia de temporada
 
-El diseño actual toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity), con contenido y fotografías propios. Combina fondo negro, rojo (`#f11313`), Inter Variable y una esfera con iluminación rosa/magenta. La fotografía de fiesta recibe un duotono rojo mediante CSS y se conserva la imagen de comunidad en blanco y negro, ambas con grano analógico visible. Los originales activos son `public/images/after-dark-party-grain.webp` y `public/images/after-dark-community-grain.webp`. El menú flotante, la cuenta regresiva y el archivo acompañan el recorrido. Consulta [el estudio, cambios y validación](docs/AFTER_DARK_EXPERIENCE.md).
+El diseño toma como referencia [Nike After Dark Tour — Ciudad de México](https://www.afterdarktour.nike.com/es/mexicocity). La página simplificada conserva el fondo negro, rojo (`#f11313`), Inter Variable, header y animación de entrada de la versión publicada. El título y la asistencia preceden a un contador grande. Las fotografías del recorrido, secciones editoriales, video, archivo, globo y footer ya no se montan en la página; sus fuentes y assets se conservan. Consulta [la base desplegada y validación del rediseño](docs/HALLOWEEN_COUNTDOWN.md).
 
 ## Desarrollo local
 
@@ -61,13 +60,11 @@ npm run build
 | Contenido | Archivo |
 | :--- | :--- |
 | Fecha, hora, Instagram y asistencia | [`src/config/event.ts`](src/config/event.ts) |
-| Hero, textos y composición principal | [`src/App.tsx`](src/App.tsx) |
-| Menú y cuenta regresiva flotante | [`src/components/AfterDarkHeader.tsx`](src/components/AfterDarkHeader.tsx) |
-| Pedas anteriores | [`src/sections/AfterDarkFAQ.tsx`](src/sections/AfterDarkFAQ.tsx) |
-| Globo de Juriquilla | [`src/sections/AfterDarkClosing.tsx`](src/sections/AfterDarkClosing.tsx), [`src/globe/`](src/globe/) |
-| Footer y próximo evento | [`src/sections/AfterDarkFooter.tsx`](src/sections/AfterDarkFooter.tsx) |
-| Reproducción del mapa 3D | [`src/components/AfterDarkLocation.tsx`](src/components/AfterDarkLocation.tsx) |
-| Renderer del nuevo video | [`aerial/scripts/render-after-dark.ts`](aerial/scripts/render-after-dark.ts) |
+| Hero, textos y composición principal | [`src/App.tsx`](src/App.tsx), [`src/components/EventLanding.css`](src/components/EventLanding.css) |
+| Header flotante y menú | [`src/components/AfterDarkHeader.tsx`](src/components/AfterDarkHeader.tsx) |
+| Animación de entrada | [`src/components/OpeningCollage.tsx`](src/components/OpeningCollage.tsx) |
+| Cuenta regresiva | [`src/components/Countdown.tsx`](src/components/Countdown.tsx), [`src/lib/countdown.ts`](src/lib/countdown.ts) |
+| Agenda y entrada | [`src/sections/NightSchedule.tsx`](src/sections/NightSchedule.tsx), [`src/components/MummyTicket.tsx`](src/components/MummyTicket.tsx) |
 | Fotos, ilustraciones y video | [`public/`](public/) |
 
 Al cambiar de temática, revisa también los textos, las imágenes y los metadatos de `index.html`.

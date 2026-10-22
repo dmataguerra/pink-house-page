@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { countdownDate } from '../config/event';
+import { countdownValues, remainingSeconds } from '../lib/countdown';
 import './Countdown.css';
 
 function Digit({ value }: { value: string }) {
@@ -19,17 +19,15 @@ function Digit({ value }: { value: string }) {
   </span>;
 }
 
-const remainingSeconds = () => Math.max(0, Math.ceil((countdownDate().getTime() - Date.now()) / 1000));
-
-export default function Countdown() {
-  const [seconds, setSeconds] = useState(remainingSeconds);
+export default function Countdown({ hoursOnly = false }: { hoursOnly?: boolean }) {
+  const [seconds, setSeconds] = useState(() => remainingSeconds());
 
   useEffect(() => {
     let timer: number;
     const update = () => {
       window.clearTimeout(timer);
       setSeconds(remainingSeconds());
-      // Both counters tick on the same second, even after returning to the tab.
+      // Align to the wall clock and refresh after returning to the tab.
       timer = window.setTimeout(update, 1000 - Date.now() % 1000 + 16);
     };
     update();
@@ -40,11 +38,13 @@ export default function Countdown() {
     };
   }, []);
 
-  const values = [Math.floor(seconds / 86400), Math.floor(seconds / 3600) % 24, Math.floor(seconds / 60) % 60, seconds % 60];
+  const values = countdownValues(seconds, hoursOnly);
+  const labels = hoursOnly ? ['HORAS', 'MINUTOS', 'SEGUNDOS'] : ['DÍAS', 'HORAS', 'MINUTOS', 'SEGUNDOS'];
+  const compactLabels = hoursOnly ? ['HRS', 'MIN', 'SEG'] : ['DÍAS', 'HRS', 'MIN', 'SEG'];
   return <div className="countdown-wrap"><div className="countdown" role="timer" aria-label="Cuenta regresiva para el 22 de octubre de 2026 a las 20:00">
     {values.map((value, i) => {
       const formatted = String(value).padStart(2, '0');
-      return <div key={i}><strong><span className="countdown-value-accessible">{formatted}</span>{[...formatted].map((digit, index) => <Digit key={index} value={digit}/>)}</strong><span className="countdown-label"><span className="countdown-label-full">{['DÍAS', 'HORAS', 'MINUTOS', 'SEGUNDOS'][i]}</span><span className="countdown-label-compact" aria-hidden="true">{['DÍAS', 'HRS', 'MIN', 'SEG'][i]}</span></span></div>;
+      return <div key={i}><strong><span className="countdown-value-accessible">{formatted}</span>{[...formatted].map((digit, index) => <Digit key={index} value={digit}/>)}</strong><span className="countdown-label"><span className="countdown-label-full">{labels[i]}</span><span className="countdown-label-compact" aria-hidden="true">{compactLabels[i]}</span></span></div>;
     })}
   </div></div>;
 }

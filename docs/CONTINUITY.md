@@ -1,5 +1,11 @@
 # The Pink House — estado de continuidad
 
+## Página simplificada desde producción
+
+La rama `codex/halloween-countdown` parte de `main` en `35a10bd`, confirmado por Cloudflare como el commit desplegado. Conserva header, animación de entrada, título y asistencia; reemplaza el recorrido por un contador grande de horas totales hasta el 22 de octubre de 2026 a las 20:00 del centro de México. El menú mantiene asistencia, agenda, ticket e Instagram y navega a inicio, contador y fecha/hora. Detalles y capturas: [HALLOWEEN_COUNTDOWN.md](HALLOWEEN_COUNTDOWN.md).
+
+Esta implementación se realizó en un worktree aislado y no incorpora los cambios locales pendientes del checkout principal.
+
 ## Estado activo — 13 de octubre de 2026
 
 La implementación actual y sus pendientes están en `docs/GLOBE_IMPLEMENTATION_AUDIT.txt`. Este estado reemplaza las descripciones históricas de abajo. La vista de desarrollo es `http://127.0.0.1:5174/`, con acceso al cierre en `/#mapa`.

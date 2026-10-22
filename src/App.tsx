@@ -28,8 +28,7 @@ export default function App() {
           <div className="ad-date">HALLOWEEN</div>
           <button id="rsvp" className="ad-heading-cta" onClick={onConfirm} aria-haspopup="dialog" aria-controls="attendance-modal">CONFIRMAR ASISTENCIA <span aria-hidden="true">↗</span></button>
         </header>
-        <div className="ad-event-countdown" id="countdown" aria-labelledby="countdown-title">
-          <h2 id="countdown-title">FALTAN PARA HALLOWEEN</h2>
+        <div className="ad-event-countdown" id="countdown">
           <Countdown hoursOnly/>
           <div className="ad-event-start" id="event-start">
             <time dateTime={countdownDate().toISOString()}>22 OCTUBRE 2026 <span aria-hidden="true">·</span> INICIO 8:00 PM</time>

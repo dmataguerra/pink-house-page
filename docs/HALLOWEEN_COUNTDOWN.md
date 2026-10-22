@@ -8,6 +8,14 @@ La implementación vive en un worktree aislado. No utiliza los cambios locales p
 
 ## Experiencia
 
+### Pulido móvil y modales
+
+Se eliminan la etiqueta «FALTAN PARA HALLOWEEN» y ambas líneas divisorias del contador y los datos del evento. La fecha, hora y zona horaria permanecen visibles sin separadores. En móvil el título y contador crecen, se reduce el espacio vacío superior y los datos se centran. Se contemplan pantallas bajas, orientación horizontal y áreas seguras.
+
+Los modales usan superficies oscuras neutras, títulos claros, tarjetas sin contornos y botones de cierre de 44 px. El menú pierde el contorno rojo de sus controles y conserva todas sus funciones. El ticket redistribuye su ilustración encima de los datos en pantallas pequeñas para mejorar la lectura.
+
+Revisión adicional de página, asistencia y menú en 320×568, 375×667, 390×844, 600×800, 768×1024, 844×390 y 1440×900: sin desbordamiento horizontal, diálogos dentro del viewport, destinos válidos y retorno del foco al cerrar con Escape. En horizontal bajo se permite desplazamiento vertical natural.
+
 La página conserva `OpeningCollage`, el header flotante original, el logo publicado, la paleta negra/roja y la composición THE PINK HOUSE / HALLOWEEN con su botón de asistencia. Debajo muestra un único contador grande de horas totales, minutos y segundos y la fecha con INICIO 8:00 PM, hora del centro de México.
 
 El destino es `2026-10-22T20:00:00-06:00` (`2026-10-23T02:00:00Z`), independiente de la zona horaria del visitante. Se recalcula desde el reloj al volver a la pestaña o recargar; no reinicia y se limita a cero después del inicio.
@@ -30,3 +38,5 @@ El contador refleja el momento de la captura y continúa actualizándose en la w
 ![Escritorio](images/halloween-countdown-desktop.jpg)
 
 ![Móvil](images/halloween-countdown-mobile.jpg)
+
+![Modal de asistencia móvil](images/halloween-countdown-modal-mobile.jpg)
